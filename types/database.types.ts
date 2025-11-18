@@ -15,6 +15,9 @@ export interface Database {
           email: string;
           full_name: string | null;
           avatar_url: string | null;
+          role: "owner" | "admin" | "manager" | "editor" | "viewer";
+          tenant_id: string;
+          permissions: string[];
           created_at: string;
           updated_at: string;
         };
@@ -23,6 +26,9 @@ export interface Database {
           email: string;
           full_name?: string | null;
           avatar_url?: string | null;
+          role?: "owner" | "admin" | "manager" | "editor" | "viewer";
+          tenant_id?: string;
+          permissions?: string[];
           created_at?: string;
           updated_at?: string;
         };
@@ -31,6 +37,9 @@ export interface Database {
           email?: string;
           full_name?: string | null;
           avatar_url?: string | null;
+          role?: "owner" | "admin" | "manager" | "editor" | "viewer";
+          tenant_id?: string;
+          permissions?: string[];
           created_at?: string;
           updated_at?: string;
         };
@@ -43,7 +52,8 @@ export interface Database {
           title: string;
           description: string | null;
           image_url: string | null;
-          status: string;
+          status: "active" | "inactive" | "archived";
+          tenant_id: string;
           created_at: string;
           updated_at: string;
         };
@@ -53,7 +63,8 @@ export interface Database {
           title: string;
           description?: string | null;
           image_url?: string | null;
-          status?: string;
+          status?: "active" | "inactive" | "archived";
+          tenant_id?: string;
           created_at?: string;
           updated_at?: string;
         };
@@ -63,7 +74,8 @@ export interface Database {
           title?: string;
           description?: string | null;
           image_url?: string | null;
-          status?: string;
+          status?: "active" | "inactive" | "archived";
+          tenant_id?: string;
           created_at?: string;
           updated_at?: string;
         };

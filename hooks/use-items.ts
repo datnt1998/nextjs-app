@@ -8,12 +8,13 @@ import type { Database } from "@/types/database.types";
 type Item = Database["public"]["Tables"]["items"]["Row"];
 type ItemInsert = Database["public"]["Tables"]["items"]["Insert"];
 type ItemUpdate = Database["public"]["Tables"]["items"]["Update"];
+type ItemStatus = Database["public"]["Tables"]["items"]["Row"]["status"];
 
 interface ItemsParams {
   page?: number;
   limit?: number;
   search?: string;
-  status?: string[];
+  status?: ItemStatus[];
 }
 
 // Fetch items list

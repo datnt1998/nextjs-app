@@ -47,6 +47,29 @@ To get your Supabase credentials:
 2. Go to Project Settings > API
 3. Copy the Project URL and anon/public key
 
+### Database Setup
+
+This starter kit includes database migrations for:
+
+- User profiles with RBAC (Role-Based Access Control)
+- Items table for CRUD operations
+- Row Level Security (RLS) policies
+- Multi-tenant support
+
+**Quick Setup:**
+
+1. Follow the detailed setup guide in [`supabase/SETUP.md`](./supabase/SETUP.md)
+2. Run the migrations in order from the `supabase/migrations/` directory
+3. Verify the setup by signing up a test user
+
+**Migration Files:**
+
+- `20241118000001_create_profiles_table.sql` - User profiles
+- `20241118000002_create_items_table.sql` - Items for CRUD demo
+- `20241118000003_add_rbac_support.sql` - RBAC and multi-tenant support
+
+See [`supabase/migrations/README.md`](./supabase/migrations/README.md) for detailed migration documentation.
+
 ### Development
 
 Run the development server:
@@ -159,6 +182,23 @@ import { Component } from "@/components/ui/button";
 
 ## Supabase Integration
 
+### Database Schema
+
+The starter kit includes a complete database schema with:
+
+**Tables:**
+
+- `profiles` - User profiles with role, tenant, and permissions
+- `items` - Demo table for CRUD operations
+
+**Features:**
+
+- Row Level Security (RLS) enabled on all tables
+- Role-Based Access Control (owner, admin, manager, editor, viewer)
+- Multi-tenant support with tenant isolation
+- Automatic profile creation on user signup
+- Automatic timestamp updates
+
 ### Client Usage (Browser)
 
 ```typescript
@@ -189,6 +229,31 @@ The middleware automatically:
 - Protects `/dashboard/*` routes
 - Redirects unauthenticated users to `/sign-in`
 
+### RBAC (Role-Based Access Control)
+
+**Roles:**
+
+- `owner` - Full access to all resources in tenant
+- `admin` - Full access to all resources in tenant
+- `manager` - Can view and manage items, view users
+- `editor` - Can create and edit own items
+- `viewer` - Can only view items (default role)
+
+**Usage Example:**
+
+```typescript
+// Check user role
+const { data: profile } = await supabase
+  .from("profiles")
+  .select("role")
+  .eq("id", userId)
+  .single();
+
+// RLS automatically enforces permissions
+const { data: items } = await supabase.from("items").select("*");
+// Returns only items user has access to based on role and tenant
+```
+
 ### Database Types
 
 Generate TypeScript types from your Supabase schema:
@@ -202,6 +267,16 @@ Or if using local Supabase:
 ```bash
 npx supabase gen types typescript --local > types/database.types.ts
 ```
+
+### Common Queries
+
+See [`supabase/common-queries.sql`](./supabase/common-queries.sql) for helpful SQL queries for:
+
+- User management
+- Role management
+- Tenant management
+- Testing RLS policies
+- Audit and monitoring
 
 ## Learn More
 
