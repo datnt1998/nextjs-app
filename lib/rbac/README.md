@@ -198,6 +198,110 @@ hasPermission(user, PERMISSIONS.ANALYTICS_VIEW); // true
 | settings:update    | ✓     | ✓     | ✗       | ✗      | ✗      |
 | analytics:view     | ✓     | ✓     | ✓       | ✗      | ✗      |
 
+## RBAC Middleware
+
+The RBAC middleware provides automatic route protection based on user roles and permissions. It integrates with NextJS middleware to check authentication and authorization before rendering pages.
+
+### Basic Usage
+
+The middleware is already configured in `middleware.ts` with default settings:
+
+```typescript
+import { rbacMiddleware } from "@/lib/rbac/middleware";
+
+export async function middleware(request: NextRequest) {
+  return await rbacMiddleware(request);
+}
+```
+
+### Default Protected Routes
+
+By default, the following routes are protected:
+
+- `/dashboard` - Requires authentication
+- `/dashboard/users` - Requires `users:view` permission
+- `/dashboard/settings` - Requires `settings:view` permission
+- `/dashboard/analytics` - Requires `analytics:view` permission
+
+### Custom Route Configuration
+
+You can customize route protection by creating a custom middleware instance:
+
+```typescript
+import { createRBACMiddleware } from "@/lib/rbac/middleware";
+import { PERMISSIONS } from "@/lib/rbac";
+
+const customMiddleware = createRBACMiddleware({
+  routes: [
+    {
+      path: "/dashboard",
+      requireAuth: true,
+    },
+    {
+      path: "/dashboard/admin/*",
+      roles: ["owner", "admin"],
+    },
+    {
+      path: "/dashboard/items/create",
+      permissions: [PERMISSIONS.ITEMS_CREATE],
+    },
+  ],
+  signInPath: "/login",
+  forbiddenPath: "/forbidden",
+  publicPaths: ["/", "/about", "/contact"],
+});
+```
+
+### Route Configuration Options
+
+Each route can have the following options:
+
+- `path` (required): Path pattern to match (supports wildcards with `*`)
+- `permissions`: Array of permissions (user must have at least one)
+- `roles`: Array of roles (user must have one of these roles)
+- `requireAuth`: Whether authentication is required (default: true)
+
+### Middleware Behavior
+
+1. **Unauthenticated users**: Redirected to sign-in page with return URL
+2. **Unauthorized users**: Redirected to 403 forbidden page
+3. **Authorized users**: Allowed to access the route
+
+### Path Matching
+
+The middleware supports three types of path matching:
+
+1. **Exact match**: `/dashboard/users` matches only `/dashboard/users`
+2. **Wildcard match**: `/dashboard/*` matches all paths under `/dashboard/`
+3. **Prefix match**: `/dashboard` matches `/dashboard` and `/dashboard/*`
+
+### Example: Protecting Admin Routes
+
+```typescript
+const routes = [
+  {
+    path: "/dashboard/admin/*",
+    roles: ["owner", "admin"],
+  },
+  {
+    path: "/dashboard/users/*/edit",
+    permissions: [PERMISSIONS.USERS_UPDATE],
+  },
+];
+```
+
+### Example: Mixed Requirements
+
+```typescript
+const routes = [
+  {
+    path: "/dashboard/reports",
+    permissions: [PERMISSIONS.ANALYTICS_VIEW],
+    roles: ["manager", "admin", "owner"],
+  },
+];
+```
+
 ## Best Practices
 
 1. **Always check permissions on both client and server**: Client-side checks improve UX, but server-side checks ensure security
@@ -205,3 +309,5 @@ hasPermission(user, PERMISSIONS.ANALYTICS_VIEW); // true
 3. **Combine with RLS policies**: The database RLS policies provide an additional security layer
 4. **Grant custom permissions sparingly**: Use role-based permissions as the primary mechanism
 5. **Check resource ownership**: Use `canPerformAction` when dealing with user-owned resources
+6. **Configure middleware routes**: Define clear route protection rules in the middleware configuration
+7. **Use wildcards wisely**: Wildcard routes can protect entire sections of your app

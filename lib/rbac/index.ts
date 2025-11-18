@@ -4,6 +4,13 @@
  */
 
 export {
+  createRBACMiddleware,
+  DEFAULT_PROTECTED_ROUTES,
+  type RBACMiddlewareOptions,
+  type RouteConfig,
+  rbacMiddleware,
+} from "./middleware";
+export {
   canPerformAction,
   getUserPermissions,
   hasAllPermissions,

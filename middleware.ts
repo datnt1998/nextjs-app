@@ -1,8 +1,21 @@
 import type { NextRequest } from "next/server";
+import { rbacMiddleware } from "@/lib/rbac/middleware";
 import { updateSession } from "@/lib/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request);
+  // First, update the session (handles cookie management)
+  const sessionResponse = await updateSession(request);
+
+  // Then, apply RBAC checks
+  const rbacResponse = await rbacMiddleware(request);
+
+  // If RBAC middleware returned a redirect, use that
+  if (rbacResponse.status === 307 || rbacResponse.status === 308) {
+    return rbacResponse;
+  }
+
+  // Otherwise, return the session response (with updated cookies)
+  return sessionResponse;
 }
 
 export const config = {
