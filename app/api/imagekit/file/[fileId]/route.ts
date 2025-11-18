@@ -12,7 +12,7 @@ import { type NextRequest, NextResponse } from "next/server";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { fileId: string } }
+  { params }: { params: Promise<{ fileId: string }> }
 ) {
   try {
     const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
@@ -24,7 +24,7 @@ export async function GET(
       );
     }
 
-    const { fileId } = params;
+    const { fileId } = await params;
 
     if (!fileId) {
       return NextResponse.json(
