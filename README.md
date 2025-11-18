@@ -6,10 +6,11 @@ A modern, lightweight, and highly extensible NextJS starter kit optimized for Sa
 
 - ⚡️ **Next.js 16** with App Router and TypeScript
 - 🎨 **Tailwind CSS v4** with CSS variables for theming
-- 🔍 **Biome** for fast linting
-- 💅 **Prettier** for code formatting
-- 🐶 **Husky** for Git hooks
-- 📝 **Commitlint** for conventional commits
+- � **Supab\*ase** for authentication and database
+- � **\*Biome** for fast linting
+- � **Pretytier** for code formatting
+- � **CHusky** for Git hooks
+- � **\*Commitlint** for conventional commits
 - 🚀 **Production-ready** configuration
 
 ## Getting Started
@@ -23,6 +24,28 @@ A modern, lightweight, and highly extensible NextJS starter kit optimized for Sa
 ```bash
 npm install
 ```
+
+### Environment Setup
+
+1. Copy the example environment file:
+
+```bash
+cp .env.example .env.local
+```
+
+2. Update `.env.local` with your Supabase credentials:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your-project-url.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+```
+
+To get your Supabase credentials:
+
+1. Create a project at [supabase.com](https://supabase.com)
+2. Go to Project Settings > API
+3. Copy the Project URL and anon/public key
 
 ### Development
 
@@ -101,9 +124,18 @@ nextjs-app/
 ├── app/                  # Next.js App Router
 │   ├── layout.tsx       # Root layout
 │   ├── page.tsx         # Home page
+│   ├── providers/       # React context providers
 │   └── globals.css      # Global styles
+├── lib/                 # Library code
+│   └── supabase/        # Supabase client configurations
+│       ├── client.ts    # Browser client
+│       ├── server.ts    # Server client
+│       └── middleware.ts # Auth middleware
+├── types/               # TypeScript type definitions
+│   └── database.types.ts # Supabase database types
 ├── public/              # Static assets
 ├── .husky/              # Git hooks
+├── middleware.ts        # Next.js middleware
 ├── biome.json           # Biome configuration
 ├── commitlint.config.js # Commitlint configuration
 ├── next.config.ts       # Next.js configuration
@@ -125,9 +157,56 @@ Example:
 import { Component } from "@/components/ui/button";
 ```
 
+## Supabase Integration
+
+### Client Usage (Browser)
+
+```typescript
+import { createClient } from "@/lib/supabase/client";
+
+const supabase = createClient();
+
+// Example: Fetch data
+const { data, error } = await supabase.from("items").select("*");
+```
+
+### Server Usage (Server Components, API Routes)
+
+```typescript
+import { createClient } from "@/lib/supabase/server";
+
+const supabase = await createClient();
+
+// Example: Fetch data with RLS
+const { data, error } = await supabase.from("items").select("*");
+```
+
+### Authentication Middleware
+
+The middleware automatically:
+
+- Refreshes user sessions
+- Protects `/dashboard/*` routes
+- Redirects unauthenticated users to `/sign-in`
+
+### Database Types
+
+Generate TypeScript types from your Supabase schema:
+
+```bash
+npx supabase gen types typescript --project-id your-project-id > types/database.types.ts
+```
+
+Or if using local Supabase:
+
+```bash
+npx supabase gen types typescript --local > types/database.types.ts
+```
+
 ## Learn More
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Tailwind CSS v4](https://tailwindcss.com/docs)
+- [Supabase Documentation](https://supabase.com/docs)
 - [Biome](https://biomejs.dev/)
 - [Conventional Commits](https://www.conventionalcommits.org/)
