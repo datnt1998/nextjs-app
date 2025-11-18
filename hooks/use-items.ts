@@ -15,12 +15,21 @@ interface ItemsParams {
   limit?: number;
   search?: string;
   status?: ItemStatus[];
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
 }
 
 // Fetch items list
 async function fetchItems(params: ItemsParams = {}) {
   const supabase = createClient();
-  const { page = 1, limit = 10, search, status } = params;
+  const {
+    page = 1,
+    limit = 10,
+    search,
+    status,
+    sortBy = "created_at",
+    sortOrder = "desc",
+  } = params;
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
@@ -28,7 +37,7 @@ async function fetchItems(params: ItemsParams = {}) {
     .from("items")
     .select("*", { count: "exact" })
     .range(from, to)
-    .order("created_at", { ascending: false });
+    .order(sortBy, { ascending: sortOrder === "asc" });
 
   if (search) {
     query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);

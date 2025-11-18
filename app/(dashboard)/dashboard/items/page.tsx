@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useQueryState } from "nuqs";
 import { useState } from "react";
@@ -70,14 +71,22 @@ export default function ItemsPage() {
               Manage your items collection
             </p>
           </div>
-          <Can permission={PERMISSIONS.ITEMS_CREATE}>
-            <Link href="/dashboard/items/new">
-              <Button className="flex items-center gap-2">
-                <Icons.plus className="h-4 w-4" />
-                Create Item
+          <Stack direction="horizontal" gap="sm">
+            <Link href="/dashboard/items/table">
+              <Button variant="outline">
+                <Icons.menu className="mr-2 h-4 w-4" />
+                Table View
               </Button>
             </Link>
-          </Can>
+            <Can permission={PERMISSIONS.ITEMS_CREATE}>
+              <Link href="/dashboard/items/new">
+                <Button className="flex items-center gap-2">
+                  <Icons.plus className="h-4 w-4" />
+                  Create Item
+                </Button>
+              </Link>
+            </Can>
+          </Stack>
         </Stack>
 
         {/* Filters */}
@@ -196,7 +205,7 @@ export default function ItemsPage() {
                     {/* Image */}
                     {item.image_url && (
                       <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
-                        <img
+                        <Image
                           src={buildImageUrl(item.image_url, {
                             width: 400,
                             height: 300,
@@ -205,6 +214,8 @@ export default function ItemsPage() {
                             format: "auto",
                           })}
                           alt={item.title}
+                          width={400}
+                          height={300}
                           className="h-full w-full object-cover"
                         />
                       </div>

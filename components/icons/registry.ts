@@ -2,11 +2,14 @@ import {
   IconChevronDown,
   IconChevronLeft,
   IconChevronRight,
+  IconEdit,
   IconFolder,
+  IconGrid3x3,
   IconHome,
   IconLoader2,
   IconLogout,
   IconMenu2,
+  IconPhoto,
   IconPlus,
   IconSearch,
   IconSettings,
@@ -32,6 +35,9 @@ export const Icons = {
   close: IconX,
   spinner: IconLoader2,
   logout: IconLogout,
+  edit: IconEdit,
+  grid: IconGrid3x3,
+  image: IconPhoto,
 } as const;
 
 export type IconName = keyof typeof Icons;

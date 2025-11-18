@@ -17,3 +17,12 @@ export const stringArrayParser = createParser<string[]>({
   parse: (v) => (v ? v.split(",") : null),
   serialize: (v) => (v && v.length > 0 ? v.join(",") : ""),
 });
+
+/**
+ * Custom parser for sort order values in URL search params
+ * Ensures value is either "asc" or "desc"
+ */
+export const sortOrderParser = createParser<"asc" | "desc">({
+  parse: (v) => (v === "asc" || v === "desc" ? v : null),
+  serialize: (v) => v || "",
+});

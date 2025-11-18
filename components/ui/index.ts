@@ -12,6 +12,8 @@ export {
 // Layout Primitives
 export { Container } from "./container";
 export { DashboardShell } from "./dashboard-shell";
+export { DataTable } from "./data-table";
+export { DensityToggle } from "./density-toggle";
 export {
   Dialog,
   DialogClose,
@@ -43,6 +45,7 @@ export {
 } from "./dropdown-menu";
 export { Grid } from "./grid";
 export { Input, inputVariants } from "./input";
+export { Pagination, PaginationInfo } from "./pagination";
 export { Section } from "./section";
 export { SidebarLayout } from "./sidebar-layout";
 export { Stack } from "./stack";

@@ -59,6 +59,8 @@ export async function GET(request: NextRequest) {
     const status = statusParam
       ? (statusParam.split(",") as Array<"active" | "inactive" | "archived">)
       : [];
+    const sortBy = searchParams.get("sortBy") || "created_at";
+    const sortOrder = searchParams.get("sortOrder") || "desc";
 
     // Calculate pagination
     const from = (page - 1) * limit;
@@ -69,7 +71,7 @@ export async function GET(request: NextRequest) {
       .from("items")
       .select("*", { count: "exact" })
       .range(from, to)
-      .order("created_at", { ascending: false });
+      .order(sortBy, { ascending: sortOrder === "asc" });
 
     // Apply search filter
     if (search) {
