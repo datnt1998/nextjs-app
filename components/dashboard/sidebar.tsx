@@ -4,49 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icons } from "@/components/icons/registry";
 import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { useSidebarStore } from "@/stores/sidebar.store";
 import { useUserStore } from "@/stores/user.store";
-
-export interface MenuItem {
-  label: string;
-  href: string;
-  icon: keyof typeof Icons;
-  roles: Array<"owner" | "admin" | "manager" | "editor" | "viewer">;
-}
-
-const sidebarMenu: MenuItem[] = [
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: "home",
-    roles: ["owner", "admin", "manager", "editor", "viewer"],
-  },
-  {
-    label: "Users",
-    href: "/dashboard/users",
-    icon: "users",
-    roles: ["owner", "admin"],
-  },
-  {
-    label: "Items",
-    href: "/dashboard/items",
-    icon: "folder",
-    roles: ["owner", "admin", "manager", "editor"],
-  },
-  {
-    label: "Upload",
-    href: "/dashboard/upload",
-    icon: "upload",
-    roles: ["owner", "admin", "manager", "editor"],
-  },
-  {
-    label: "Settings",
-    href: "/dashboard/settings",
-    icon: "settings",
-    roles: ["owner", "admin"],
-  },
-];
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -54,14 +15,16 @@ export function Sidebar() {
   const role = useUserStore((s) => s.role);
 
   // Filter menu items based on user role
-  const filteredMenu = sidebarMenu.filter((item) => item.roles.includes(role));
+  const filteredMenu = siteConfig.dashboardNav.filter((item) =>
+    (item.roles as readonly string[]).includes(role)
+  );
 
   return (
     <div className="flex h-full flex-col bg-sidebar-bg text-sidebar-fg">
       {/* Header */}
       <div className="flex h-16 items-center justify-between border-b border-border px-4">
         {!isCollapsed && (
-          <h2 className="text-lg font-semibold">NextJS Starter</h2>
+          <h2 className="text-lg font-semibold">{siteConfig.name}</h2>
         )}
         <Button
           variant="ghost"
@@ -81,7 +44,7 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 space-y-1 p-4">
         {filteredMenu.map((item) => {
-          const Icon = Icons[item.icon];
+          const Icon = item.icon ? Icons[item.icon] : null;
           const isActive = pathname === item.href;
 
           return (
@@ -94,10 +57,10 @@ export function Sidebar() {
                 isActive ? "bg-sidebar-active text-white" : "text-sidebar-fg",
                 isCollapsed && "justify-center"
               )}
-              title={isCollapsed ? item.label : undefined}
+              title={isCollapsed ? item.title : undefined}
             >
-              <Icon className="h-5 w-5 shrink-0" />
-              {!isCollapsed && <span>{item.label}</span>}
+              {Icon && <Icon className="h-5 w-5 shrink-0" />}
+              {!isCollapsed && <span>{item.title}</span>}
             </Link>
           );
         })}

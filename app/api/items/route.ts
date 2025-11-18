@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { ApiErrors, handleAPIError } from "@/lib/api";
 import { hasPermission, PERMISSIONS } from "@/lib/rbac/permissions";
 import { createClient } from "@/lib/supabase/server";
 import { itemSchema } from "@/lib/zod/schemas";
@@ -21,7 +22,7 @@ export async function GET(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      throw ApiErrors.unauthorized("Authentication required");
     }
 
     // Get user profile for RBAC
@@ -32,10 +33,7 @@ export async function GET(request: NextRequest) {
       .single<Profile>();
 
     if (profileError || !profile) {
-      return NextResponse.json(
-        { error: "User profile not found" },
-        { status: 404 }
-      );
+      throw ApiErrors.notFound("User profile not found");
     }
 
     // Check permission
@@ -47,7 +45,7 @@ export async function GET(request: NextRequest) {
     };
 
     if (!hasPermission(userProfile, PERMISSIONS.ITEMS_VIEW)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      throw ApiErrors.forbidden("You don't have permission to view items");
     }
 
     // Parse query parameters
@@ -87,10 +85,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error("Error fetching items:", error);
-      return NextResponse.json(
-        { error: "Failed to fetch items" },
-        { status: 500 }
-      );
+      throw ApiErrors.internalServer("Failed to fetch items");
     }
 
     return NextResponse.json({
@@ -100,10 +95,10 @@ export async function GET(request: NextRequest) {
       limit,
     });
   } catch (error) {
-    console.error("Unexpected error:", error);
+    const errorResponse = handleAPIError(error);
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
+      { error: errorResponse.error, code: errorResponse.code },
+      { status: errorResponse.statusCode }
     );
   }
 }
@@ -123,7 +118,7 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      throw ApiErrors.unauthorized("Authentication required");
     }
 
     // Get user profile for RBAC
@@ -134,10 +129,7 @@ export async function POST(request: NextRequest) {
       .single<Profile>();
 
     if (profileError || !profile) {
-      return NextResponse.json(
-        { error: "User profile not found" },
-        { status: 404 }
-      );
+      throw ApiErrors.notFound("User profile not found");
     }
 
     // Check permission
@@ -149,7 +141,7 @@ export async function POST(request: NextRequest) {
     };
 
     if (!hasPermission(userProfile, PERMISSIONS.ITEMS_CREATE)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      throw ApiErrors.forbidden("You don't have permission to create items");
     }
 
     // Parse and validate request body
@@ -157,12 +149,8 @@ export async function POST(request: NextRequest) {
     const validation = itemSchema.safeParse(body);
 
     if (!validation.success) {
-      return NextResponse.json(
-        {
-          error: "Validation failed",
-          details: validation.error.format(),
-        },
-        { status: 400 }
+      throw ApiErrors.badRequest(
+        `Validation failed: ${validation.error.issues.map((e: { message: string }) => e.message).join(", ")}`
       );
     }
 
@@ -178,18 +166,15 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("Error creating item:", error);
-      return NextResponse.json(
-        { error: "Failed to create item" },
-        { status: 500 }
-      );
+      throw ApiErrors.internalServer("Failed to create item");
     }
 
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
-    console.error("Unexpected error:", error);
+    const errorResponse = handleAPIError(error);
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
+      { error: errorResponse.error, code: errorResponse.code },
+      { status: errorResponse.statusCode }
     );
   }
 }

@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { ApiErrors, handleAPIError } from "@/lib/api";
 import {
   canPerformAction,
   hasPermission,
@@ -16,7 +17,7 @@ type Item = Database["public"]["Tables"]["items"]["Row"];
  * Fetch a single item by ID
  */
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -30,7 +31,7 @@ export async function GET(
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      throw ApiErrors.unauthorized("Authentication required");
     }
 
     // Get user profile for RBAC
@@ -41,10 +42,7 @@ export async function GET(
       .single<Profile>();
 
     if (profileError || !profile) {
-      return NextResponse.json(
-        { error: "User profile not found" },
-        { status: 404 }
-      );
+      throw ApiErrors.notFound("User profile not found");
     }
 
     // Check permission
@@ -56,7 +54,7 @@ export async function GET(
     };
 
     if (!hasPermission(userProfile, PERMISSIONS.ITEMS_VIEW)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      throw ApiErrors.forbidden("You don't have permission to view items");
     }
 
     // Fetch item
@@ -68,21 +66,18 @@ export async function GET(
 
     if (error) {
       if (error.code === "PGRST116") {
-        return NextResponse.json({ error: "Item not found" }, { status: 404 });
+        throw ApiErrors.notFound("Item not found");
       }
       console.error("Error fetching item:", error);
-      return NextResponse.json(
-        { error: "Failed to fetch item" },
-        { status: 500 }
-      );
+      throw ApiErrors.internalServer("Failed to fetch item");
     }
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Unexpected error:", error);
+    const errorResponse = handleAPIError(error);
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
+      { error: errorResponse.error, code: errorResponse.code },
+      { status: errorResponse.statusCode }
     );
   }
 }
@@ -106,7 +101,7 @@ export async function PATCH(
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      throw ApiErrors.unauthorized("Authentication required");
     }
 
     // Get user profile for RBAC
@@ -117,10 +112,7 @@ export async function PATCH(
       .single<Profile>();
 
     if (profileError || !profile) {
-      return NextResponse.json(
-        { error: "User profile not found" },
-        { status: 404 }
-      );
+      throw ApiErrors.notFound("User profile not found");
     }
 
     // Fetch the item to check ownership
@@ -132,13 +124,10 @@ export async function PATCH(
 
     if (fetchError || !existingItem) {
       if (fetchError?.code === "PGRST116") {
-        return NextResponse.json({ error: "Item not found" }, { status: 404 });
+        throw ApiErrors.notFound("Item not found");
       }
       console.error("Error fetching item:", fetchError);
-      return NextResponse.json(
-        { error: "Failed to fetch item" },
-        { status: 500 }
-      );
+      throw ApiErrors.internalServer("Failed to fetch item");
     }
 
     // Check permission
@@ -156,7 +145,9 @@ export async function PATCH(
     );
 
     if (!canUpdate) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      throw ApiErrors.forbidden(
+        "You don't have permission to update this item"
+      );
     }
 
     // Parse and validate request body
@@ -164,12 +155,8 @@ export async function PATCH(
     const validation = itemUpdateSchema.safeParse(body);
 
     if (!validation.success) {
-      return NextResponse.json(
-        {
-          error: "Validation failed",
-          details: validation.error.format(),
-        },
-        { status: 400 }
+      throw ApiErrors.badRequest(
+        `Validation failed: ${validation.error.issues.map((e: { message: string }) => e.message).join(", ")}`
       );
     }
 
@@ -183,18 +170,15 @@ export async function PATCH(
 
     if (error) {
       console.error("Error updating item:", error);
-      return NextResponse.json(
-        { error: "Failed to update item" },
-        { status: 500 }
-      );
+      throw ApiErrors.internalServer("Failed to update item");
     }
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Unexpected error:", error);
+    const errorResponse = handleAPIError(error);
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
+      { error: errorResponse.error, code: errorResponse.code },
+      { status: errorResponse.statusCode }
     );
   }
 }
@@ -204,7 +188,7 @@ export async function PATCH(
  * Delete an item by ID
  */
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -218,7 +202,7 @@ export async function DELETE(
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      throw ApiErrors.unauthorized("Authentication required");
     }
 
     // Get user profile for RBAC
@@ -229,10 +213,7 @@ export async function DELETE(
       .single<Profile>();
 
     if (profileError || !profile) {
-      return NextResponse.json(
-        { error: "User profile not found" },
-        { status: 404 }
-      );
+      throw ApiErrors.notFound("User profile not found");
     }
 
     // Fetch the item to check ownership
@@ -244,13 +225,10 @@ export async function DELETE(
 
     if (fetchError || !existingItem) {
       if (fetchError?.code === "PGRST116") {
-        return NextResponse.json({ error: "Item not found" }, { status: 404 });
+        throw ApiErrors.notFound("Item not found");
       }
       console.error("Error fetching item:", fetchError);
-      return NextResponse.json(
-        { error: "Failed to fetch item" },
-        { status: 500 }
-      );
+      throw ApiErrors.internalServer("Failed to fetch item");
     }
 
     // Check permission
@@ -268,7 +246,9 @@ export async function DELETE(
     );
 
     if (!canDelete) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      throw ApiErrors.forbidden(
+        "You don't have permission to delete this item"
+      );
     }
 
     // Delete item
@@ -276,18 +256,15 @@ export async function DELETE(
 
     if (error) {
       console.error("Error deleting item:", error);
-      return NextResponse.json(
-        { error: "Failed to delete item" },
-        { status: 500 }
-      );
+      throw ApiErrors.internalServer("Failed to delete item");
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error("Unexpected error:", error);
+    const errorResponse = handleAPIError(error);
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
+      { error: errorResponse.error, code: errorResponse.code },
+      { status: errorResponse.statusCode }
     );
   }
 }
