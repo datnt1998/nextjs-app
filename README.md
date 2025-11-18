@@ -27,25 +27,123 @@ npm install
 
 ### Environment Setup
 
-1. Copy the example environment file:
+This starter kit requires environment variables for Supabase (authentication & database) and ImageKit (image management).
+
+#### 1. Copy the Environment Template
 
 ```bash
 cp .env.example .env.local
 ```
 
-2. Update `.env.local` with your Supabase credentials:
+#### 2. Configure Supabase (Required)
+
+Supabase provides authentication, database, and real-time features.
+
+**Get your Supabase credentials:**
+
+1. Create a free account at [supabase.com](https://supabase.com)
+2. Create a new project (note: it takes ~2 minutes to provision)
+3. Go to **Project Settings** > **API**
+4. Copy the following values to your `.env.local`:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your-project-url.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
-To get your Supabase credentials:
+**Important Notes:**
 
-1. Create a project at [supabase.com](https://supabase.com)
-2. Go to Project Settings > API
-3. Copy the Project URL and anon/public key
+- `NEXT_PUBLIC_SUPABASE_URL` - Your project's API URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Public key (safe to expose in browser)
+- `SUPABASE_SERVICE_ROLE_KEY` - Secret key (server-side only, bypasses RLS)
+
+⚠️ **Security Warning:** Never commit `.env.local` or expose the service role key to the client.
+
+#### 3. Configure ImageKit (Required for Image Uploads)
+
+ImageKit provides image CDN, transformations, and optimization.
+
+**Get your ImageKit credentials:**
+
+1. Create a free account at [imagekit.io](https://imagekit.io)
+2. Go to **Developer Options** > **API Keys**
+3. Copy the following values to your `.env.local`:
+
+```env
+NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY=public_xxxxx
+NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/your-id
+IMAGEKIT_PRIVATE_KEY=private_xxxxx
+```
+
+**Important Notes:**
+
+- `NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY` - Public key (safe to expose in browser)
+- `NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT` - Your ImageKit URL endpoint
+- `IMAGEKIT_PRIVATE_KEY` - Secret key (server-side only, used for upload signatures)
+
+⚠️ **Security Warning:** Never expose the private key to the client.
+
+#### 4. Configure Site URL (Optional)
+
+Set your application's base URL:
+
+```env
+# Development
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Production
+NEXT_PUBLIC_SITE_URL=https://yourdomain.com
+```
+
+This is used for generating absolute URLs, redirects, and metadata.
+
+#### 5. Verify Your Configuration
+
+After setting up your environment variables, verify they're loaded correctly:
+
+```bash
+npm run dev
+```
+
+If you see errors about missing environment variables, double-check:
+
+1. File is named `.env.local` (not `.env.example`)
+2. File is in the `nextjs-app/` directory
+3. No extra spaces around the `=` sign
+4. Values are copied correctly from your dashboards
+
+#### Environment Variables Reference
+
+| Variable                            | Required | Description                        | Where to Get It                        |
+| ----------------------------------- | -------- | ---------------------------------- | -------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`          | ✅ Yes   | Supabase project URL               | Supabase Dashboard > Settings > API    |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY`     | ✅ Yes   | Supabase anonymous key (public)    | Supabase Dashboard > Settings > API    |
+| `SUPABASE_SERVICE_ROLE_KEY`         | ✅ Yes   | Supabase service role key (secret) | Supabase Dashboard > Settings > API    |
+| `NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY`   | ✅ Yes   | ImageKit public key                | ImageKit Dashboard > Developer Options |
+| `NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT` | ✅ Yes   | ImageKit URL endpoint              | ImageKit Dashboard > Developer Options |
+| `IMAGEKIT_PRIVATE_KEY`              | ✅ Yes   | ImageKit private key (secret)      | ImageKit Dashboard > Developer Options |
+| `NEXT_PUBLIC_SITE_URL`              | ⚪ No    | Your application's base URL        | Set manually                           |
+
+#### Troubleshooting
+
+**"Missing Supabase environment variables" error:**
+
+- Ensure `.env.local` exists in the `nextjs-app/` directory
+- Verify all three Supabase variables are set
+- Restart the development server after adding variables
+
+**"ImageKit credentials not configured" error:**
+
+- Ensure all three ImageKit variables are set
+- Verify the URL endpoint includes `https://` and your ImageKit ID
+- Check that keys are copied completely (they're quite long)
+
+**Changes not taking effect:**
+
+- Restart the development server (`Ctrl+C` then `npm run dev`)
+- Clear Next.js cache: `rm -rf .next`
+- Verify you're editing `.env.local` not `.env.example`
 
 ### Database Setup
 
