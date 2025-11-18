@@ -52,9 +52,11 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                "hover:bg-sidebar-hover",
-                isActive ? "bg-sidebar-active text-white" : "text-sidebar-fg",
+                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all duration-200",
+                "hover:bg-sidebar-hover hover:scale-[1.02]",
+                isActive
+                  ? "bg-sidebar-active text-white shadow-sm"
+                  : "text-sidebar-fg hover:text-foreground",
                 isCollapsed && "justify-center"
               )}
               title={isCollapsed ? item.title : undefined}

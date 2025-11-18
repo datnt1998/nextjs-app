@@ -122,7 +122,7 @@
     /* Sidebar */
     --sidebar-bg: 0 0% 100%;
     --sidebar-fg: 222 47% 11%;
-    --sidebar-hover: 210 40% 96%;
+    --sidebar-hover: 210 40% 94%;
     --sidebar-active: 242 75% 58%;
     --sidebar-border: 214 32% 91%;
     --sidebar-ring: 242 75% 58%;
@@ -168,7 +168,7 @@
 
     --sidebar-bg: 224 25% 12%;
     --sidebar-fg: 210 40% 98%;
-    --sidebar-hover: 222 16% 20%;
+    --sidebar-hover: 222 16% 22%;
     --sidebar-active: 242 75% 58%;
     --sidebar-border: 222 16% 20%;
     --sidebar-ring: 242 75% 58%;

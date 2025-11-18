@@ -6,8 +6,9 @@ import { cn } from "@/lib/utils";
 const cardVariants = cva("rounded-lg transition-all", {
   variants: {
     variant: {
-      default: "bg-card text-card-foreground shadow-sm",
-      elevated: "bg-card text-card-foreground shadow-lg",
+      default: "bg-card text-card-foreground shadow-md border border-border/50",
+      elevated:
+        "bg-card text-card-foreground shadow-lg border border-border/50",
       outline: "bg-card text-card-foreground border border-border",
       glass:
         "bg-card/50 backdrop-blur-sm text-card-foreground border border-border/50",
