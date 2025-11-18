@@ -35,6 +35,12 @@ const sidebarMenu: MenuItem[] = [
     roles: ["owner", "admin", "manager", "editor"],
   },
   {
+    label: "Upload",
+    href: "/dashboard/upload",
+    icon: "upload",
+    roles: ["owner", "admin", "manager", "editor"],
+  },
+  {
     label: "Settings",
     href: "/dashboard/settings",
     icon: "settings",

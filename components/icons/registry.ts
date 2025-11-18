@@ -14,6 +14,7 @@ import {
   IconSearch,
   IconSettings,
   IconTrash,
+  IconUpload,
   IconUser,
   IconUsers,
   IconX,
@@ -38,6 +39,7 @@ export const Icons = {
   edit: IconEdit,
   grid: IconGrid3x3,
   image: IconPhoto,
+  upload: IconUpload,
 } as const;
 
 export type IconName = keyof typeof Icons;
