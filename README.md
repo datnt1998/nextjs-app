@@ -247,14 +247,26 @@ nextjs-app/
 │   ├── page.tsx         # Home page
 │   ├── providers/       # React context providers
 │   └── globals.css      # Global styles
+├── components/          # Component library (see Component Architecture below)
+│   ├── ui/              # Atomic UI primitives (Button, Input, Card, etc.)
+│   ├── shared/          # Composite reusable components (DataTable, Pagination)
+│   ├── dashboard/       # Dashboard shell components (Sidebar, Layout)
+│   ├── features/        # Feature-specific components (Items, Upload)
+│   ├── icons/           # Icon registry
+│   └── rbac/            # RBAC components
 ├── lib/                 # Library code
-│   └── supabase/        # Supabase client configurations
-│       ├── client.ts    # Browser client
-│       ├── server.ts    # Server client
-│       └── middleware.ts # Auth middleware
+│   ├── supabase/        # Supabase client configurations
+│   ├── imagekit/        # ImageKit integration
+│   ├── nuqs/            # URL state management
+│   ├── rbac/            # RBAC utilities
+│   ├── api/             # API utilities
+│   └── zod/             # Validation schemas
+├── hooks/               # Custom React hooks
+├── stores/              # Zustand state stores
 ├── types/               # TypeScript type definitions
 │   └── database.types.ts # Supabase database types
 ├── public/              # Static assets
+├── supabase/            # Supabase migrations and setup
 ├── .husky/              # Git hooks
 ├── middleware.ts        # Next.js middleware
 ├── biome.json           # Biome configuration
@@ -265,6 +277,71 @@ nextjs-app/
 ├── tsconfig.json        # TypeScript configuration
 └── README.md            # This file
 ```
+
+## Component Architecture
+
+This starter kit follows a **layered component architecture** for maintainability and scalability.
+
+### Architecture Layers
+
+```
+components/
+├── ui/                    # Layer 1: Atomic UI primitives
+├── shared/                # Layer 2: Composite reusable components
+├── dashboard/             # Layer 3: Dashboard shell components
+└── features/              # Layer 4: Feature-specific components
+```
+
+### Quick Reference
+
+| Layer          | Purpose               | Can Use                          | Cannot Use             |
+| -------------- | --------------------- | -------------------------------- | ---------------------- |
+| **ui/**        | Primitive UI elements | Radix UI, theme tokens           | Business logic, APIs   |
+| **shared/**    | Reusable composites   | ui/, external libs               | Business logic, APIs   |
+| **dashboard/** | App shell/layout      | ui/, shared/, auth               | Feature-specific logic |
+| **features/**  | Feature-specific      | All layers, APIs, business logic | -                      |
+
+### Key Rules
+
+1. **Atomic UI components** (`ui/`) MUST use ShadCN/Radix UI primitives
+2. **All components** MUST support `className`, `forwardRef`, and `asChild` (where appropriate)
+3. **Business logic** belongs ONLY in `features/` components
+4. **Use absolute imports**: `@/components/ui/button` not `../../components/ui/button`
+
+### Examples
+
+```tsx
+// ✅ Atomic UI (components/ui/button.tsx)
+import { Slot } from "@radix-ui/react-slot";
+export const Button = React.forwardRef(({ asChild, ...props }, ref) => {
+  const Comp = asChild ? Slot : "button";
+  return <Comp ref={ref} {...props} />;
+});
+
+// ✅ Shared Component (components/shared/pagination.tsx)
+import { Button } from "@/components/ui/button";
+export function Pagination({ currentPage, totalPages, onPageChange }) {
+  return <Button onClick={() => onPageChange(currentPage + 1)}>Next</Button>;
+}
+
+// ✅ Feature Component (components/features/items/item-form.tsx)
+import { Button } from "@/components/ui/button";
+import { useMutation } from "@tanstack/react-query";
+export function ItemForm() {
+  const mutation = useMutation({ mutationFn: saveItem });
+  return <form onSubmit={mutation.mutate}>...</form>;
+}
+```
+
+### Full Documentation
+
+See [COMPONENT_ARCHITECTURE.md](./COMPONENT_ARCHITECTURE.md) for complete architecture documentation including:
+
+- Detailed layer definitions and rules
+- MCP ShadCN enforcement rules
+- Code style checklist
+- Migration guide
+- Testing strategy
 
 ## Path Aliases
 

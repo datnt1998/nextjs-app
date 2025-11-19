@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { use } from "react";
+import { ItemForm } from "@/components/features/items/item-form";
 import { Icons } from "@/components/icons/registry";
-import { ItemForm } from "@/components/items/item-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";

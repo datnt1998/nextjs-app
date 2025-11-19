@@ -1,6 +1,6 @@
 import { Sidebar } from "@/components/dashboard/sidebar";
+import { SidebarLayout } from "@/components/dashboard/sidebar-layout";
 import { UserMenu } from "@/components/dashboard/user-menu";
-import { SidebarLayout } from "@/components/ui/sidebar-layout";
 
 export default function DashboardLayout({
   children,

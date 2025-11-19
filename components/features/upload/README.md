@@ -16,7 +16,7 @@ A comprehensive image upload component with real-time transformations powered by
 ### Basic Usage
 
 ```tsx
-import { ImageUploadForm } from "@/components/upload";
+import { ImageUploadForm } from "@/components/features/upload";
 
 export default function UploadPage() {
   return <ImageUploadForm folder="/uploads" maxSizeMB={10} />;
@@ -26,7 +26,7 @@ export default function UploadPage() {
 ### With Upload Callback
 
 ```tsx
-import { ImageUploadForm } from "@/components/upload";
+import { ImageUploadForm } from "@/components/features/upload";
 import type { UploadResponse } from "@/lib/imagekit/upload";
 
 export default function UploadPage() {

@@ -16,7 +16,9 @@ A powerful, feature-rich data table component built with TanStack Table v8 that 
 ## Basic Usage
 
 ```tsx
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/shared/data-table";
+// or
+import { DataTable } from "@/components/shared";
 import { type ColumnDef } from "@tanstack/react-table";
 
 interface User {
@@ -163,7 +165,9 @@ const handleSortingChange = (updater) => {
 Use the `DensityToggle` component to let users control table density:
 
 ```tsx
-import { DensityToggle } from "@/components/ui/density-toggle";
+import { DensityToggle } from "@/components/shared/data-table";
+// or
+import { DensityToggle } from "@/components/shared";
 
 <DensityToggle />
 <DataTable columns={columns} data={data} />

@@ -1,6 +1,6 @@
+import { DashboardShell } from "@/components/dashboard/dashboard-shell";
+import { ImageUploadForm } from "@/components/features/upload/image-upload-form";
 import { Container } from "@/components/ui/container";
-import { DashboardShell } from "@/components/ui/dashboard-shell";
-import { ImageUploadForm } from "@/components/upload/image-upload-form";
 
 export const metadata = {
   title: "Image Upload | Dashboard",

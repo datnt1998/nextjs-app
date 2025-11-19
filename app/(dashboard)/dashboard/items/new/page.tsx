@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { ItemForm } from "@/components/features/items/item-form";
 import { Icons } from "@/components/icons/registry";
-import { ItemForm } from "@/components/items/item-form";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Stack } from "@/components/ui/stack";
