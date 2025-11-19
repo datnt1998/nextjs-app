@@ -133,7 +133,7 @@ export function hasPermission(
   }
 
   // Check user-specific permissions (custom permissions granted to the user)
-  if (user.permissions && user.permissions.includes(permission)) {
+  if (user.permissions?.includes(permission)) {
     return true;
   }
 

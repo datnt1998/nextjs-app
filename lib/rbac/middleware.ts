@@ -6,11 +6,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 import type { Database } from "@/types/database.types";
-import {
-  hasAnyPermission,
-  hasPermission,
-  type Permission,
-} from "./permissions";
+import { hasAnyPermission, type Permission } from "./permissions";
 
 /**
  * Route configuration for RBAC protection
@@ -67,7 +63,7 @@ function matchesPath(pathname: string, pattern: string): boolean {
   }
 
   // Prefix match (e.g., /dashboard matches /dashboard/*)
-  if (pathname.startsWith(pattern + "/")) {
+  if (pathname.startsWith(`${pattern}/`)) {
     return true;
   }
 

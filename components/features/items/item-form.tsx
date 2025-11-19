@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { useCreateItem, useUpdateItem } from "@/hooks/use-items";
 import { useToast } from "@/hooks/use-toast";
 import { uploadFile, validateFile } from "@/lib/imagekit/upload";
-import { buildImageUrl, buildLQIP } from "@/lib/imagekit/url-builder";
 import type { Database } from "@/types/database.types";
 
 type Item = Database["public"]["Tables"]["items"]["Row"];
@@ -29,7 +28,7 @@ export function ItemForm({ item, mode }: ItemFormProps) {
   const [title, setTitle] = useState(item?.title || "");
   const [description, setDescription] = useState(item?.description || "");
   const [status, setStatus] = useState<ItemStatus>(item?.status || "active");
-  const [imageUrl, setImageUrl] = useState(item?.image_url || "");
+  const [imageUrl, _setImageUrl] = useState(item?.image_url || "");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(
     item?.image_url || null,
@@ -241,8 +240,10 @@ export function ItemForm({ item, mode }: ItemFormProps) {
                   <Icons.spinner className="h-4 w-4 animate-spin" />
                   {isUploading ? "Uploading..." : "Saving..."}
                 </>
+              ) : mode === "create" ? (
+                "Create Item"
               ) : (
-                <>{mode === "create" ? "Create Item" : "Update Item"}</>
+                "Update Item"
               )}
             </Button>
             <Button

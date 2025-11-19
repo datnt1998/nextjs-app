@@ -11,7 +11,7 @@ import { type NextRequest, NextResponse } from "next/server";
  * @returns File details or error response
  */
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ fileId: string }> },
 ) {
   try {
