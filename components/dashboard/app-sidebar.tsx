@@ -44,7 +44,7 @@ export function AppSidebar() {
   // Filter nav items by RBAC
   const items = useMemo(() => {
     return siteConfig.dashboardNav.filter((item) =>
-      (item.roles as readonly string[]).includes(role),
+      (item.roles as readonly string[]).includes(role)
     );
   }, [role]);
 
@@ -58,10 +58,17 @@ export function AppSidebar() {
 
   // Group items by category
   const mainItems = items.filter((item) =>
-    ["/dashboard", "/items"].includes(item.href),
+    [
+      "/dashboard",
+      "/dashboard/items",
+      "/dashboard/examples",
+      "/dashboard/upload",
+    ].includes(item.href)
   );
   const managementItems = items.filter((item) =>
-    ["/settings", "/users", "/teams"].includes(item.href),
+    ["/dashboard/settings", "/dashboard/users", "/dashboard/teams"].includes(
+      item.href
+    )
   );
 
   return (
@@ -143,7 +150,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                   {mainItems.map((item) => {
                     const Icon = item.icon ? Icons[item.icon] : Icons.folder;
-                    const hasSubmenu = item.href === "/items";
+                    const hasSubmenu = item.href === "/dashboard/items";
 
                     if (hasSubmenu) {
                       return (
@@ -167,21 +174,21 @@ export function AppSidebar() {
                               <SidebarMenuSub>
                                 <SidebarMenuSubItem>
                                   <SidebarMenuSubButton asChild>
-                                    <Link href="/items">
+                                    <Link href="/dashboard/items">
                                       <span>All Items</span>
                                     </Link>
                                   </SidebarMenuSubButton>
                                 </SidebarMenuSubItem>
                                 <SidebarMenuSubItem>
                                   <SidebarMenuSubButton asChild>
-                                    <Link href="/items/new">
+                                    <Link href="/dashboard/items/new">
                                       <span>Create New</span>
                                     </Link>
                                   </SidebarMenuSubButton>
                                 </SidebarMenuSubItem>
                                 <SidebarMenuSubItem>
                                   <SidebarMenuSubButton asChild>
-                                    <Link href="/items/archived">
+                                    <Link href="/dashboard/items/archived">
                                       <span>Archived</span>
                                     </Link>
                                   </SidebarMenuSubButton>

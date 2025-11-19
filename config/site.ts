@@ -97,6 +97,12 @@ export const siteConfig = {
       roles: ["owner", "admin", "manager", "editor"],
     },
     {
+      title: "DataTable Examples",
+      href: "/dashboard/examples/data-table",
+      icon: "grid",
+      roles: ["owner", "admin", "manager", "editor", "viewer"],
+    },
+    {
       title: "Upload",
       href: "/dashboard/upload",
       icon: "upload",

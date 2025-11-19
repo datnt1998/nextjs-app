@@ -1,510 +1,492 @@
-# DataTable Component
+# Data Table Components
 
-A powerful, feature-rich data table component built with TanStack Table v8 that supports column resizing, sticky headers, row selection, server-side pagination, sorting, and filtering.
+A comprehensive data table implementation with advanced filtering, sorting, pagination, and URL state management based on openstatusHQ patterns.
 
 ## Features
 
-- ✅ Column resizing with visual feedback
-- ✅ Sticky header support for long tables
-- ✅ Row selection with state management
-- ✅ Server-side pagination with manual control
-- ✅ Server-side sorting with URL state sync
-- ✅ Density toggle (compact, comfortable, spacious)
-- ✅ Responsive design with semantic tokens
-- ✅ TypeScript support with full type safety
+- ✅ **URL State Synchronization** - All table state (filters, sorting, pagination) synced to URL
+- ✅ **Compact URL Serialization** - Space-efficient filter encoding (`status:active,pending`)
+- ✅ **Multiple Filter Types** - Input, checkbox, slider, and timerange filters
+- ✅ **Type-Safe** - Full TypeScript support with discriminated union types
+- ✅ **Flexible** - Works with both client-side and server-side data
+- ✅ **Accessible** - Built on Radix UI primitives
+- ✅ **Customizable** - Extensive configuration options
 
-## Basic Usage
+## Quick Start
+
+### Basic Usage
 
 ```tsx
-import { DataTable } from "@/components/shared/data-table";
-// or
-import { DataTable } from "@/components/shared";
-import { type ColumnDef } from "@tanstack/react-table";
+import {
+  useDataTable,
+  DataTable,
+  DataTablePagination,
+  DataTableToolbar,
+} from "@/components/shared/data-table";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { DataTableFilterField } from "@/types/table";
 
-interface User {
+type Product = {
   id: string;
   name: string;
-  email: string;
-}
-
-const columns: ColumnDef<User>[] = [
-  {
-    accessorKey: "name",
-    header: "Name",
-    enableSorting: true,
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-    enableSorting: true,
-  },
-];
-
-function UsersTable() {
-  const users = [
-    { id: "1", name: "John Doe", email: "john@example.com" },
-    { id: "2", name: "Jane Smith", email: "jane@example.com" },
-  ];
-
-  return <DataTable columns={columns} data={users} />;
-}
-```
-
-## Advanced Features
-
-### Column Resizing
-
-Enable column resizing by setting `enableColumnResizing={true}`:
-
-```tsx
-<DataTable columns={columns} data={data} enableColumnResizing />
-```
-
-Set initial column widths in your column definitions:
-
-```tsx
-const columns: ColumnDef<User>[] = [
-  {
-    accessorKey: "name",
-    header: "Name",
-    size: 200, // Initial width in pixels
-  },
-];
-```
-
-### Sticky Header
-
-Enable sticky headers for long tables:
-
-```tsx
-<DataTable columns={columns} data={data} enableStickyHeader />
-```
-
-### Row Selection
-
-Enable row selection and manage selected rows:
-
-```tsx
-const [rowSelection, setRowSelection] = useState({});
-
-<DataTable
-  columns={columns}
-  data={data}
-  enableRowSelection
-  rowSelection={rowSelection}
-  onRowSelectionChange={setRowSelection}
-/>;
-```
-
-### Server-Side Pagination
-
-For large datasets, use server-side pagination:
-
-```tsx
-const [page, setPage] = useState(1);
-const { data, isLoading } = useQuery({
-  queryKey: ["users", page],
-  queryFn: () => fetchUsers({ page, limit: 10 }),
-});
-
-const totalPages = Math.ceil(data.total / 10);
-
-<DataTable
-  columns={columns}
-  data={data.items}
-  manualPagination
-  pageCount={totalPages}
-/>
-
-<Pagination
-  currentPage={page}
-  totalPages={totalPages}
-  onPageChange={setPage}
-/>
-```
-
-### Server-Side Sorting
-
-Sync sorting state with URL params using Nuqs:
-
-```tsx
-import { sortOrderParser } from "@/lib/nuqs/parsers";
-
-const [sortBy, setSortBy] = useQueryState("sortBy", {
-  defaultValue: "created_at",
-});
-const [sortOrder, setSortOrder] = useQueryState(
-  "sortOrder",
-  sortOrderParser.withDefault("desc")
-);
-
-const sorting = useMemo(
-  () => [{ id: sortBy, desc: sortOrder === "desc" }],
-  [sortBy, sortOrder]
-);
-
-const handleSortingChange = (updater) => {
-  const newSorting = typeof updater === "function" ? updater(sorting) : updater;
-  if (newSorting.length > 0) {
-    setSortBy(newSorting[0].id);
-    setSortOrder(newSorting[0].desc ? "desc" : "asc");
-  }
+  status: "active" | "inactive";
 };
 
-<DataTable
-  columns={columns}
-  data={data}
-  manualSorting
-  sorting={sorting}
-  onSortingChange={handleSortingChange}
-/>;
-```
-
-### Density Toggle
-
-Use the `DensityToggle` component to let users control table density:
-
-```tsx
-import { DensityToggle } from "@/components/shared/data-table";
-// or
-import { DensityToggle } from "@/components/shared";
-
-<DensityToggle />
-<DataTable columns={columns} data={data} />
-```
-
-The density is automatically applied from the Zustand store.
-
-## Complete Example
-
-See `/app/(dashboard)/dashboard/items/table/page.tsx` for a complete example with:
-
-- Server-side pagination
-- Server-side sorting
-- Server-side filtering
-- Column resizing
-- Sticky headers
-- Density toggle
-- URL state management with Nuqs
-
-## Props
-
-### DataTable Props
-
-| Prop                   | Type                            | Default  | Description                            |
-| ---------------------- | ------------------------------- | -------- | -------------------------------------- |
-| `columns`              | `ColumnDef<TData, TValue>[]`    | Required | Column definitions                     |
-| `data`                 | `TData[]`                       | Required | Table data                             |
-| `enableRowSelection`   | `boolean`                       | `false`  | Enable row selection                   |
-| `enableColumnResizing` | `boolean`                       | `false`  | Enable column resizing                 |
-| `enableStickyHeader`   | `boolean`                       | `false`  | Enable sticky header                   |
-| `onRowSelectionChange` | `OnChangeFn<RowSelectionState>` | -        | Row selection change handler           |
-| `rowSelection`         | `RowSelectionState`             | `{}`     | Row selection state                    |
-| `manualPagination`     | `boolean`                       | `false`  | Enable manual pagination               |
-| `pageCount`            | `number`                        | -        | Total page count for manual pagination |
-| `manualSorting`        | `boolean`                       | `false`  | Enable manual sorting                  |
-| `onSortingChange`      | `(sorting: any) => void`        | -        | Sorting change handler                 |
-| `sorting`              | `any`                           | `[]`     | Sorting state                          |
-
-### Pagination Props
-
-| Prop           | Type                     | Description           |
-| -------------- | ------------------------ | --------------------- |
-| `currentPage`  | `number`                 | Current page number   |
-| `totalPages`   | `number`                 | Total number of pages |
-| `onPageChange` | `(page: number) => void` | Page change handler   |
-| `className`    | `string`                 | Optional CSS class    |
-
-### PaginationInfo Props
-
-| Prop          | Type     | Description           |
-| ------------- | -------- | --------------------- |
-| `currentPage` | `number` | Current page number   |
-| `pageSize`    | `number` | Items per page        |
-| `totalItems`  | `number` | Total number of items |
-| `className`   | `string` | Optional CSS class    |
-
-## Styling
-
-The DataTable uses semantic tokens for consistent theming:
-
-- `--table-header-bg`: Header background color
-- `--table-header-fg`: Header text color
-- `--table-row-hover`: Row hover background color
-- `--table-border`: Border color
-
-These tokens automatically adapt to light and dark modes.
-
-## Accessibility
-
-- Sortable columns are keyboard accessible
-- Column resize handles are touch-friendly
-- Proper ARIA labels for interactive elements
-- Semantic HTML structure
-
-## Performance Tips
-
-1. Use `useMemo` for column definitions to prevent re-renders
-2. Enable server-side pagination for large datasets
-3. Use `enableColumnResizing` only when needed
-4. Implement virtual scrolling for very large tables (not included)
-
-## Related Components
-
-- `Pagination`: Pagination controls
-- `PaginationInfo`: Results information display
-- `DensityToggle`: Table density control
-- `useTableStore`: Zustand store for table preferences
-
----
-
-## New Enhanced Features
-
-### useDataTable Hook
-
-A comprehensive hook that manages all table state with URL persistence via Nuqs. Handles pagination, sorting, searching, filtering, row selection, and column visibility.
-
-**Example:**
-
-```tsx
-import { useDataTable } from "@/components/shared/data-table";
-
-const {
-  table, // TanStack Table instance
-  page, // Current page (1-indexed)
-  limit, // Items per page
-  sortBy, // Current sort column
-  sortOrder, // Sort direction ('asc' | 'desc')
-  search, // Global search value
-  setPage,
-  setLimit,
-  setSort,
-  setSearch,
-  reset, // Reset all state
-} = useDataTable({
-  columns,
-  data,
-  manualPagination: true,
-  pageCount: 10,
-  manualSorting: true,
-  enableRowSelection: true,
-  enableGlobalFilter: true,
-  defaultPageSize: 10,
-  onPaginationChange: (page, limit) => {
-    console.log("Page changed:", page, limit);
-  },
-  onSortingChange: (sortBy, sortOrder) => {
-    console.log("Sort changed:", sortBy, sortOrder);
-  },
-  onSearchChange: (search) => {
-    console.log("Search changed:", search);
-  },
-});
-```
-
-### DataTableToolbar Component
-
-Toolbar with debounced search and custom action slots.
-
-```tsx
-import {
-  DataTableToolbar,
-  DataTableViewOptions,
-} from "@/components/shared/data-table";
-
-<DataTableToolbar
-  table={table}
-  searchValue={search}
-  onSearchChange={setSearch}
-  searchPlaceholder="Search users..."
->
-  <DataTableViewOptions table={table} />
-  <Button>Add User</Button>
-</DataTableToolbar>;
-```
-
-### DataTablePagination Component
-
-Full-featured pagination with page size selector and navigation buttons.
-
-```tsx
-import { DataTablePagination } from "@/components/shared/data-table";
-
-<DataTablePagination
-  table={table}
-  pageSizeOptions={[10, 20, 50, 100]}
-  showSelectedCount={true}
-/>;
-```
-
-### DataTableViewOptions Component
-
-Combined control for column visibility and table density.
-
-```tsx
-import { DataTableViewOptions } from "@/components/shared/data-table";
-
-<DataTableViewOptions
-  table={table}
-  showDensityControl={true}
-  showColumnVisibility={true}
-/>;
-```
-
-### Loading, Error, and Empty States
-
-The DataTable now supports multiple states:
-
-```tsx
-<DataTable
-  columns={columns}
-  data={data}
-  isLoading={isLoading} // Show skeleton rows
-  isError={isError} // Show error message
-  error={error} // Error object
-  emptyTitle="No users found" // Empty state title
-  emptyDescription="Try a different search" // Empty state description
-  emptyAction={<Button>Clear Filters</Button>} // Empty state action
-  loadingRowCount={5} // Number of skeleton rows
-/>
-```
-
-### Complete Server-Side Example
-
-```tsx
-"use client";
-
-import { useQuery } from "@tanstack/react-query";
-import { type ColumnDef } from "@tanstack/react-table";
-import {
-  DataTable,
-  DataTableToolbar,
-  DataTablePagination,
-  DataTableViewOptions,
-  useDataTable,
-} from "@/components/shared/data-table";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
-
-const columns: ColumnDef<User>[] = [
+const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "name",
     header: "Name",
-    enableSorting: true,
   },
   {
-    accessorKey: "email",
-    header: "Email",
-    enableSorting: true,
-  },
-  {
-    accessorKey: "role",
-    header: "Role",
+    accessorKey: "status",
+    header: "Status",
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
   },
 ];
 
-export function UsersTable() {
-  const { table, page, limit, sortBy, sortOrder, search, setSearch } =
-    useDataTable({
-      columns,
-      data: [],
-      manualPagination: true,
-      manualSorting: true,
-      enableRowSelection: true,
-      enableGlobalFilter: true,
-      defaultPageSize: 10,
-    });
+const filterFields: DataTableFilterField<Product>[] = [
+  {
+    id: "name",
+    label: "Product Name",
+    type: "input",
+    placeholder: "Search products...",
+  },
+  {
+    id: "status",
+    label: "Status",
+    type: "checkbox",
+    options: [
+      { label: "Active", value: "active" },
+      { label: "Inactive", value: "inactive" },
+    ],
+  },
+];
 
-  // Fetch data from server
-  const {
-    data: response,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["users", page, limit, sortBy, sortOrder, search],
-    queryFn: async () => {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: limit.toString(),
-        ...(sortBy && { sortBy }),
-        ...(sortOrder && { sortOrder }),
-        ...(search && { search }),
-      });
-      const res = await fetch(`/api/users?${params}`);
-      if (!res.ok) throw new Error("Failed to fetch users");
-      return res.json();
-    },
+function MyDataTable({ data }: { data: Product[] }) {
+  const { table } = useDataTable({
+    columns,
+    data,
+    filterFields,
+    enableUrlState: true,
   });
 
-  const users = response?.data ?? [];
-  const pageCount = response?.pageCount ?? 0;
-
-  // Update table with fetched data
-  table.options.data = users;
-  table.options.pageCount = pageCount;
-
   return (
-    <div className="space-y-4">
-      <DataTableToolbar
-        table={table}
-        searchValue={search}
-        onSearchChange={setSearch}
-        searchPlaceholder="Search users..."
-      >
-        <DataTableViewOptions table={table} />
-      </DataTableToolbar>
-
-      <DataTable
-        columns={columns}
-        data={users}
-        enableRowSelection
-        enableStickyHeader
-        manualPagination
-        pageCount={pageCount}
-        manualSorting
-        sorting={table.getState().sorting}
-        onSortingChange={table.setSorting}
-        rowSelection={table.getState().rowSelection}
-        onRowSelectionChange={table.setRowSelection}
-        columnVisibility={table.getState().columnVisibility}
-        onColumnVisibilityChange={table.setColumnVisibility}
-        isLoading={isLoading}
-        isError={isError}
-        error={error}
-        emptyTitle="No users found"
-        emptyDescription="Try adjusting your search or filters"
-      />
-
+    <>
+      <DataTableToolbar table={table} filterFields={filterFields} />
+      <DataTable table={table} columns={columns} />
       <DataTablePagination table={table} />
-    </div>
+    </>
   );
 }
 ```
 
-### URL State Persistence
+## Components
 
-The `useDataTable` hook automatically syncs state with URL parameters:
+### DataTable
 
-- `page` - Current page number
-- `limit` - Items per page
-- `sortBy` - Sort column
-- `sortOrder` - Sort direction (asc/desc)
-- `search` - Global search query
+Main table component that renders the data.
 
-Example URL: `/users?page=2&limit=20&sortBy=name&sortOrder=asc&search=john`
+```tsx
+<DataTable
+  table={table}
+  columns={columns}
+  isLoading={false}
+  emptyMessage="No results found."
+  bordered={true}
+/>
+```
 
-This enables:
+**Props:**
 
-- Shareable links with filter/sort state
-- Browser back/forward navigation
-- Bookmarkable table views
+- `table` - Table instance from `useDataTable`
+- `columns` - Column definitions
+- `isLoading` - Show loading spinner
+- `emptyMessage` - Message when no data
+- `bordered` - Show table border
+- `className` - Custom styles
 
-### Custom Hooks
+### DataTableColumnHeader
 
-A new `useDebouncedCallback` hook is included at `/hooks/use-debounced-callback.ts` for optimized search performance.
+Sortable column header with dropdown menu.
+
+```tsx
+<DataTableColumnHeader column={column} title="Product Name" />
+```
+
+**Features:**
+
+- Sort ascending/descending
+- Hide column option
+- Visual sort indicators
+
+### DataTablePagination
+
+Pagination controls.
+
+```tsx
+<DataTablePagination
+  table={table}
+  pageSizeOptions={[10, 20, 30, 40, 50]}
+  showRowsSelected={true}
+/>
+```
+
+### DataTableToolbar
+
+Toolbar with search and filter controls.
+
+```tsx
+<DataTableToolbar table={table} filterFields={filterFields}>
+  <DataTableFacetedFilter
+    column={table.getColumn("status")}
+    title="Status"
+    options={statusOptions}
+  />
+</DataTableToolbar>
+```
+
+### DataTableViewOptions
+
+Column visibility toggle dropdown.
+
+```tsx
+<DataTableViewOptions table={table} />
+```
+
+## Filter Components
+
+### DataTableFacetedFilter
+
+Multi-select dropdown filter with badges.
+
+```tsx
+<DataTableFacetedFilter
+  column={table.getColumn("status")}
+  title="Status"
+  options={[
+    { label: "Active", value: "active" },
+    { label: "Inactive", value: "inactive" },
+  ]}
+/>
+```
+
+**Features:**
+
+- Multi-select with checkboxes
+- Shows selected count
+- Clear all option
+- Displays facet counts
+
+### DataTableFilterInput
+
+Text input filter.
+
+```tsx
+<DataTableFilterInput
+  column={table.getColumn("name")}
+  title="Product Name"
+  placeholder="Search..."
+/>
+```
+
+### DataTableFilterSlider
+
+Numeric range slider filter.
+
+```tsx
+<DataTableFilterSlider
+  column={table.getColumn("price")}
+  title="Price Range"
+  min={0}
+  max={1000}
+  step={10}
+/>
+```
+
+### DataTableFilterTimerange
+
+Date range picker with presets.
+
+```tsx
+<DataTableFilterTimerange
+  column={table.getColumn("createdAt")}
+  title="Created Date"
+  presets={[
+    {
+      label: "Last 7 days",
+      startDate: subDays(new Date(), 7),
+      endDate: new Date(),
+    },
+  ]}
+/>
+```
+
+## Hook API
+
+### useDataTable
+
+Main hook for creating table instances.
+
+```tsx
+const { table } = useDataTable({
+  columns,
+  data,
+  pageCount,
+  filterFields,
+  initialState,
+  manualPagination: false,
+  manualSorting: false,
+  manualFiltering: false,
+  enableRowSelection: true,
+  enableUrlState: true,
+  debounceMs: 500,
+  onFiltersChange: (filters) => console.log(filters),
+  onPaginationChange: (pagination) => console.log(pagination),
+  onSortingChange: (sorting) => console.log(sorting),
+});
+```
+
+**Options:**
+
+| Option               | Type                     | Default     | Description                   |
+| -------------------- | ------------------------ | ----------- | ----------------------------- |
+| `columns`            | `ColumnDef[]`            | Required    | Column definitions            |
+| `data`               | `TData[]`                | Required    | Data array                    |
+| `pageCount`          | `number`                 | `undefined` | Total pages (for server-side) |
+| `filterFields`       | `DataTableFilterField[]` | `undefined` | Filter configuration          |
+| `initialState`       | `object`                 | `{}`        | Initial table state           |
+| `manualPagination`   | `boolean`                | `false`     | Enable server-side pagination |
+| `manualSorting`      | `boolean`                | `false`     | Enable server-side sorting    |
+| `manualFiltering`    | `boolean`                | `false`     | Enable server-side filtering  |
+| `enableRowSelection` | `boolean`                | `false`     | Enable row selection          |
+| `enableUrlState`     | `boolean`                | `true`      | Sync state to URL             |
+| `debounceMs`         | `number`                 | `500`       | Debounce delay for filters    |
+| `onFiltersChange`    | `function`               | `undefined` | Filter change callback        |
+| `onPaginationChange` | `function`               | `undefined` | Pagination change callback    |
+| `onSortingChange`    | `function`               | `undefined` | Sorting change callback       |
+
+## Filter Field Types
+
+### Input Filter
+
+Text-based search filter.
+
+```tsx
+{
+  id: "name",
+  label: "Product Name",
+  type: "input",
+  placeholder: "Search products...",
+}
+```
+
+### Checkbox Filter
+
+Multi-select dropdown filter.
+
+```tsx
+{
+  id: "status",
+  label: "Status",
+  type: "checkbox",
+  options: [
+    { label: "Active", value: "active" },
+    { label: "Inactive", value: "inactive" },
+  ],
+}
+```
+
+**Column filterFn:**
+
+```tsx
+{
+  accessorKey: "status",
+  filterFn: (row, id, value) => value.includes(row.getValue(id)),
+}
+```
+
+### Slider Filter
+
+Numeric range filter.
+
+```tsx
+{
+  id: "price",
+  label: "Price Range",
+  type: "slider",
+  min: 0,
+  max: 1000,
+  step: 10,
+}
+```
+
+**Column filterFn:**
+
+```tsx
+{
+  accessorKey: "price",
+  filterFn: (row, id, value) => {
+    const price = parseFloat(row.getValue(id));
+    const [min, max] = value as [number, number];
+    return price >= min && price <= max;
+  },
+}
+```
+
+### Timerange Filter
+
+Date range picker.
+
+```tsx
+{
+  id: "createdAt",
+  label: "Created Date",
+  type: "timerange",
+  presets: [
+    {
+      label: "Last 7 days",
+      startDate: subDays(new Date(), 7),
+      endDate: new Date(),
+    },
+  ],
+}
+```
+
+## URL State Format
+
+The table state is encoded in the URL using these parameters:
+
+| Parameter | Format                    | Example                                       |
+| --------- | ------------------------- | --------------------------------------------- |
+| `page`    | Number (1-indexed)        | `?page=2`                                     |
+| `perPage` | Number                    | `?perPage=20`                                 |
+| `sort`    | `column.order`            | `?sort=name.asc`                              |
+| `filters` | `key:value key:val1,val2` | `?filters=status:active,pending price:10-100` |
+
+**Example URL:**
+
+```
+/products?page=1&perPage=10&sort=name.asc&filters=status:active,pending category:Electronics
+```
+
+## Server-Side Usage
+
+For server-side data fetching:
+
+```tsx
+function ServerDataTable() {
+  const [data, setData] = React.useState([]);
+  const [pageCount, setPageCount] = React.useState(0);
+
+  const { table } = useDataTable({
+    columns,
+    data,
+    pageCount,
+    filterFields,
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
+    onFiltersChange: (filters) => {
+      // Fetch data with new filters
+      fetchData({ filters });
+    },
+    onPaginationChange: (pagination) => {
+      // Fetch data with new pagination
+      fetchData({
+        page: pagination.pageIndex + 1,
+        perPage: pagination.pageSize,
+      });
+    },
+    onSortingChange: (sorting) => {
+      // Fetch data with new sorting
+      fetchData({
+        sortBy: sorting[0]?.id,
+        sortOrder: sorting[0]?.desc ? "desc" : "asc",
+      });
+    },
+  });
+
+  return (
+    <>
+      <DataTableToolbar table={table} filterFields={filterFields} />
+      <DataTable table={table} columns={columns} isLoading={isLoading} />
+      <DataTablePagination table={table} />
+    </>
+  );
+}
+```
+
+## Advanced Patterns
+
+### Custom Filter Component
+
+```tsx
+<DataTableToolbar table={table} filterFields={filterFields}>
+  {/* Add custom filters */}
+  <DataTableFacetedFilter
+    column={table.getColumn("status")}
+    title="Status"
+    options={statusOptions}
+  />
+  <DataTableFilterSlider
+    column={table.getColumn("price")}
+    title="Price"
+    min={0}
+    max={1000}
+  />
+</DataTableToolbar>
+```
+
+### Disable URL State
+
+For multiple tables on one page:
+
+```tsx
+const { table } = useDataTable({
+  columns,
+  data,
+  enableUrlState: false, // Use local state only
+});
+```
+
+### Custom Initial State
+
+```tsx
+const { table } = useDataTable({
+  columns,
+  data,
+  initialState: {
+    pagination: { pageIndex: 0, pageSize: 20 },
+    sorting: [{ id: "name", desc: false }],
+    columnFilters: [{ id: "status", value: ["active"] }],
+    columnVisibility: { id: false },
+  },
+});
+```
+
+## TypeScript Types
+
+All types are exported from `@/types/table`:
+
+```tsx
+import type {
+  DataTableFilterField,
+  DataTableConfig,
+  Option,
+  DatePreset,
+  InputFilterField,
+  CheckboxFilterField,
+  SliderFilterField,
+  TimerangeFilterField,
+  SheetField,
+  SerializedFilters,
+} from "@/types/table";
+```
+
+## Examples
+
+See `/app/(dashboard)/dashboard/examples/data-table/page.tsx` for a complete working example.
+
+## Credits
+
+Inspired by [openstatusHQ/data-table-filters](https://github.com/openstatusHQ/data-table-filters) with enhancements for this starter kit.

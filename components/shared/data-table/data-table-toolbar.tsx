@@ -1,78 +1,72 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
-import { SearchIcon, XIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { X } from "lucide-react";
+import type * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
+import type { TableDensity } from "@/types/density";
+import type { DataTableFilterField } from "@/types/table";
+import { DataTableViewOptions } from "./data-table-view-options";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
-  searchPlaceholder?: string;
-  searchValue?: string;
-  onSearchChange?: (value: string) => void;
+  filterFields?: DataTableFilterField<TData>[];
   children?: React.ReactNode;
+  density?: TableDensity;
+  onDensityChange?: (density: TableDensity) => void;
 }
 
 export function DataTableToolbar<TData>({
   table,
-  searchPlaceholder = "Search...",
-  searchValue = "",
-  onSearchChange,
+  filterFields,
   children,
+  density,
+  onDensityChange,
 }: DataTableToolbarProps<TData>) {
-  const [search, setSearch] = useState(searchValue);
+  const isFiltered = table.getState().columnFilters.length > 0;
 
-  // Sync with external search value
-  useEffect(() => {
-    setSearch(searchValue);
-  }, [searchValue]);
-
-  // Debounced search handler
-  const debouncedSearch = useDebouncedCallback((value: string) => {
-    onSearchChange?.(value);
-    table.setGlobalFilter(value);
-  }, 300);
-
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
-    debouncedSearch(value);
-  };
-
-  const handleClearSearch = () => {
-    setSearch("");
-    onSearchChange?.("");
-    table.setGlobalFilter("");
-  };
-
-  const isFiltered = search.length > 0;
+  // Get the first input filter field for the search bar
+  const searchField = filterFields?.find((field) => field.type === "input");
 
   return (
-    <div className="flex items-center justify-between gap-2">
-      <div className="flex flex-1 items-center gap-2">
-        <div className="relative w-full max-w-sm">
-          <SearchIcon className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2" />
+    <div className="flex items-center justify-between">
+      <div className="flex flex-1 items-center space-x-2">
+        {searchField && (
           <Input
-            placeholder={searchPlaceholder}
-            value={search}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-9 pr-9"
+            placeholder={
+              searchField.placeholder ||
+              `Search ${searchField.label.toLowerCase()}...`
+            }
+            value={
+              (table.getColumn(searchField.id)?.getFilterValue() as string) ??
+              ""
+            }
+            onChange={(event) =>
+              table
+                .getColumn(searchField.id)
+                ?.setFilterValue(event.target.value)
+            }
+            className="h-8 w-[150px] lg:w-[250px]"
           />
-          {isFiltered && (
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={handleClearSearch}
-              className="absolute right-1 top-1/2 -translate-y-1/2"
-            >
-              <XIcon className="size-4" />
-              <span className="sr-only">Clear search</span>
-            </Button>
-          )}
-        </div>
+        )}
+        {children}
+        {isFiltered && (
+          <Button
+            variant="ghost"
+            onClick={() => table.resetColumnFilters()}
+            className="h-8 px-2 lg:px-3"
+          >
+            Reset
+            <X className="ml-2 h-4 w-4" />
+          </Button>
+        )}
       </div>
-      {children && <div className="flex items-center gap-2">{children}</div>}
+      <DataTableViewOptions
+        table={table}
+        density={density}
+        onDensityChange={onDensityChange}
+      />
     </div>
   );
 }

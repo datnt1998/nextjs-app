@@ -4,379 +4,288 @@ import {
   type ColumnDef,
   type ColumnFiltersState,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  type OnChangeFn,
   type PaginationState,
-  type RowSelectionState,
   type SortingState,
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
-import { useMemo, useState } from "react";
-import { useTableStore } from "@/stores/table.store";
+import { useQueryStates } from "nuqs";
+import * as React from "react";
+import { useDebounce } from "@/hooks/use-debounce";
+import {
+  getColumnFiltersParser,
+  getSortingStateParser,
+  numberParser,
+} from "@/lib/nuqs/parsers";
+import type { TableDensity } from "@/types/density";
+import type { DataTableFilterField } from "@/types/table";
 
-/**
- * Options for useDataTable hook
- */
-export interface UseDataTableOptions<TData, TValue = unknown> {
-  /** Column definitions */
+interface UseDataTableProps<TData, TValue> {
+  /**
+   * Column definitions
+   */
   columns: ColumnDef<TData, TValue>[];
-  /** Table data */
+  /**
+   * Data array
+   */
   data: TData[];
-  /** Enable manual pagination (for server-side) */
-  manualPagination?: boolean;
-  /** Total page count (required if manualPagination is true) */
+  /**
+   * Total page count for server-side pagination
+   */
   pageCount?: number;
-  /** Enable manual sorting (for server-side) */
+  /**
+   * Filter field configuration
+   */
+  filterFields?: DataTableFilterField<TData>[];
+  /**
+   * Initial state
+   */
+  initialState?: {
+    pagination?: Partial<PaginationState>;
+    sorting?: SortingState;
+    columnFilters?: ColumnFiltersState;
+    columnVisibility?: VisibilityState;
+  };
+  /**
+   * Enable manual pagination (for server-side)
+   */
+  manualPagination?: boolean;
+  /**
+   * Enable manual sorting (for server-side)
+   */
   manualSorting?: boolean;
-  /** Enable manual filtering (for server-side) */
+  /**
+   * Enable manual filtering (for server-side)
+   */
   manualFiltering?: boolean;
-  /** Enable row selection */
+  /**
+   * Enable row selection
+   */
   enableRowSelection?: boolean;
-  /** Enable column filters */
-  enableColumnFilters?: boolean;
-  /** Enable global filter/search */
-  enableGlobalFilter?: boolean;
-  /** Default page size */
-  defaultPageSize?: number;
-  /** Page size options */
-  pageSizeOptions?: number[];
-  /** Enable URL state persistence */
+  /**
+   * Enable URL state synchronization
+   */
   enableUrlState?: boolean;
-  /** Default sorting */
-  defaultSorting?: SortingState;
-  /** Default column visibility */
-  defaultColumnVisibility?: VisibilityState;
-  /** Row ID accessor */
-  getRowId?: (row: TData, index: number) => string;
-  /** Callback when pagination changes */
-  onPaginationChange?: (page: number, limit: number) => void;
-  /** Callback when sorting changes */
-  onSortingChange?: (
-    sortBy: string | null,
-    sortOrder: "asc" | "desc" | null
-  ) => void;
-  /** Callback when search changes */
-  onSearchChange?: (search: string) => void;
-  /** Callback when row selection changes */
-  onRowSelectionChange?: (selectedRows: TData[]) => void;
+  /**
+   * Debounce delay for filter updates (ms)
+   */
+  debounceMs?: number;
+  /**
+   * Callback when filters change
+   */
+  onFiltersChange?: (filters: Record<string, string | string[] | null>) => void;
+  /**
+   * Callback when pagination changes
+   */
+  onPaginationChange?: (pagination: PaginationState) => void;
+  /**
+   * Callback when sorting changes
+   */
+  onSortingChange?: (sorting: SortingState) => void;
+  /**
+   * Initial density
+   */
+  initialDensity?: TableDensity;
 }
 
-/**
- * Comprehensive hook for managing TanStack Table state with URL persistence
- *
- * Features:
- * - Pagination state (page, limit) synced with URL
- * - Sorting state (sortBy, sortOrder) synced with URL
- * - Global search synced with URL
- * - Column filters (local state)
- * - Row selection (local state)
- * - Column visibility (local state)
- * - Density from global store
- * - Manual mode support for server-side operations
- *
- * @example
- * ```tsx
- * const { table, page, limit, sortBy, sortOrder, search } = useDataTable({
- *   columns,
- *   data,
- *   manualPagination: true,
- *   pageCount: 10,
- *   manualSorting: true,
- *   enableRowSelection: true,
- * });
- * ```
- */
-export function useDataTable<TData, TValue = unknown>({
+export function useDataTable<TData, TValue>({
   columns,
   data,
-  manualPagination = false,
   pageCount,
+  filterFields,
+  initialState,
+  manualPagination = false,
   manualSorting = false,
   manualFiltering = false,
   enableRowSelection = false,
-  enableColumnFilters: _enableColumnFilters = false,
-  enableGlobalFilter: _enableGlobalFilter = false,
-  defaultPageSize = 10,
-  pageSizeOptions = [10, 20, 30, 40, 50, 100],
   enableUrlState = true,
-  defaultSorting = [],
-  defaultColumnVisibility = {},
-  getRowId,
+  debounceMs = 500,
+  onFiltersChange,
   onPaginationChange,
   onSortingChange,
-  onSearchChange,
-  onRowSelectionChange,
-}: UseDataTableOptions<TData, TValue>) {
-  // URL state for pagination, sorting, and search
+  initialDensity = "comfortable",
+}: UseDataTableProps<TData, TValue>) {
+  // URL state management with nuqs
   const [urlState, setUrlState] = useQueryStates(
     {
-      page: parseAsInteger.withDefault(1),
-      limit: parseAsInteger.withDefault(defaultPageSize),
-      sortBy: parseAsString,
-      sortOrder: parseAsString,
-      search: parseAsString.withDefault(""),
+      page: numberParser.withDefault(1),
+      perPage: numberParser.withDefault(
+        initialState?.pagination?.pageSize ?? 10
+      ),
+      sort: getSortingStateParser<TData>().withDefault(
+        (initialState?.sorting ?? []) as any
+      ),
+      filters: getColumnFiltersParser<TData>(filterFields).withDefault({}),
     },
     {
-      history: enableUrlState ? "push" : "replace",
+      history: "replace",
       shallow: true,
     }
   );
 
-  // Local state for row selection
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-
-  // Local state for column visibility
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-    defaultColumnVisibility
+  // Local state (fallback when URL state is disabled)
+  const [localPage, setLocalPage] = React.useState(
+    initialState?.pagination?.pageIndex ?? 0
+  );
+  const [localPageSize, setLocalPageSize] = React.useState(
+    initialState?.pagination?.pageSize ?? 10
+  );
+  const [localSorting, setLocalSorting] = React.useState<SortingState>(
+    initialState?.sorting ?? []
+  );
+  const [localFilters, setLocalFilters] = React.useState<ColumnFiltersState>(
+    initialState?.columnFilters ?? []
   );
 
-  // Local state for column filters
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  // Use URL state or local state based on enableUrlState flag
+  const page = enableUrlState ? urlState.page : localPage + 1;
+  const pageSize = enableUrlState ? urlState.perPage : localPageSize;
+  const sorting = enableUrlState
+    ? (urlState.sort as SortingState)
+    : localSorting;
 
-  // Global filter (search)
-  const [globalFilter, setGlobalFilter] = useState(urlState.search);
-
-  // Get density from store
-  const density = useTableStore((state) => state.density);
-  const setDensity = useTableStore((state) => state.setDensity);
-
-  // Convert URL state to TanStack Table pagination state
-  const pagination = useMemo<PaginationState>(
-    () => ({
-      pageIndex: urlState.page - 1, // TanStack uses 0-indexed
-      pageSize: urlState.limit,
-    }),
-    [urlState.page, urlState.limit]
-  );
-
-  // Convert URL state to TanStack Table sorting state
-  const sorting = useMemo<SortingState>(() => {
-    if (!urlState.sortBy) return defaultSorting;
-    return [
-      {
-        id: urlState.sortBy,
-        desc: urlState.sortOrder === "desc",
-      },
-    ];
-  }, [urlState.sortBy, urlState.sortOrder, defaultSorting]);
-
-  // Pagination change handler
-  const handlePaginationChange: OnChangeFn<PaginationState> = (updater) => {
-    const newPagination =
-      typeof updater === "function" ? updater(pagination) : updater;
-
-    const newPage = newPagination.pageIndex + 1;
-    const newLimit = newPagination.pageSize;
-
-    setUrlState({
-      page: newPage,
-      limit: newLimit,
-    });
-
-    onPaginationChange?.(newPage, newLimit);
-  };
-
-  // Sorting change handler
-  const handleSortingChange: OnChangeFn<SortingState> = (updater) => {
-    const newSorting =
-      typeof updater === "function" ? updater(sorting) : updater;
-
-    const firstSort = newSorting[0];
-    const newSortBy = firstSort?.id ?? null;
-    const newSortOrder = firstSort?.desc ? "desc" : firstSort ? "asc" : null;
-
-    setUrlState({
-      sortBy: newSortBy,
-      sortOrder: newSortOrder,
-      page: 1, // Reset to first page when sorting changes
-    });
-
-    onSortingChange?.(newSortBy, newSortOrder);
-  };
-
-  // Column filters change handler
-  const handleColumnFiltersChange: OnChangeFn<ColumnFiltersState> = (
-    updater
-  ) => {
-    const newFilters =
-      typeof updater === "function" ? updater(columnFilters) : updater;
-    setColumnFilters(newFilters);
-
-    // Reset to first page when filters change
-    setUrlState({ page: 1 });
-  };
-
-  // Row selection change handler
-  const handleRowSelectionChange: OnChangeFn<RowSelectionState> = (updater) => {
-    const newSelection =
-      typeof updater === "function" ? updater(rowSelection) : updater;
-    setRowSelection(newSelection);
-
-    // Get selected rows
-    if (onRowSelectionChange) {
-      const selectedRows = Object.keys(newSelection)
-        .filter((key) => newSelection[key])
-        .map((key) => {
-          const index = Number.parseInt(key, 10);
-          return data[index];
-        })
-        .filter(Boolean);
-      onRowSelectionChange(selectedRows);
+  // Convert filters from Record to ColumnFiltersState
+  const columnFilters = React.useMemo<ColumnFiltersState>(() => {
+    if (enableUrlState) {
+      return Object.entries(urlState.filters)
+        .filter(([_, value]) => value != null)
+        .map(([id, value]) => ({ id, value }));
     }
-  };
+    return localFilters;
+  }, [enableUrlState, urlState.filters, localFilters]);
 
-  // Column visibility change handler
-  const handleColumnVisibilityChange: OnChangeFn<VisibilityState> = (
-    updater
-  ) => {
-    const newVisibility =
-      typeof updater === "function" ? updater(columnVisibility) : updater;
-    setColumnVisibility(newVisibility);
-  };
+  // Row selection state
+  const [rowSelection, setRowSelection] = React.useState({});
 
-  // Global filter change handler
-  const handleGlobalFilterChange = (value: string) => {
-    setGlobalFilter(value);
-    setUrlState({ search: value, page: 1 }); // Reset to first page
-    onSearchChange?.(value);
-  };
+  // Column visibility state
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>(initialState?.columnVisibility ?? {});
+
+  // Density state
+  const [density, setDensity] = React.useState<TableDensity>(initialDensity);
+
+  // Debounced filters for callbacks
+  const debouncedFilters = useDebounce(columnFilters, debounceMs);
+
+  // Call onFiltersChange callback
+  React.useEffect(() => {
+    if (onFiltersChange) {
+      const filtersRecord: Record<string, string | string[] | null> = {};
+      for (const filter of debouncedFilters) {
+        filtersRecord[filter.id] = filter.value as string | string[] | null;
+      }
+      onFiltersChange(filtersRecord);
+    }
+  }, [debouncedFilters, onFiltersChange]);
+
+  // Pagination state handlers
+  const paginationState = React.useMemo<PaginationState>(
+    () => ({
+      pageIndex: page - 1,
+      pageSize,
+    }),
+    [page, pageSize]
+  );
+
+  const onPaginationChangeHandler = React.useCallback(
+    (
+      updater: PaginationState | ((old: PaginationState) => PaginationState)
+    ) => {
+      const newState =
+        typeof updater === "function" ? updater(paginationState) : updater;
+
+      if (enableUrlState) {
+        setUrlState({
+          page: newState.pageIndex + 1,
+          perPage: newState.pageSize,
+        });
+      } else {
+        setLocalPage(newState.pageIndex);
+        setLocalPageSize(newState.pageSize);
+      }
+
+      onPaginationChange?.(newState);
+    },
+    [enableUrlState, paginationState, setUrlState, onPaginationChange]
+  );
+
+  // Sorting state handlers
+  const onSortingChangeHandler = React.useCallback(
+    (updater: SortingState | ((old: SortingState) => SortingState)) => {
+      const newState =
+        typeof updater === "function" ? updater(sorting) : updater;
+
+      if (enableUrlState) {
+        setUrlState({ sort: newState as any });
+      } else {
+        setLocalSorting(newState);
+      }
+
+      onSortingChange?.(newState);
+    },
+    [enableUrlState, sorting, setUrlState, onSortingChange]
+  );
+
+  // Column filters state handlers
+  const onColumnFiltersChangeHandler = React.useCallback(
+    (
+      updater:
+        | ColumnFiltersState
+        | ((old: ColumnFiltersState) => ColumnFiltersState)
+    ) => {
+      const newState =
+        typeof updater === "function" ? updater(columnFilters) : updater;
+
+      if (enableUrlState) {
+        // Convert ColumnFiltersState to Record for URL
+        const filtersRecord: Record<string, string | string[] | null> = {};
+        for (const filter of newState) {
+          filtersRecord[filter.id] = filter.value as string | string[] | null;
+        }
+        setUrlState({ filters: filtersRecord, page: 1 }); // Reset to page 1 on filter change
+      } else {
+        setLocalFilters(newState);
+        setLocalPage(0); // Reset to first page
+      }
+    },
+    [enableUrlState, columnFilters, setUrlState]
+  );
 
   // Create table instance
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    // Pagination
-    ...(manualPagination
-      ? {
-          manualPagination: true,
-          pageCount,
-        }
-      : {
-          getPaginationRowModel: getPaginationRowModel(),
-        }),
-    onPaginationChange: handlePaginationChange,
-    // Sorting
-    ...(manualSorting
-      ? {
-          manualSorting: true,
-        }
-      : {
-          getSortedRowModel: getSortedRowModel(),
-        }),
-    onSortingChange: handleSortingChange,
-    // Filtering
-    ...(manualFiltering
-      ? {
-          manualFiltering: true,
-        }
-      : {
-          getFilteredRowModel: getFilteredRowModel(),
-        }),
-    onColumnFiltersChange: handleColumnFiltersChange,
-    onGlobalFilterChange: handleGlobalFilterChange,
-    // Row selection
-    enableRowSelection,
-    onRowSelectionChange: handleRowSelectionChange,
-    // Column visibility
-    onColumnVisibilityChange: handleColumnVisibilityChange,
-    // Row ID
-    getRowId,
-    // State
+    pageCount: pageCount,
     state: {
-      pagination,
+      pagination: paginationState,
       sorting,
       columnFilters,
-      globalFilter,
       rowSelection,
       columnVisibility,
     },
+    enableRowSelection,
+    onRowSelectionChange: setRowSelection,
+    onPaginationChange: onPaginationChangeHandler,
+    onSortingChange: onSortingChangeHandler,
+    onColumnFiltersChange: onColumnFiltersChangeHandler,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: manualFiltering ? undefined : getFilteredRowModel(),
+    getPaginationRowModel: manualPagination
+      ? undefined
+      : getPaginationRowModel(),
+    getSortedRowModel: manualSorting ? undefined : getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    manualPagination,
+    manualSorting,
+    manualFiltering,
   });
 
-  // Helper functions
-  const setPage = (page: number) => {
-    setUrlState({ page });
-    onPaginationChange?.(page, urlState.limit);
-  };
-
-  const setLimit = (limit: number) => {
-    setUrlState({ limit, page: 1 }); // Reset to first page
-    onPaginationChange?.(1, limit);
-  };
-
-  const setSort = (column: string | null, order: "asc" | "desc" | null) => {
-    setUrlState({
-      sortBy: column,
-      sortOrder: order,
-      page: 1,
-    });
-    onSortingChange?.(column, order);
-  };
-
-  const setSearch = (search: string) => {
-    handleGlobalFilterChange(search);
-  };
-
-  const clearFilters = () => {
-    setColumnFilters([]);
-    setGlobalFilter("");
-    setUrlState({ search: "", page: 1 });
-  };
-
-  const reset = () => {
-    setUrlState({
-      page: 1,
-      limit: defaultPageSize,
-      sortBy: null,
-      sortOrder: null,
-      search: "",
-    });
-    setRowSelection({});
-    setColumnFilters([]);
-    setGlobalFilter("");
-    setColumnVisibility(defaultColumnVisibility);
-  };
-
-  return {
-    table,
-    // State
-    page: urlState.page,
-    limit: urlState.limit,
-    sortBy: urlState.sortBy ?? null,
-    sortOrder: (urlState.sortOrder as "asc" | "desc" | null) ?? null,
-    search: urlState.search,
-    columnFilters,
-    rowSelection,
-    columnVisibility,
-    density,
-    pagination,
-    sorting,
-    globalFilter,
-    // Setters
-    setPage,
-    setLimit,
-    setSort,
-    setSearch,
-    setColumnFilters,
-    setRowSelection,
-    setColumnVisibility,
-    setDensity,
-    setGlobalFilter: handleGlobalFilterChange,
-    clearFilters,
-    reset,
-    // Options
-    pageSizeOptions,
-    // Computed
-    selectedRows: Object.keys(rowSelection)
-      .filter((key) => rowSelection[key])
-      .map((key) => {
-        const index = Number.parseInt(key, 10);
-        return data[index];
-      })
-      .filter(Boolean),
-  };
+  return { table, density, setDensity };
 }
