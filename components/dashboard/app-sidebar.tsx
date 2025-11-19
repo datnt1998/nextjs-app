@@ -148,7 +148,7 @@ export function AppSidebar() {
             <CollapsibleContent>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {mainItems.map((item) => {
+                  {items.map((item) => {
                     const Icon = item.icon ? Icons[item.icon] : Icons.folder;
                     const hasSubmenu = item.href === "/dashboard/items";
 

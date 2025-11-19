@@ -100,6 +100,12 @@ export const siteConfig = {
       title: "DataTable Examples",
       href: "/dashboard/examples/data-table",
       icon: "grid",
+      roles: [],
+    },
+    {
+      title: "Components",
+      href: "/dashboard/components",
+      icon: "grid",
       roles: ["owner", "admin", "manager", "editor", "viewer"],
     },
     {
