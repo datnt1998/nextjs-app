@@ -42,7 +42,21 @@ export {
 } from "./dropdown-menu";
 export { Grid } from "./grid";
 export { Input, inputVariants } from "./input";
+export { ScrollArea, ScrollBar } from "./scroll-area";
 export { Section } from "./section";
+export { Separator } from "./separator";
+export {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetOverlay,
+  SheetPortal,
+  SheetTitle,
+  SheetTrigger,
+} from "./sheet";
 export { Stack } from "./stack";
 export {
   Toast,
