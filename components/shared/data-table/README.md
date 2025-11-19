@@ -255,3 +255,256 @@ These tokens automatically adapt to light and dark modes.
 - `PaginationInfo`: Results information display
 - `DensityToggle`: Table density control
 - `useTableStore`: Zustand store for table preferences
+
+---
+
+## New Enhanced Features
+
+### useDataTable Hook
+
+A comprehensive hook that manages all table state with URL persistence via Nuqs. Handles pagination, sorting, searching, filtering, row selection, and column visibility.
+
+**Example:**
+
+```tsx
+import { useDataTable } from "@/components/shared/data-table";
+
+const {
+  table, // TanStack Table instance
+  page, // Current page (1-indexed)
+  limit, // Items per page
+  sortBy, // Current sort column
+  sortOrder, // Sort direction ('asc' | 'desc')
+  search, // Global search value
+  setPage,
+  setLimit,
+  setSort,
+  setSearch,
+  reset, // Reset all state
+} = useDataTable({
+  columns,
+  data,
+  manualPagination: true,
+  pageCount: 10,
+  manualSorting: true,
+  enableRowSelection: true,
+  enableGlobalFilter: true,
+  defaultPageSize: 10,
+  onPaginationChange: (page, limit) => {
+    console.log("Page changed:", page, limit);
+  },
+  onSortingChange: (sortBy, sortOrder) => {
+    console.log("Sort changed:", sortBy, sortOrder);
+  },
+  onSearchChange: (search) => {
+    console.log("Search changed:", search);
+  },
+});
+```
+
+### DataTableToolbar Component
+
+Toolbar with debounced search and custom action slots.
+
+```tsx
+import {
+  DataTableToolbar,
+  DataTableViewOptions,
+} from "@/components/shared/data-table";
+
+<DataTableToolbar
+  table={table}
+  searchValue={search}
+  onSearchChange={setSearch}
+  searchPlaceholder="Search users..."
+>
+  <DataTableViewOptions table={table} />
+  <Button>Add User</Button>
+</DataTableToolbar>;
+```
+
+### DataTablePagination Component
+
+Full-featured pagination with page size selector and navigation buttons.
+
+```tsx
+import { DataTablePagination } from "@/components/shared/data-table";
+
+<DataTablePagination
+  table={table}
+  pageSizeOptions={[10, 20, 50, 100]}
+  showSelectedCount={true}
+/>;
+```
+
+### DataTableViewOptions Component
+
+Combined control for column visibility and table density.
+
+```tsx
+import { DataTableViewOptions } from "@/components/shared/data-table";
+
+<DataTableViewOptions
+  table={table}
+  showDensityControl={true}
+  showColumnVisibility={true}
+/>;
+```
+
+### Loading, Error, and Empty States
+
+The DataTable now supports multiple states:
+
+```tsx
+<DataTable
+  columns={columns}
+  data={data}
+  isLoading={isLoading} // Show skeleton rows
+  isError={isError} // Show error message
+  error={error} // Error object
+  emptyTitle="No users found" // Empty state title
+  emptyDescription="Try a different search" // Empty state description
+  emptyAction={<Button>Clear Filters</Button>} // Empty state action
+  loadingRowCount={5} // Number of skeleton rows
+/>
+```
+
+### Complete Server-Side Example
+
+```tsx
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
+import { type ColumnDef } from "@tanstack/react-table";
+import {
+  DataTable,
+  DataTableToolbar,
+  DataTablePagination,
+  DataTableViewOptions,
+  useDataTable,
+} from "@/components/shared/data-table";
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
+const columns: ColumnDef<User>[] = [
+  {
+    accessorKey: "name",
+    header: "Name",
+    enableSorting: true,
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+    enableSorting: true,
+  },
+  {
+    accessorKey: "role",
+    header: "Role",
+  },
+];
+
+export function UsersTable() {
+  const { table, page, limit, sortBy, sortOrder, search, setSearch } =
+    useDataTable({
+      columns,
+      data: [],
+      manualPagination: true,
+      manualSorting: true,
+      enableRowSelection: true,
+      enableGlobalFilter: true,
+      defaultPageSize: 10,
+    });
+
+  // Fetch data from server
+  const {
+    data: response,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["users", page, limit, sortBy, sortOrder, search],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: limit.toString(),
+        ...(sortBy && { sortBy }),
+        ...(sortOrder && { sortOrder }),
+        ...(search && { search }),
+      });
+      const res = await fetch(`/api/users?${params}`);
+      if (!res.ok) throw new Error("Failed to fetch users");
+      return res.json();
+    },
+  });
+
+  const users = response?.data ?? [];
+  const pageCount = response?.pageCount ?? 0;
+
+  // Update table with fetched data
+  table.options.data = users;
+  table.options.pageCount = pageCount;
+
+  return (
+    <div className="space-y-4">
+      <DataTableToolbar
+        table={table}
+        searchValue={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="Search users..."
+      >
+        <DataTableViewOptions table={table} />
+      </DataTableToolbar>
+
+      <DataTable
+        columns={columns}
+        data={users}
+        enableRowSelection
+        enableStickyHeader
+        manualPagination
+        pageCount={pageCount}
+        manualSorting
+        sorting={table.getState().sorting}
+        onSortingChange={table.setSorting}
+        rowSelection={table.getState().rowSelection}
+        onRowSelectionChange={table.setRowSelection}
+        columnVisibility={table.getState().columnVisibility}
+        onColumnVisibilityChange={table.setColumnVisibility}
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+        emptyTitle="No users found"
+        emptyDescription="Try adjusting your search or filters"
+      />
+
+      <DataTablePagination table={table} />
+    </div>
+  );
+}
+```
+
+### URL State Persistence
+
+The `useDataTable` hook automatically syncs state with URL parameters:
+
+- `page` - Current page number
+- `limit` - Items per page
+- `sortBy` - Sort column
+- `sortOrder` - Sort direction (asc/desc)
+- `search` - Global search query
+
+Example URL: `/users?page=2&limit=20&sortBy=name&sortOrder=asc&search=john`
+
+This enables:
+
+- Shareable links with filter/sort state
+- Browser back/forward navigation
+- Bookmarkable table views
+
+### Custom Hooks
+
+A new `useDebouncedCallback` hook is included at `/hooks/use-debounced-callback.ts` for optimized search performance.

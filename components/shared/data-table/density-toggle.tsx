@@ -14,7 +14,7 @@ export function DensityToggle() {
       </span>
       <div className="flex gap-1 rounded-md border border-border p-1">
         <Button
-          variant={density === "compact" ? "primary" : "subtle"}
+          variant={density === "compact" ? "default" : "ghost"}
           size="sm"
           onClick={() => setDensity("compact")}
           className={cn("h-7 px-2 text-xs")}
@@ -22,7 +22,7 @@ export function DensityToggle() {
           Compact
         </Button>
         <Button
-          variant={density === "comfortable" ? "primary" : "subtle"}
+          variant={density === "comfortable" ? "default" : "ghost"}
           size="sm"
           onClick={() => setDensity("comfortable")}
           className={cn("h-7 px-2 text-xs")}
@@ -30,7 +30,7 @@ export function DensityToggle() {
           Comfortable
         </Button>
         <Button
-          variant={density === "spacious" ? "primary" : "subtle"}
+          variant={density === "spacious" ? "default" : "ghost"}
           size="sm"
           onClick={() => setDensity("spacious")}
           className={cn("h-7 px-2 text-xs")}

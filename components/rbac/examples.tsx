@@ -61,7 +61,7 @@ export function Example2_PermissionWithFallback() {
  * Example 3: Multiple action buttons with different permissions
  * Each button is shown based on its required permission
  */
-export function Example3_MultipleActions({ item }: { item: any }) {
+export function Example3_MultipleActions() {
   return (
     <div className="flex gap-2">
       <Can permission={PERMISSIONS.ITEMS_UPDATE}>

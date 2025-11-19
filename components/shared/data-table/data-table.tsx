@@ -2,14 +2,37 @@
 
 import {
   type ColumnDef,
-  type ColumnResizeMode,
   flexRender,
   getCoreRowModel,
   type OnChangeFn,
   type RowSelectionState,
   type SortingState,
   useReactTable,
+  type VisibilityState,
 } from "@tanstack/react-table";
+import {
+  AlertCircleIcon,
+  ArrowDownIcon,
+  ArrowUpIcon,
+  InboxIcon,
+} from "lucide-react";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { useTableStore } from "@/stores/table.store";
 
@@ -17,7 +40,6 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   enableRowSelection?: boolean;
-  enableColumnResizing?: boolean;
   enableStickyHeader?: boolean;
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
   rowSelection?: RowSelectionState;
@@ -26,13 +48,22 @@ interface DataTableProps<TData, TValue> {
   manualSorting?: boolean;
   onSortingChange?: OnChangeFn<SortingState>;
   sorting?: SortingState;
+  columnVisibility?: VisibilityState;
+  onColumnVisibilityChange?: OnChangeFn<VisibilityState>;
+  isLoading?: boolean;
+  isError?: boolean;
+  error?: Error | null;
+  emptyTitle?: string;
+  emptyDescription?: string;
+  emptyAction?: React.ReactNode;
+  loadingRowCount?: number;
+  className?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   enableRowSelection = false,
-  enableColumnResizing = false,
   enableStickyHeader = false,
   onRowSelectionChange,
   rowSelection = {},
@@ -41,134 +72,155 @@ export function DataTable<TData, TValue>({
   manualSorting = false,
   onSortingChange,
   sorting = [],
+  columnVisibility = {},
+  onColumnVisibilityChange,
+  isLoading = false,
+  isError = false,
+  error = null,
+  emptyTitle = "No data available",
+  emptyDescription = "There are no records to display at this time.",
+  emptyAction,
+  loadingRowCount = 5,
+  className,
 }: DataTableProps<TData, TValue>) {
   const density = useTableStore((state) => state.density);
-
-  const columnResizeMode: ColumnResizeMode = "onChange";
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection,
-    enableColumnResizing,
-    columnResizeMode,
     onRowSelectionChange,
     state: {
       rowSelection,
+      columnVisibility,
       ...(manualSorting && { sorting }),
     },
     manualPagination,
     pageCount,
     manualSorting,
     onSortingChange,
+    onColumnVisibilityChange,
   });
 
   // Density-based padding classes
   const densityClasses = {
-    compact: "px-2 py-1",
-    comfortable: "px-4 py-2",
-    spacious: "px-6 py-4",
+    compact: "h-8",
+    comfortable: "h-10",
+    spacious: "h-12",
   };
 
-  const cellPadding = densityClasses[density];
+  const rowHeight = densityClasses[density];
 
   return (
-    <div className="relative w-full overflow-auto">
-      <table className="w-full border-collapse">
-        <thead
+    <div className={cn("w-full", className)}>
+      <Table>
+        <TableHeader
           className={cn(
-            "bg-[hsl(var(--table-header-bg))] text-[hsl(var(--table-header-fg))]",
-            enableStickyHeader && "sticky top-0 z-10",
+            enableStickyHeader && "sticky top-0 z-10 bg-background"
           )}
         >
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr
-              key={headerGroup.id}
-              className="border-b border-[hsl(var(--table-border))]"
-            >
+            <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th
+                <TableHead
                   key={header.id}
                   className={cn(
-                    "text-left font-medium",
-                    cellPadding,
-                    header.column.getCanSort() &&
-                      "cursor-pointer select-none hover:bg-[hsl(var(--table-row-hover))]",
+                    rowHeight,
+                    header.column.getCanSort() && "cursor-pointer select-none"
                   )}
-                  style={{
-                    width: header.getSize(),
-                    position: "relative",
-                  }}
                   onClick={header.column.getToggleSortingHandler()}
                 >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
+                  {header.isPlaceholder ? null : (
+                    <div className="flex items-center gap-2">
+                      {flexRender(
                         header.column.columnDef.header,
-                        header.getContext(),
+                        header.getContext()
                       )}
-                  {header.column.getCanSort() && (
-                    <span className="ml-2">
-                      {{
-                        asc: "↑",
-                        desc: "↓",
-                      }[header.column.getIsSorted() as string] ?? "↕"}
-                    </span>
-                  )}
-                  {enableColumnResizing && header.column.getCanResize() && (
-                    <button
-                      type="button"
-                      onMouseDown={header.getResizeHandler()}
-                      onTouchStart={header.getResizeHandler()}
-                      className={cn(
-                        "absolute right-0 top-0 h-full w-1 cursor-col-resize bg-border opacity-0 hover:opacity-100",
-                        header.column.getIsResizing() &&
-                          "opacity-100 bg-primary",
+                      {header.column.getCanSort() && (
+                        <div className="flex flex-col">
+                          {header.column.getIsSorted() === "asc" ? (
+                            <ArrowUpIcon className="size-3" />
+                          ) : header.column.getIsSorted() === "desc" ? (
+                            <ArrowDownIcon className="size-3" />
+                          ) : null}
+                        </div>
                       )}
-                      aria-label="Resize column"
-                    />
+                    </div>
                   )}
-                </th>
+                </TableHead>
               ))}
-            </tr>
+            </TableRow>
           ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.length === 0 ? (
-            <tr>
-              <td
-                colSpan={columns.length}
-                className={cn("text-center text-muted-foreground", cellPadding)}
-              >
-                No data available
-              </td>
-            </tr>
+        </TableHeader>
+        <TableBody>
+          {isLoading ? (
+            // Loading state - show skeleton rows
+            Array.from({ length: loadingRowCount }).map((_, index) => (
+              <TableRow key={`loading-row-${index}`}>
+                {columns.map((_, colIndex) => (
+                  <TableCell
+                    key={`loading-cell-${index}-${colIndex}`}
+                    className={rowHeight}
+                  >
+                    <Skeleton className="h-5 w-full" />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : isError ? (
+            // Error state - show error message
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-64 p-0">
+                <Empty className="border-0">
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                      <AlertCircleIcon className="text-destructive" />
+                    </EmptyMedia>
+                    <EmptyTitle>Error loading data</EmptyTitle>
+                    <EmptyDescription>
+                      {error?.message ||
+                        "An error occurred while loading the data. Please try again."}
+                    </EmptyDescription>
+                  </EmptyHeader>
+                  {emptyAction && <EmptyContent>{emptyAction}</EmptyContent>}
+                </Empty>
+              </TableCell>
+            </TableRow>
+          ) : table.getRowModel().rows.length === 0 ? (
+            // Empty state - no data
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-64 p-0">
+                <Empty className="border-0">
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                      <InboxIcon />
+                    </EmptyMedia>
+                    <EmptyTitle>{emptyTitle}</EmptyTitle>
+                    <EmptyDescription>{emptyDescription}</EmptyDescription>
+                  </EmptyHeader>
+                  {emptyAction && <EmptyContent>{emptyAction}</EmptyContent>}
+                </Empty>
+              </TableCell>
+            </TableRow>
           ) : (
+            // Success state - show data
             table.getRowModel().rows.map((row) => (
-              <tr
+              <TableRow
                 key={row.id}
-                className={cn(
-                  "border-b border-[hsl(var(--table-border))] transition-colors hover:bg-[hsl(var(--table-row-hover))]",
-                  row.getIsSelected() && "bg-[hsl(var(--table-row-hover))]",
-                )}
+                data-state={row.getIsSelected() && "selected"}
+                className={rowHeight}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className={cellPadding}
-                    style={{
-                      width: cell.column.getSize(),
-                    }}
-                  >
+                  <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
+                  </TableCell>
                 ))}
-              </tr>
+              </TableRow>
             ))
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }
