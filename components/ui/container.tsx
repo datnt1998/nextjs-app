@@ -19,11 +19,11 @@ export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
             "max-w-[1400px]": size === "xl",
             "max-w-full": size === "full",
           },
-          className
+          className,
         )}
         {...props}
       />
     );
-  }
+  },
 );
 Container.displayName = "Container";

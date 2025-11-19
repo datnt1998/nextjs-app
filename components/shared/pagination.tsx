@@ -41,7 +41,7 @@ export function Pagination({
           totalPages - 3,
           totalPages - 2,
           totalPages - 1,
-          totalPages
+          totalPages,
         );
       } else {
         // In the middle
@@ -51,7 +51,7 @@ export function Pagination({
           currentPage,
           currentPage + 1,
           "ellipsis",
-          totalPages
+          totalPages,
         );
       }
     }
@@ -94,7 +94,7 @@ export function Pagination({
           >
             {page}
           </Button>
-        )
+        ),
       )}
 
       <Button

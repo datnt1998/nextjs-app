@@ -36,14 +36,14 @@ export default function ItemsTablePage() {
   });
   const [statusFilter, setStatusFilter] = useQueryState(
     "status",
-    stringArrayParser.withDefault([])
+    stringArrayParser.withDefault([]),
   );
   const [sortBy, setSortBy] = useQueryState("sortBy", {
     defaultValue: "created_at",
   });
   const [sortOrder, setSortOrder] = useQueryState(
     "sortOrder",
-    sortOrderParser.withDefault("desc")
+    sortOrderParser.withDefault("desc"),
   );
 
   // Local state for search input
@@ -57,11 +57,11 @@ export default function ItemsTablePage() {
         desc: sortOrder === "desc",
       },
     ],
-    [sortBy, sortOrder]
+    [sortBy, sortOrder],
   );
 
   const handleSortingChange = (
-    updater: SortingState | ((old: SortingState) => SortingState)
+    updater: SortingState | ((old: SortingState) => SortingState),
   ) => {
     const newSorting =
       typeof updater === "function" ? updater(sorting) : updater;
@@ -220,7 +220,7 @@ export default function ItemsTablePage() {
         size: 120,
       },
     ],
-    []
+    [],
   );
 
   return (

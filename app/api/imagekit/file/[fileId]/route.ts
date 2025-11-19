@@ -12,7 +12,7 @@ import { type NextRequest, NextResponse } from "next/server";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ fileId: string }> }
+  { params }: { params: Promise<{ fileId: string }> },
 ) {
   try {
     const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
@@ -20,7 +20,7 @@ export async function GET(
     if (!privateKey) {
       return NextResponse.json(
         { error: "ImageKit credentials not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -29,7 +29,7 @@ export async function GET(
     if (!fileId) {
       return NextResponse.json(
         { error: "File ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -44,14 +44,14 @@ export async function GET(
         headers: {
           Authorization: authHeader,
         },
-      }
+      },
     );
 
     if (!response.ok) {
       const errorData = await response.json();
       return NextResponse.json(
         { error: errorData.message || "Failed to get file details" },
-        { status: response.status }
+        { status: response.status },
       );
     }
 
@@ -61,7 +61,7 @@ export async function GET(
     console.error("ImageKit file details error:", error);
     return NextResponse.json(
       { error: "Failed to get file details" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

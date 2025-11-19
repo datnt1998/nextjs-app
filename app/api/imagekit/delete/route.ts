@@ -17,7 +17,7 @@ export async function DELETE(request: NextRequest) {
     if (!privateKey || !urlEndpoint) {
       return NextResponse.json(
         { error: "ImageKit credentials not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -27,7 +27,7 @@ export async function DELETE(request: NextRequest) {
     if (!fileId) {
       return NextResponse.json(
         { error: "File ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -46,7 +46,7 @@ export async function DELETE(request: NextRequest) {
       const errorData = await response.json();
       return NextResponse.json(
         { error: errorData.message || "Failed to delete file" },
-        { status: response.status }
+        { status: response.status },
       );
     }
 
@@ -55,7 +55,7 @@ export async function DELETE(request: NextRequest) {
     console.error("ImageKit delete error:", error);
     return NextResponse.json(
       { error: "Failed to delete file" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

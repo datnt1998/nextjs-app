@@ -32,7 +32,7 @@ export function ItemForm({ item, mode }: ItemFormProps) {
   const [imageUrl, setImageUrl] = useState(item?.image_url || "");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(
-    item?.image_url || null
+    item?.image_url || null,
   );
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);

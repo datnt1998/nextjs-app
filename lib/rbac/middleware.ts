@@ -79,11 +79,11 @@ function matchesPath(pathname: string, pattern: string): boolean {
  */
 function findMatchingRoute(
   pathname: string,
-  routes: RouteConfig[]
+  routes: RouteConfig[],
 ): RouteConfig | null {
   // Find the most specific matching route (longest path first)
   const sortedRoutes = [...routes].sort(
-    (a, b) => b.path.length - a.path.length
+    (a, b) => b.path.length - a.path.length,
   );
 
   for (const route of sortedRoutes) {
@@ -166,7 +166,7 @@ export function createRBACMiddleware(options: RBACMiddlewareOptions = {}) {
             }
           },
         },
-      }
+      },
     );
 
     // Get authenticated user
@@ -224,7 +224,7 @@ export function createRBACMiddleware(options: RBACMiddlewareOptions = {}) {
 
         const hasRequiredPermission = hasAnyPermission(
           userProfile,
-          routeConfig.permissions
+          routeConfig.permissions,
         );
 
         if (!hasRequiredPermission) {

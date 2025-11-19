@@ -37,11 +37,13 @@
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
 
-  /* Sidebar Colors */
-  --color-sidebar-bg: hsl(var(--sidebar-bg));
-  --color-sidebar-fg: hsl(var(--sidebar-fg));
-  --color-sidebar-hover: hsl(var(--sidebar-hover));
-  --color-sidebar-active: hsl(var(--sidebar-active));
+  /* Sidebar Colors (ShadCN) */
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
   --color-sidebar-border: hsl(var(--sidebar-border));
   --color-sidebar-ring: hsl(var(--sidebar-ring));
 
@@ -119,14 +121,6 @@
     --shadow-lg:
       0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
-    /* Sidebar */
-    --sidebar-bg: 0 0% 100%;
-    --sidebar-fg: 222 47% 11%;
-    --sidebar-hover: 210 40% 94%;
-    --sidebar-active: 242 75% 58%;
-    --sidebar-border: 214 32% 91%;
-    --sidebar-ring: 242 75% 58%;
-
     /* Table */
     --table-header-bg: 210 40% 96%;
     --table-header-fg: 222 47% 11%;
@@ -135,6 +129,16 @@
 
     /* Focus Ring */
     --focus-ring: 242 75% 58%;
+
+    /* Sidebar */
+    --sidebar: 0 0% 100%; /* card background */
+    --sidebar-foreground: 222 47% 11%; /* foreground */
+    --sidebar-primary: 242 75% 58%; /* primary */
+    --sidebar-primary-foreground: 0 0% 100%; /* primary-foreground */
+    --sidebar-accent: 242 75% 58%; /* primary */
+    --sidebar-accent-foreground: 0 0% 100%; /* primary-foreground */
+    --sidebar-border: 214 32% 91%; /* border */
+    --sidebar-ring: 242 75% 58%; /* ring */
   }
 
   .dark {
@@ -166,19 +170,21 @@
     --shadow-lg:
       0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
 
-    --sidebar-bg: 224 25% 12%;
-    --sidebar-fg: 210 40% 98%;
-    --sidebar-hover: 222 16% 22%;
-    --sidebar-active: 242 75% 58%;
-    --sidebar-border: 222 16% 20%;
-    --sidebar-ring: 242 75% 58%;
-
     --table-header-bg: 222 16% 20%;
     --table-header-fg: 210 40% 98%;
     --table-row-hover: 222 16% 18%;
     --table-border: 222 16% 20%;
 
     --focus-ring: 242 75% 58%;
+
+    --sidebar: 224 25% 12%; /* card background */
+    --sidebar-foreground: 210 40% 98%; /* foreground */
+    --sidebar-primary: 242 75% 58%; /* primary */
+    --sidebar-primary-foreground: 0 0% 100%; /* primary-foreground */
+    --sidebar-accent: 242 75% 58%; /* primary */
+    --sidebar-accent-foreground: 0 0% 100%; /* primary-foreground */
+    --sidebar-border: 222 16% 20%; /* border */
+    --sidebar-ring: 242 75% 58%; /* ring */
   }
 }
 

@@ -45,7 +45,7 @@ export const validateFile = (
   options?: {
     maxSizeMB?: number;
     allowedTypes?: string[];
-  }
+  },
 ): { valid: boolean; error?: string } => {
   const maxSizeMB = options?.maxSizeMB || 10;
   const allowedTypes = options?.allowedTypes || [
@@ -101,7 +101,7 @@ export const validateFile = (
  * ```
  */
 export const uploadFile = async (
-  options: UploadOptions
+  options: UploadOptions,
 ): Promise<UploadResponse> => {
   const {
     file,
@@ -157,7 +157,7 @@ export const uploadFile = async (
     {
       method: "POST",
       body: formData,
-    }
+    },
   );
 
   if (!uploadResponse.ok) {
@@ -202,7 +202,7 @@ export const deleteFile = async (fileId: string): Promise<void> => {
  * @returns File details
  */
 export const getFileDetails = async (
-  fileId: string
+  fileId: string,
 ): Promise<UploadResponse> => {
   const response = await fetch(`/api/imagekit/file/${fileId}`);
 

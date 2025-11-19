@@ -79,7 +79,7 @@ export function DataTable<TData, TValue>({
         <thead
           className={cn(
             "bg-[hsl(var(--table-header-bg))] text-[hsl(var(--table-header-fg))]",
-            enableStickyHeader && "sticky top-0 z-10"
+            enableStickyHeader && "sticky top-0 z-10",
           )}
         >
           {table.getHeaderGroups().map((headerGroup) => (
@@ -94,7 +94,7 @@ export function DataTable<TData, TValue>({
                     "text-left font-medium",
                     cellPadding,
                     header.column.getCanSort() &&
-                      "cursor-pointer select-none hover:bg-[hsl(var(--table-row-hover))]"
+                      "cursor-pointer select-none hover:bg-[hsl(var(--table-row-hover))]",
                   )}
                   style={{
                     width: header.getSize(),
@@ -106,7 +106,7 @@ export function DataTable<TData, TValue>({
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                   {header.column.getCanSort() && (
                     <span className="ml-2">
@@ -124,7 +124,7 @@ export function DataTable<TData, TValue>({
                       className={cn(
                         "absolute right-0 top-0 h-full w-1 cursor-col-resize bg-border opacity-0 hover:opacity-100",
                         header.column.getIsResizing() &&
-                          "opacity-100 bg-primary"
+                          "opacity-100 bg-primary",
                       )}
                       aria-label="Resize column"
                     />
@@ -150,7 +150,7 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 className={cn(
                   "border-b border-[hsl(var(--table-border))] transition-colors hover:bg-[hsl(var(--table-row-hover))]",
-                  row.getIsSelected() && "bg-[hsl(var(--table-row-hover))]"
+                  row.getIsSelected() && "bg-[hsl(var(--table-row-hover))]",
                 )}
               >
                 {row.getVisibleCells().map((cell) => (

@@ -13,7 +13,7 @@ export const useThemeStore = create<ThemeState>()(
         theme: "system",
         setTheme: (theme) => set({ theme }),
       }),
-      { name: "theme-storage" }
-    )
-  )
+      { name: "theme-storage" },
+    ),
+  ),
 );

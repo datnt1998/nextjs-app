@@ -30,7 +30,7 @@ export default function ItemsPage() {
   });
   const [statusFilter, setStatusFilter] = useQueryState(
     "status",
-    stringArrayParser.withDefault([])
+    stringArrayParser.withDefault([]),
   );
 
   // Local state for search input
@@ -270,7 +270,7 @@ export default function ItemsPage() {
                       (p) =>
                         p === 1 ||
                         p === totalPages ||
-                        (p >= page - 1 && p <= page + 1)
+                        (p >= page - 1 && p <= page + 1),
                     )
                     .map((p, idx, arr) => (
                       <div key={p} className="flex items-center gap-2">

@@ -15,6 +15,6 @@ export const useTableStore = create<TableState>()(
         set((state) => {
           state.density = density;
         }),
-    }))
-  )
+    })),
+  ),
 );
