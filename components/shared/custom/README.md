@@ -4,6 +4,55 @@ This folder contains custom-built components that extend the base UI components 
 
 ## Components
 
+### TextWithTooltip
+
+A smart text component that automatically shows a tooltip when the text is truncated.
+
+**Features:**
+
+- Automatically detects text truncation
+- Shows tooltip only when text is truncated
+- Uses ResizeObserver for responsive behavior
+- Optimized performance with proper cleanup
+- Fully accessible with Radix UI Tooltip
+- Supports both string and number values
+
+**Usage:**
+
+```tsx
+import { TextWithTooltip } from "@/components/shared/custom";
+
+function ProductList() {
+  return (
+    <div className="w-[200px]">
+      <TextWithTooltip
+        text="This is a very long product name that will be truncated"
+        className="text-sm font-medium"
+      />
+    </div>
+  );
+}
+```
+
+**Props:**
+
+- `text` (required): `string | number` - The text content to display
+- `className` (optional): `string` - Additional CSS classes for styling
+
+**How it works:**
+
+1. Uses `ResizeObserver` to detect when text is truncated
+2. Compares `scrollWidth` with `clientWidth` to determine truncation
+3. Only enables tooltip when text is actually truncated
+4. Automatically updates on resize or text changes
+5. Cleans up observers on unmount
+
+**Styling:**
+
+The component applies `truncate` class by default and disables pointer events when not truncated to prevent unnecessary tooltip triggers.
+
+---
+
 ### PasswordInput
 
 A password input field with a toggle button to show/hide the password.

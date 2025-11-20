@@ -1,6 +1,6 @@
 import { Archive, ChevronDown, Info, Search } from "lucide-react";
 import type { ReactNode } from "react";
-import { PasswordInput } from "@/components/shared/custom";
+import { PasswordInput, TextWithTooltip } from "@/components/shared/custom";
 import {
   Accordion,
   AccordionContent,
@@ -362,6 +362,20 @@ export const componentRegistry: ComponentExample[] = [
         <Avatar>
           <AvatarFallback>AB</AvatarFallback>
         </Avatar>
+      </div>
+    ),
+  },
+  {
+    id: "text-with-tooltip",
+    name: "Text with Tooltip",
+    description: "Truncated text with tooltip on hover",
+    category: "display",
+    component: (
+      <div className="w-[200px]">
+        <TextWithTooltip
+          text="This is a very long text that will be truncated and show a tooltip when you hover over it"
+          className="text-sm"
+        />
       </div>
     ),
   },
