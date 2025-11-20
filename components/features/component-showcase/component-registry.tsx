@@ -1,5 +1,6 @@
 import { Archive, ChevronDown, Info, Search } from "lucide-react";
 import type { ReactNode } from "react";
+import { PasswordInput } from "@/components/shared/custom";
 import {
   Accordion,
   AccordionContent,
@@ -215,6 +216,13 @@ export const componentRegistry: ComponentExample[] = [
         </InputOTPGroup>
       </InputOTP>
     ),
+  },
+  {
+    id: "password-input",
+    name: "Password Input",
+    description: "Password input with show/hide toggle",
+    category: "form",
+    component: <PasswordInput placeholder="Enter password..." />,
   },
   {
     id: "textarea",
