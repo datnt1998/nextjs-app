@@ -3,7 +3,6 @@
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import * as React from "react";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
@@ -23,23 +22,20 @@ const PasswordInput = React.forwardRef<
         ref={ref}
         {...props}
       />
-      <Button
+      <button
         type="button"
-        variant="ghost"
-        size="sm"
-        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+        className="absolute right-0 top-0 z-10 flex h-full items-center justify-center px-3 text-muted-foreground hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
         onClick={() => setShowPassword((prev) => !prev)}
         disabled={disabled}
+        tabIndex={-1}
+        aria-label={showPassword ? "Hide password" : "Show password"}
       >
         {showPassword && !disabled ? (
           <IconEye className="h-4 w-4" aria-hidden="true" />
         ) : (
           <IconEyeOff className="h-4 w-4" aria-hidden="true" />
         )}
-        <span className="sr-only">
-          {showPassword ? "Hide password" : "Show password"}
-        </span>
-      </Button>
+      </button>
 
       {/* hides browsers password toggles */}
       <style>{`
