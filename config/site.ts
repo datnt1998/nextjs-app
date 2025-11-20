@@ -1,5 +1,4 @@
 import type { Icons } from "@/components/icons/registry";
-import type { Role } from "@/stores/user.store";
 
 export type SiteConfig = typeof siteConfig;
 
@@ -10,6 +9,9 @@ export interface NavItem {
   external?: boolean;
   icon?: keyof typeof Icons;
   label?: string;
+  badge?: string | number;
+  permissions?: string[]; // Required permissions to view this item
+  items?: NavItem[]; // Sub-navigation items
 }
 
 export interface NavItemWithChildren extends NavItem {
@@ -82,45 +84,90 @@ export const siteConfig = {
       title: "Dashboard",
       href: "/dashboard",
       icon: "home",
-      roles: ["owner", "admin", "manager", "editor", "viewer"],
+      // No permissions required - visible to all authenticated users
     },
     {
       title: "Users",
       href: "/dashboard/users",
       icon: "users",
-      roles: ["owner", "admin"],
+      permissions: [],
     },
     {
       title: "Items",
       href: "/dashboard/items",
       icon: "folder",
-      roles: ["owner", "admin", "manager", "editor"],
+      permissions: [],
+      items: [
+        {
+          title: "All Items",
+          href: "/dashboard/items",
+        },
+        {
+          title: "Create New",
+          href: "/dashboard/items/new",
+          permissions: [],
+        },
+        {
+          title: "Archived",
+          href: "/dashboard/items/archived",
+          permissions: [],
+        },
+      ],
     },
     {
       title: "DataTable Examples",
       href: "/dashboard/examples/data-table",
       icon: "grid",
-      roles: [],
+      // No permissions required - visible to all
     },
     {
       title: "Components",
       href: "/dashboard/components",
       icon: "grid",
-      roles: ["owner", "admin", "manager", "editor", "viewer"],
+      // No permissions required - visible to all
     },
     {
       title: "Upload",
       href: "/dashboard/upload",
       icon: "upload",
-      roles: ["owner", "admin", "manager", "editor"],
+      permissions: [],
     },
     {
       title: "Settings",
       href: "/dashboard/settings",
       icon: "settings",
-      roles: ["owner", "admin"],
+      permissions: [],
     },
-  ] satisfies Array<NavItem & { roles: Role[] }>,
+  ] satisfies NavItem[],
+  secondaryNav: [
+    {
+      title: "Documentation",
+      href: "/docs",
+      icon: "folder",
+    },
+    {
+      title: "Support",
+      href: "/support",
+      icon: "search",
+    },
+  ] satisfies NavItem[],
+  projects: [
+    {
+      name: "Main Workspace",
+      url: "#",
+      icon: "home",
+    },
+    {
+      name: "Team Alpha",
+      url: "#",
+      icon: "users",
+    },
+    {
+      name: "Team Beta",
+      url: "#",
+      icon: "users",
+    },
+  ] as const,
   footerNav: [
     {
       title: "Product",

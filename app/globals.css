@@ -57,7 +57,7 @@
   --color-focus-ring: hsl(var(--focus-ring));
 
   /* Fonts */
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-open-sans);
   --font-mono: var(--font-geist-mono);
 
   /* Border Radius */

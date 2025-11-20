@@ -1,17 +1,30 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
 import { Providers } from "./providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+// Open Sans - Variable font with all weights (100-900) and width variations
+const openSans = localFont({
+  src: [
+    {
+      path: "../public/fonts/open-sans/OpenSans-VariableFont_wdth,wght.ttf",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/open-sans/OpenSans-Italic-VariableFont_wdth,wght.ttf",
+      style: "italic",
+    },
+  ],
+  variable: "--font-open-sans",
+  weight: "100 900", // Variable font supports all weights from 100 to 900
 });
 
-const geistMono = Geist_Mono({
+// Geist Mono - Variable font with all weights (100-900)
+const geistMono = localFont({
+  src: "../public/fonts/geist-mono/GeistMono-VariableFont_wght.ttf",
   variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: "100 900", // Variable font supports all weights from 100 to 900
 });
 
 export const metadata: Metadata = {
@@ -60,7 +73,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${openSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>{children}</Providers>
       </body>
