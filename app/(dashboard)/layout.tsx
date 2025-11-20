@@ -2,7 +2,7 @@
 
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
-import { UserMenu } from "@/components/dashboard/user-menu";
+import { NavUser } from "@/components/dashboard/nav-user";
 import {
   SidebarInset,
   SidebarProvider,
@@ -25,7 +25,6 @@ export default function DashboardLayout({
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border bg-background px-6">
             <SidebarTrigger />
             <div className="flex-1" />
-            <UserMenu />
           </header>
 
           {/* Main Content */}
