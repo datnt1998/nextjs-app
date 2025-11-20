@@ -40,18 +40,18 @@ export function DataTableColumnHeader<TData, TValue>({
       <span className="flex flex-col">
         <ChevronUp
           className={cn(
-            "-mb-0.5 h-3 w-3",
+            "-mb-0.5 h-2 w-2",
             column.getIsSorted() === "asc"
               ? "text-accent-foreground"
-              : "text-muted-foreground"
+              : "text-muted-foreground/40"
           )}
         />
         <ChevronDown
           className={cn(
-            "-mt-0.5 h-3 w-3",
+            "-mt-0.5 h-2 w-2",
             column.getIsSorted() === "desc"
               ? "text-accent-foreground"
-              : "text-muted-foreground"
+              : "text-muted-foreground/40"
           )}
         />
       </span>

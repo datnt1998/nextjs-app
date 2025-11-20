@@ -116,8 +116,8 @@ export const siteConfig = {
       ],
     },
     {
-      title: "DataTable Examples",
-      href: "/dashboard/examples/data-table",
+      title: "DataTable",
+      href: "/dashboard/table",
       icon: "grid",
       // Demo page - no permissions required
     },
