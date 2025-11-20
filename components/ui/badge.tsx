@@ -17,12 +17,23 @@ const badgeVariants = cva(
           "border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
+        soft: "border-transparent bg-primary/10 text-primary [a&]:hover:bg-primary/20 dark:bg-primary/20 dark:[a&]:hover:bg-primary/30",
+        "soft-secondary":
+          "border-transparent bg-secondary/50 text-secondary-foreground [a&]:hover:bg-secondary/60 dark:bg-secondary/40 dark:[a&]:hover:bg-secondary/50",
+        "soft-destructive":
+          "border-transparent bg-destructive/10 text-destructive [a&]:hover:bg-destructive/20 dark:bg-destructive/20 dark:[a&]:hover:bg-destructive/30 dark:text-destructive-foreground",
+        "soft-success":
+          "border-transparent bg-green-500/10 text-green-700 [a&]:hover:bg-green-500/20 dark:bg-green-500/20 dark:[a&]:hover:bg-green-500/30 dark:text-green-400",
+        "soft-warning":
+          "border-transparent bg-yellow-500/10 text-yellow-700 [a&]:hover:bg-yellow-500/20 dark:bg-yellow-500/20 dark:[a&]:hover:bg-yellow-500/30 dark:text-yellow-400",
+        "soft-info":
+          "border-transparent bg-blue-500/10 text-blue-700 [a&]:hover:bg-blue-500/20 dark:bg-blue-500/20 dark:[a&]:hover:bg-blue-500/30 dark:text-blue-400",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  },
+  }
 );
 
 function Badge({

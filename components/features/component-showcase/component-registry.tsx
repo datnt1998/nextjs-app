@@ -320,11 +320,23 @@ export const componentRegistry: ComponentExample[] = [
     description: "Small label for status or categories",
     category: "display",
     component: (
-      <div className="flex flex-wrap gap-2">
-        <Badge>Default</Badge>
-        <Badge variant="secondary">Secondary</Badge>
-        <Badge variant="destructive">Destructive</Badge>
-        <Badge variant="outline">Outline</Badge>
+      <div className="space-y-3">
+        <div className="flex flex-wrap gap-2">
+          <Badge>Default</Badge>
+          <Badge variant="secondary">Secondary</Badge>
+          <Badge variant="destructive">Destructive</Badge>
+          <Badge variant="outline">Outline</Badge>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Badge variant="soft">Soft</Badge>
+          <Badge variant="soft-secondary">Soft Secondary</Badge>
+          <Badge variant="soft-destructive">Soft Destructive</Badge>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Badge variant="soft-success">Success</Badge>
+          <Badge variant="soft-warning">Warning</Badge>
+          <Badge variant="soft-info">Info</Badge>
+        </div>
       </div>
     ),
   },
