@@ -1,105 +1,108 @@
 "use client";
 
-import type { ColumnDef, SortingState } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 import Image from "next/image";
 import Link from "next/link";
-import { useQueryState } from "nuqs";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Icons } from "@/components/icons/registry";
 import { Can } from "@/components/rbac/can";
-import { DataTable } from "@/components/shared/data-table";
-import { Pagination, PaginationInfo } from "@/components/shared/pagination";
+import {
+  DataTableFacetedFilter,
+  DataTablePagination,
+  DataTableViewOptions,
+  useDataTable,
+} from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Container } from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
 import { Stack } from "@/components/ui/stack";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useItems } from "@/hooks/use-items";
 import { buildImageUrl } from "@/lib/imagekit/url-builder";
-import {
-  numberParser,
-  sortOrderParser,
-  stringArrayParser,
-} from "@/lib/nuqs/parsers";
 import { PERMISSIONS } from "@/lib/rbac/permissions";
+import { cn } from "@/lib/utils";
 import type { Database } from "@/types/database.types";
+import type { DataTableFilterField } from "@/types/table";
 
 type ItemStatus = Database["public"]["Tables"]["items"]["Row"]["status"];
 type Item = Database["public"]["Tables"]["items"]["Row"];
 
-export default function ItemsTablePage() {
-  // URL state management with Nuqs
-  const [page, setPage] = useQueryState("page", numberParser.withDefault(1));
-  const [limit] = useQueryState("limit", numberParser.withDefault(10));
-  const [search, setSearch] = useQueryState("search", {
-    defaultValue: "",
-  });
-  const [statusFilter, setStatusFilter] = useQueryState(
-    "status",
-    stringArrayParser.withDefault([])
-  );
-  const [sortBy, setSortBy] = useQueryState("sortBy", {
-    defaultValue: "created_at",
-  });
-  const [sortOrder, setSortOrder] = useQueryState(
-    "sortOrder",
-    sortOrderParser.withDefault("desc")
-  );
-
-  // Local state for search input
-  const [searchInput, setSearchInput] = useState(search);
-
-  // Sorting state for TanStack Table
-  const sorting: SortingState = useMemo(
-    () => [
+// Filter field definitions for the new data table hook
+const filterFields: DataTableFilterField<Item>[] = [
+  {
+    type: "input",
+    id: "title",
+    label: "Title",
+    placeholder: "Search by title...",
+  },
+  {
+    type: "checkbox",
+    id: "status",
+    label: "Status",
+    options: [
       {
-        id: sortBy,
-        desc: sortOrder === "desc",
+        label: "Active",
+        value: "active",
+      },
+      {
+        label: "Inactive",
+        value: "inactive",
+      },
+      {
+        label: "Archived",
+        value: "archived",
       },
     ],
-    [sortBy, sortOrder]
-  );
+  },
+];
 
-  const handleSortingChange = (
-    updater: SortingState | ((old: SortingState) => SortingState)
-  ) => {
-    const newSorting =
-      typeof updater === "function" ? updater(sorting) : updater;
-    if (newSorting.length > 0) {
-      setSortBy(newSorting[0].id);
-      setSortOrder(newSorting[0].desc ? "desc" : "asc");
-    }
-  };
-
-  // Fetch items
+export default function ItemsTablePage() {
+  // Fetch items - for now using static params, will be enhanced with server-side fetching
   const { data, isLoading, error } = useItems({
-    page,
-    limit,
-    search,
-    status: statusFilter as ItemStatus[],
-    sortBy,
-    sortOrder,
+    page: 1,
+    limit: 10,
+    search: "",
+    status: [],
+    sortBy: "created_at",
+    sortOrder: "desc",
   });
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSearch(searchInput);
-    setPage(1);
-  };
-
-  const handleStatusToggle = (status: ItemStatus) => {
-    const newStatus = statusFilter.includes(status)
-      ? statusFilter.filter((s) => s !== status)
-      : [...statusFilter, status];
-    setStatusFilter(newStatus.length > 0 ? newStatus : null);
-    setPage(1);
-  };
-
-  const totalPages = data ? Math.ceil(data.total / limit) : 0;
+  const totalPages = data ? Math.ceil(data.total / 10) : 0;
 
   // Define columns
   const columns = useMemo<ColumnDef<Item>[]>(
     () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={table.getIsAllPageRowsSelected()}
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
       {
         accessorKey: "title",
         header: "Title",
@@ -151,6 +154,9 @@ export default function ItemsTablePage() {
           );
         },
         enableSorting: true,
+        filterFn: (row, id, value) => {
+          return value.includes(row.getValue(id));
+        },
         size: 120,
       },
       {
@@ -209,7 +215,7 @@ export default function ItemsTablePage() {
                 </Link>
               </Can>
               <Can permission={PERMISSIONS.ITEMS_DELETE}>
-                <Button variant="danger" size="sm">
+                <Button variant="destructive" size="sm">
                   <Icons.trash className="h-4 w-4" />
                 </Button>
               </Can>
@@ -222,6 +228,28 @@ export default function ItemsTablePage() {
     ],
     []
   );
+
+  // Use the new data table hook
+  const { table } = useDataTable({
+    data: (data?.items as Item[]) || [],
+    columns,
+    pageCount: totalPages,
+    initialState: {
+      pagination: {
+        pageIndex: 0,
+        pageSize: 10,
+      },
+      sorting: [
+        {
+          id: "created_at",
+          desc: true,
+        },
+      ],
+    },
+    manualPagination: false,
+    manualSorting: false,
+    manualFiltering: false,
+  });
 
   return (
     <Container size="full" className="py-8">
@@ -252,79 +280,6 @@ export default function ItemsTablePage() {
           </Stack>
         </Stack>
 
-        {/* Filters */}
-        <Card>
-          <CardContent className="pt-6">
-            <Stack direction="vertical" gap="md">
-              {/* Search */}
-              <form onSubmit={handleSearchSubmit}>
-                <Stack direction="horizontal" gap="sm">
-                  <div className="flex-1">
-                    <Input
-                      type="text"
-                      placeholder="Search items by title or description..."
-                      value={searchInput}
-                      onChange={(e) => setSearchInput(e.target.value)}
-                    />
-                  </div>
-                  <Button type="submit">
-                    <Icons.search className="h-4 w-4" />
-                  </Button>
-                </Stack>
-              </form>
-
-              {/* Status Filter and Density Toggle */}
-              <Stack direction="horizontal" justify="between" align="center">
-                <div>
-                  <p className="mb-2 text-sm font-medium">Filter by status:</p>
-                  <Stack direction="horizontal" gap="sm">
-                    <Button
-                      variant={
-                        statusFilter.includes("active") ? "primary" : "outline"
-                      }
-                      size="sm"
-                      onClick={() => handleStatusToggle("active")}
-                    >
-                      Active
-                    </Button>
-                    <Button
-                      variant={
-                        statusFilter.includes("inactive")
-                          ? "primary"
-                          : "outline"
-                      }
-                      size="sm"
-                      onClick={() => handleStatusToggle("inactive")}
-                    >
-                      Inactive
-                    </Button>
-                    <Button
-                      variant={
-                        statusFilter.includes("archived")
-                          ? "primary"
-                          : "outline"
-                      }
-                      size="sm"
-                      onClick={() => handleStatusToggle("archived")}
-                    >
-                      Archived
-                    </Button>
-                    {statusFilter.length > 0 && (
-                      <Button
-                        variant="subtle"
-                        size="sm"
-                        onClick={() => setStatusFilter(null)}
-                      >
-                        Clear
-                      </Button>
-                    )}
-                  </Stack>
-                </div>
-              </Stack>
-            </Stack>
-          </CardContent>
-        </Card>
-
         {/* Loading State */}
         {isLoading && (
           <div className="flex items-center justify-center py-12">
@@ -334,9 +289,9 @@ export default function ItemsTablePage() {
 
         {/* Error State */}
         {error && (
-          <Card variant="outline">
+          <Card>
             <CardContent className="py-12 text-center">
-              <p className="text-danger">
+              <p className="text-destructive">
                 Failed to load items. Please try again.
               </p>
             </CardContent>
@@ -345,37 +300,130 @@ export default function ItemsTablePage() {
 
         {/* Data Table */}
         {!isLoading && !error && data && (
-          <>
-            <Card>
-              <DataTable
-                columns={columns}
-                data={data.items as Item[]}
-                enableColumnResizing
-                enableStickyHeader
-                manualPagination
-                pageCount={totalPages}
-                manualSorting
-                sorting={sorting}
-                onSortingChange={handleSortingChange}
-              />
-            </Card>
+          <Card>
+            <CardContent className="p-0">
+              <Stack direction="vertical" gap="md" className="p-4">
+                {/* Toolbar */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex flex-1 items-center gap-2">
+                    {/* Search filter */}
+                    <Input
+                      placeholder="Search by title..."
+                      value={
+                        (table
+                          .getColumn("title")
+                          ?.getFilterValue() as string) ?? ""
+                      }
+                      onChange={(event) =>
+                        table
+                          .getColumn("title")
+                          ?.setFilterValue(event.target.value)
+                      }
+                      className="max-w-sm"
+                    />
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                onPageChange={setPage}
-              />
-            )}
+                    {/* Faceted filters */}
+                    {table.getColumn("status") && (
+                      <DataTableFacetedFilter
+                        column={table.getColumn("status")}
+                        title="Status"
+                        options={[
+                          { label: "Active", value: "active" },
+                          { label: "Inactive", value: "inactive" },
+                          { label: "Archived", value: "archived" },
+                        ]}
+                      />
+                    )}
 
-            {/* Results Info */}
-            <PaginationInfo
-              currentPage={page}
-              pageSize={limit}
-              totalItems={data.total}
-            />
-          </>
+                    {/* Reset filters */}
+                    {table.getState().columnFilters.length > 0 && (
+                      <Button
+                        variant="ghost"
+                        onClick={() => table.resetColumnFilters()}
+                        className="h-8 px-2 lg:px-3"
+                      >
+                        Reset
+                      </Button>
+                    )}
+                  </div>
+
+                  {/* View options */}
+                  <DataTableViewOptions table={table} />
+                </div>
+
+                {/* Table */}
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader>
+                      {table.getHeaderGroups().map((headerGroup) => (
+                        <TableRow key={headerGroup.id}>
+                          {headerGroup.headers.map((header) => (
+                            <TableHead
+                              key={header.id}
+                              className={cn(
+                                header.column.getCanSort() &&
+                                  "cursor-pointer select-none"
+                              )}
+                              onClick={header.column.getToggleSortingHandler()}
+                            >
+                              {header.isPlaceholder ? null : (
+                                <div className="flex items-center gap-2">
+                                  {flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                  )}
+                                  {header.column.getCanSort() && (
+                                    <div className="flex flex-col">
+                                      {header.column.getIsSorted() === "asc"
+                                        ? "↑"
+                                        : header.column.getIsSorted() === "desc"
+                                          ? "↓"
+                                          : null}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </TableHead>
+                          ))}
+                        </TableRow>
+                      ))}
+                    </TableHeader>
+                    <TableBody>
+                      {table.getRowModel().rows.length === 0 ? (
+                        <TableRow>
+                          <TableCell
+                            colSpan={columns.length}
+                            className="h-24 text-center"
+                          >
+                            No results found.
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        table.getRowModel().rows.map((row) => (
+                          <TableRow
+                            key={row.id}
+                            data-state={row.getIsSelected() && "selected"}
+                          >
+                            {row.getVisibleCells().map((cell) => (
+                              <TableCell key={cell.id}>
+                                {flexRender(
+                                  cell.column.columnDef.cell,
+                                  cell.getContext()
+                                )}
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                {/* Pagination */}
+                <DataTablePagination table={table} />
+              </Stack>
+            </CardContent>
+          </Card>
         )}
       </Stack>
     </Container>

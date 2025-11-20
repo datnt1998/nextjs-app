@@ -99,8 +99,13 @@ export const siteConfig = {
       permissions: ["items:view"],
       items: [
         {
-          title: "All Items",
+          title: "Grid View",
           href: "/dashboard/items",
+          permissions: ["items:view"],
+        },
+        {
+          title: "Table View",
+          href: "/dashboard/items/table",
           permissions: ["items:view"],
         },
         {

@@ -1,2 +1,1 @@
-export { DataTable, DensityToggle } from "./data-table";
-export { Pagination, PaginationInfo } from "./pagination";
+export { DataTable } from "./data-table";
