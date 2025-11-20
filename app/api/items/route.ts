@@ -1,11 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { ApiErrors, handleAPIError } from "@/lib/api";
-import { hasPermission, PERMISSIONS } from "@/lib/rbac/permissions";
+import {
+  createUserProfileFromJWT,
+  hasPermission,
+  PERMISSIONS,
+} from "@/lib/rbac/permissions";
 import { createClient } from "@/lib/supabase/server";
 import { itemSchema } from "@/lib/zod/schemas";
-import type { Database } from "@/types/database.types";
-
-type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 /**
  * GET /api/items
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
 
-    // Get authenticated user
+    // Get authenticated user and session (for JWT)
     const {
       data: { user },
       error: authError,
@@ -25,25 +26,19 @@ export async function GET(request: NextRequest) {
       throw ApiErrors.unauthorized("Authentication required");
     }
 
-    // Get user profile for RBAC
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single<Profile>();
+    // Get session to access JWT access token
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-    if (profileError || !profile) {
-      throw ApiErrors.notFound("User profile not found");
+    if (!session) {
+      throw ApiErrors.unauthorized("Session not found");
     }
 
-    // Check permission
-    const userProfile = {
-      id: profile.id,
-      role: profile.role,
-      permissions: profile.permissions || [],
-      tenant_id: profile.tenant_id || "",
-    };
+    // Create user profile from JWT (no database query needed!)
+    const userProfile = createUserProfileFromJWT(user, session.access_token);
 
+    // Check permission
     if (!hasPermission(userProfile, PERMISSIONS.ITEMS_VIEW)) {
       throw ApiErrors.forbidden("You don't have permission to view items");
     }
@@ -98,7 +93,7 @@ export async function GET(request: NextRequest) {
     const errorResponse = handleAPIError(error);
     return NextResponse.json(
       { error: errorResponse.error, code: errorResponse.code },
-      { status: errorResponse.statusCode },
+      { status: errorResponse.statusCode }
     );
   }
 }
@@ -111,7 +106,7 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
 
-    // Get authenticated user
+    // Get authenticated user and session (for JWT)
     const {
       data: { user },
       error: authError,
@@ -121,25 +116,19 @@ export async function POST(request: NextRequest) {
       throw ApiErrors.unauthorized("Authentication required");
     }
 
-    // Get user profile for RBAC
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single<Profile>();
+    // Get session to access JWT access token
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-    if (profileError || !profile) {
-      throw ApiErrors.notFound("User profile not found");
+    if (!session) {
+      throw ApiErrors.unauthorized("Session not found");
     }
 
-    // Check permission
-    const userProfile = {
-      id: profile.id,
-      role: profile.role,
-      permissions: profile.permissions || [],
-      tenant_id: profile.tenant_id || "",
-    };
+    // Create user profile from JWT (no database query needed!)
+    const userProfile = createUserProfileFromJWT(user, session.access_token);
 
+    // Check permission
     if (!hasPermission(userProfile, PERMISSIONS.ITEMS_CREATE)) {
       throw ApiErrors.forbidden("You don't have permission to create items");
     }
@@ -150,7 +139,7 @@ export async function POST(request: NextRequest) {
 
     if (!validation.success) {
       throw ApiErrors.badRequest(
-        `Validation failed: ${validation.error.issues.map((e: { message: string }) => e.message).join(", ")}`,
+        `Validation failed: ${validation.error.issues.map((e: { message: string }) => e.message).join(", ")}`
       );
     }
 
@@ -174,7 +163,7 @@ export async function POST(request: NextRequest) {
     const errorResponse = handleAPIError(error);
     return NextResponse.json(
       { error: errorResponse.error, code: errorResponse.code },
-      { status: errorResponse.statusCode },
+      { status: errorResponse.statusCode }
     );
   }
 }

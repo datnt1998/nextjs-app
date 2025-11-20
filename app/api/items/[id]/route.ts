@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { ApiErrors, handleAPIError } from "@/lib/api";
 import {
   canPerformAction,
+  createUserProfileFromJWT,
   hasPermission,
   PERMISSIONS,
 } from "@/lib/rbac/permissions";
@@ -9,7 +10,6 @@ import { createClient } from "@/lib/supabase/server";
 import { itemUpdateSchema } from "@/lib/zod/schemas";
 import type { Database } from "@/types/database.types";
 
-type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 type Item = Database["public"]["Tables"]["items"]["Row"];
 
 /**
@@ -18,13 +18,13 @@ type Item = Database["public"]["Tables"]["items"]["Row"];
  */
 export async function GET(
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
     const supabase = await createClient();
 
-    // Get authenticated user
+    // Get authenticated user and session (for JWT)
     const {
       data: { user },
       error: authError,
@@ -34,25 +34,19 @@ export async function GET(
       throw ApiErrors.unauthorized("Authentication required");
     }
 
-    // Get user profile for RBAC
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single<Profile>();
+    // Get session to access JWT access token
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-    if (profileError || !profile) {
-      throw ApiErrors.notFound("User profile not found");
+    if (!session) {
+      throw ApiErrors.unauthorized("Session not found");
     }
 
-    // Check permission
-    const userProfile = {
-      id: profile.id,
-      role: profile.role,
-      permissions: profile.permissions || [],
-      tenant_id: profile.tenant_id || "",
-    };
+    // Create user profile from JWT (no database query needed!)
+    const userProfile = createUserProfileFromJWT(user, session.access_token);
 
+    // Check permission
     if (!hasPermission(userProfile, PERMISSIONS.ITEMS_VIEW)) {
       throw ApiErrors.forbidden("You don't have permission to view items");
     }
@@ -77,7 +71,7 @@ export async function GET(
     const errorResponse = handleAPIError(error);
     return NextResponse.json(
       { error: errorResponse.error, code: errorResponse.code },
-      { status: errorResponse.statusCode },
+      { status: errorResponse.statusCode }
     );
   }
 }
@@ -88,13 +82,13 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
     const supabase = await createClient();
 
-    // Get authenticated user
+    // Get authenticated user and session (for JWT)
     const {
       data: { user },
       error: authError,
@@ -104,16 +98,17 @@ export async function PATCH(
       throw ApiErrors.unauthorized("Authentication required");
     }
 
-    // Get user profile for RBAC
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single<Profile>();
+    // Get session to access JWT access token
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-    if (profileError || !profile) {
-      throw ApiErrors.notFound("User profile not found");
+    if (!session) {
+      throw ApiErrors.unauthorized("Session not found");
     }
+
+    // Create user profile from JWT (no database query needed!)
+    const userProfile = createUserProfileFromJWT(user, session.access_token);
 
     // Fetch the item to check ownership
     const { data: existingItem, error: fetchError } = await supabase
@@ -130,23 +125,16 @@ export async function PATCH(
       throw ApiErrors.internalServer("Failed to fetch item");
     }
 
-    // Check permission
-    const userProfile = {
-      id: profile.id,
-      role: profile.role,
-      permissions: profile.permissions || [],
-      tenant_id: profile.tenant_id || "",
-    };
-
+    // Check permission (can update any item OR can update own item)
     const canUpdate = canPerformAction(
       userProfile,
       PERMISSIONS.ITEMS_UPDATE_ANY,
-      existingItem.user_id,
+      existingItem.user_id
     );
 
     if (!canUpdate) {
       throw ApiErrors.forbidden(
-        "You don't have permission to update this item",
+        "You don't have permission to update this item"
       );
     }
 
@@ -156,7 +144,7 @@ export async function PATCH(
 
     if (!validation.success) {
       throw ApiErrors.badRequest(
-        `Validation failed: ${validation.error.issues.map((e: { message: string }) => e.message).join(", ")}`,
+        `Validation failed: ${validation.error.issues.map((e: { message: string }) => e.message).join(", ")}`
       );
     }
 
@@ -178,7 +166,7 @@ export async function PATCH(
     const errorResponse = handleAPIError(error);
     return NextResponse.json(
       { error: errorResponse.error, code: errorResponse.code },
-      { status: errorResponse.statusCode },
+      { status: errorResponse.statusCode }
     );
   }
 }
@@ -189,13 +177,13 @@ export async function PATCH(
  */
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
     const supabase = await createClient();
 
-    // Get authenticated user
+    // Get authenticated user and session (for JWT)
     const {
       data: { user },
       error: authError,
@@ -205,16 +193,17 @@ export async function DELETE(
       throw ApiErrors.unauthorized("Authentication required");
     }
 
-    // Get user profile for RBAC
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single<Profile>();
+    // Get session to access JWT access token
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-    if (profileError || !profile) {
-      throw ApiErrors.notFound("User profile not found");
+    if (!session) {
+      throw ApiErrors.unauthorized("Session not found");
     }
+
+    // Create user profile from JWT (no database query needed!)
+    const userProfile = createUserProfileFromJWT(user, session.access_token);
 
     // Fetch the item to check ownership
     const { data: existingItem, error: fetchError } = await supabase
@@ -231,23 +220,16 @@ export async function DELETE(
       throw ApiErrors.internalServer("Failed to fetch item");
     }
 
-    // Check permission
-    const userProfile = {
-      id: profile.id,
-      role: profile.role,
-      permissions: profile.permissions || [],
-      tenant_id: profile.tenant_id || "",
-    };
-
+    // Check permission (can delete any item OR can delete own item)
     const canDelete = canPerformAction(
       userProfile,
       PERMISSIONS.ITEMS_DELETE_ANY,
-      existingItem.user_id,
+      existingItem.user_id
     );
 
     if (!canDelete) {
       throw ApiErrors.forbidden(
-        "You don't have permission to delete this item",
+        "You don't have permission to delete this item"
       );
     }
 
@@ -264,7 +246,7 @@ export async function DELETE(
     const errorResponse = handleAPIError(error);
     return NextResponse.json(
       { error: errorResponse.error, code: errorResponse.code },
-      { status: errorResponse.statusCode },
+      { status: errorResponse.statusCode }
     );
   }
 }

@@ -1,7 +1,22 @@
 import { createServerClient } from "@supabase/ssr";
+import type { User } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
+import type { Database } from "@/types/database.types";
 
-export async function updateSession(request: NextRequest) {
+export interface SessionUpdateResult {
+  response: NextResponse;
+  user: User | null;
+  supabase: ReturnType<typeof createServerClient<Database>>;
+  session: Awaited<
+    ReturnType<
+      ReturnType<typeof createServerClient<Database>>["auth"]["getSession"]
+    >
+  >["data"]["session"];
+}
+
+export async function updateSession(
+  request: NextRequest
+): Promise<SessionUpdateResult> {
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -13,7 +28,7 @@ export async function updateSession(request: NextRequest) {
     throw new Error("Missing Supabase environment variables");
   }
 
-  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+  const supabase = createServerClient<Database>(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
@@ -36,10 +51,17 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Get session for RBAC middleware (avoids duplicate getSession call)
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
   // Note: Route protection is now handled by RBAC middleware
-  // This function only manages session cookies
+  // This function manages session cookies and returns user data to avoid duplicate calls
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:
@@ -54,5 +76,10 @@ export async function updateSession(request: NextRequest) {
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
 
-  return supabaseResponse;
+  return {
+    response: supabaseResponse,
+    user,
+    supabase,
+    session,
+  };
 }

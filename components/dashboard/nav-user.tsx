@@ -25,11 +25,35 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useToast } from "@/hooks/use-toast";
+import { createClient } from "@/lib/supabase/client";
 import { useUserStore } from "@/stores/user.store";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
+  const { toast } = useToast();
   const user = useUserStore((s) => s.user);
+  const clearUser = useUserStore((s) => s.clearUser);
+  const supabase = createClient();
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Clear user state
+    clearUser();
+
+    // Use window.location for full page reload to clear session completely
+    window.location.href = "/sign-in";
+  };
 
   if (!user) {
     return null;
@@ -137,11 +161,12 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/signout">
-                <LogOut className="mr-2 h-4 w-4" />
-                Log out
-              </Link>
+            <DropdownMenuItem
+              onClick={handleSignOut}
+              className="cursor-pointer"
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

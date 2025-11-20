@@ -90,27 +90,23 @@ export const siteConfig = {
       title: "Users",
       href: "/dashboard/users",
       icon: "users",
-      permissions: [],
+      permissions: ["users:view"],
     },
     {
       title: "Items",
       href: "/dashboard/items",
       icon: "folder",
-      permissions: [],
+      permissions: ["items:view"],
       items: [
         {
           title: "All Items",
           href: "/dashboard/items",
+          permissions: ["items:view"],
         },
         {
           title: "Create New",
           href: "/dashboard/items/new",
-          permissions: [],
-        },
-        {
-          title: "Archived",
-          href: "/dashboard/items/archived",
-          permissions: [],
+          permissions: ["items:create"],
         },
       ],
     },
@@ -118,25 +114,25 @@ export const siteConfig = {
       title: "DataTable Examples",
       href: "/dashboard/examples/data-table",
       icon: "grid",
-      // No permissions required - visible to all
+      // Demo page - no permissions required
     },
     {
       title: "Components",
       href: "/dashboard/components",
       icon: "grid",
-      // No permissions required - visible to all
+      // Demo page - no permissions required
     },
     {
       title: "Upload",
       href: "/dashboard/upload",
       icon: "upload",
-      permissions: [],
+      permissions: ["items:create"],
     },
     {
       title: "Settings",
       href: "/dashboard/settings",
       icon: "settings",
-      permissions: [],
+      permissions: ["settings:view"],
     },
   ] satisfies NavItem[],
   secondaryNav: [

@@ -31,11 +31,17 @@ export function NavMain({ items }: { items: NavItem[] }) {
   // Helper to check if a route is active (for parent items with children)
   // Uses prefix matching to keep parent highlighted when on any child route
   const isActive = (href: string) => {
+    // Exact match
     if (pathname === href) {
       return true;
     }
+    // Special case: Don't use prefix matching for the root dashboard route
+    // to prevent it from matching all /dashboard/* routes
+    if (href === "/dashboard") {
+      return false;
+    }
     // For sub-routes, check if pathname starts with href followed by /
-    return pathname.startsWith(href + "/");
+    return pathname.startsWith(`${href}/`);
   };
 
   // Helper to check if a specific sub-item is active (exact match only)

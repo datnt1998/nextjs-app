@@ -17,7 +17,13 @@ export function NavSecondary({ items }: { items: NavItem[] }) {
 
   // Helper to check if a route is active
   const isActive = (href: string) => {
-    return pathname.startsWith(href);
+    // Exact match
+    if (pathname === href) {
+      return true;
+    }
+    // Check if pathname starts with href followed by /
+    // This prevents /support from matching /support-center
+    return pathname.startsWith(`${href}/`);
   };
 
   return (

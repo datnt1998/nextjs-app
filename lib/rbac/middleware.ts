@@ -1,12 +1,19 @@
 /**
- * RBAC Middleware
- * Provides route protection based on user roles and permissions
+ * RBAC Middleware - Updated for Supabase JWT-based RBAC
+ * Provides route protection based on user roles from JWT claims
+ * No database queries needed - everything comes from JWT!
  */
 
 import { createServerClient } from "@supabase/ssr";
+import type { User } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
 import type { Database } from "@/types/database.types";
-import { hasAnyPermission, type Permission } from "./permissions";
+import {
+  createUserProfileFromJWT,
+  hasAnyPermission,
+  type Permission,
+  type UserRole,
+} from "./permissions";
 
 /**
  * Route configuration for RBAC protection
@@ -17,7 +24,7 @@ export interface RouteConfig {
   /** Required permissions (user must have at least one) */
   permissions?: Permission[];
   /** Required roles (user must have one of these roles) */
-  roles?: Array<"owner" | "admin" | "manager" | "editor" | "viewer">;
+  roles?: UserRole[];
   /** Whether authentication is required (default: true) */
   requireAuth?: boolean;
 }
@@ -72,17 +79,15 @@ function matchesPath(pathname: string, pattern: string): boolean {
 
 /**
  * Find matching route configuration for a given pathname
+ * Expects routes to be pre-sorted by path length (longest first)
  */
 function findMatchingRoute(
   pathname: string,
-  routes: RouteConfig[],
+  routes: RouteConfig[]
 ): RouteConfig | null {
-  // Find the most specific matching route (longest path first)
-  const sortedRoutes = [...routes].sort(
-    (a, b) => b.path.length - a.path.length,
-  );
-
-  for (const route of sortedRoutes) {
+  // Routes should already be sorted by path length (longest first)
+  // This eliminates O(n log n) sorting on every request
+  for (const route of routes) {
     if (matchesPath(pathname, route.path)) {
       return route;
     }
@@ -103,10 +108,22 @@ export interface RBACMiddlewareOptions {
   forbiddenPath?: string;
   /** Public paths that don't require authentication */
   publicPaths?: string[];
+  /** Optional authenticated user (to avoid duplicate getUser calls) */
+  user?: User | null;
+  /** Optional Supabase client (to avoid creating a new one) */
+  supabase?: ReturnType<typeof createServerClient<Database>>;
+  /** Optional session (to avoid duplicate getSession calls) */
+  session?: Awaited<
+    ReturnType<
+      ReturnType<typeof createServerClient<Database>>["auth"]["getSession"]
+    >
+  >["data"]["session"];
 }
 
 /**
  * Create RBAC middleware with custom configuration
+ * Updated to use JWT claims instead of database queries
+ * Optimized to avoid duplicate getSession() calls
  */
 export function createRBACMiddleware(options: RBACMiddlewareOptions = {}) {
   const {
@@ -114,12 +131,20 @@ export function createRBACMiddleware(options: RBACMiddlewareOptions = {}) {
     signInPath = "/sign-in",
     forbiddenPath = "/403",
     publicPaths = ["/", "/sign-in", "/sign-up", "/403"],
+    user: providedUser,
+    supabase: providedSupabase,
+    session: providedSession,
   } = options;
+
+  // Pre-sort routes once for better performance (O(1) vs O(n log n) per request)
+  const sortedRoutes = [...routes].sort(
+    (a, b) => b.path.length - a.path.length
+  );
 
   return async function rbacMiddleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
 
-    // Skip public paths
+    // Skip public paths (early exit before any auth operations)
     if (publicPaths.some((path) => matchesPath(pathname, path))) {
       return NextResponse.next();
     }
@@ -129,23 +154,22 @@ export function createRBACMiddleware(options: RBACMiddlewareOptions = {}) {
       return NextResponse.next();
     }
 
-    // Create Supabase client
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseAnonKey) {
-      console.error("Missing Supabase environment variables");
-      return NextResponse.next();
-    }
-
     let supabaseResponse = NextResponse.next({
       request,
     });
 
-    const supabase = createServerClient<Database>(
-      supabaseUrl,
-      supabaseAnonKey,
-      {
+    // Use provided Supabase client or create a new one
+    let supabase = providedSupabase;
+    if (!supabase) {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+      if (!supabaseUrl || !supabaseAnonKey) {
+        console.error("Missing Supabase environment variables");
+        return NextResponse.next();
+      }
+
+      supabase = createServerClient<Database>(supabaseUrl, supabaseAnonKey, {
         cookies: {
           getAll() {
             return request.cookies.getAll();
@@ -162,16 +186,20 @@ export function createRBACMiddleware(options: RBACMiddlewareOptions = {}) {
             }
           },
         },
-      },
-    );
+      });
+    }
 
-    // Get authenticated user
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    // Use provided user or get authenticated user
+    let user = providedUser;
+    if (user === undefined) {
+      const {
+        data: { user: fetchedUser },
+      } = await supabase.auth.getUser();
+      user = fetchedUser;
+    }
 
-    // Find matching route configuration
-    const routeConfig = findMatchingRoute(pathname, routes);
+    // Find matching route configuration (using pre-sorted routes)
+    const routeConfig = findMatchingRoute(pathname, sortedRoutes);
 
     // If no route config found, allow access (not a protected route)
     if (!routeConfig) {
@@ -188,22 +216,26 @@ export function createRBACMiddleware(options: RBACMiddlewareOptions = {}) {
 
     // If user is authenticated and route has role/permission requirements
     if (user && (routeConfig.roles || routeConfig.permissions)) {
-      // Fetch user profile with role and permissions
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("id, role, permissions, tenant_id")
-        .eq("id", user.id)
-        .single();
+      // Use provided session or get it (optimized to avoid duplicate calls)
+      let session = providedSession;
+      if (!session) {
+        const {
+          data: { session: fetchedSession },
+        } = await supabase.auth.getSession();
+        session = fetchedSession;
+      }
 
-      if (error || !profile) {
-        console.error("Error fetching user profile:", error);
+      if (!session) {
         const url = request.nextUrl.clone();
         url.pathname = signInPath;
         return NextResponse.redirect(url);
       }
 
+      // Create user profile from JWT claims (no database query needed!)
+      const userProfile = createUserProfileFromJWT(user, session.access_token);
+
       // Check role requirement
-      if (routeConfig.roles && !routeConfig.roles.includes(profile.role)) {
+      if (routeConfig.roles && !routeConfig.roles.includes(userProfile.role)) {
         const url = request.nextUrl.clone();
         url.pathname = forbiddenPath;
         return NextResponse.redirect(url);
@@ -211,16 +243,9 @@ export function createRBACMiddleware(options: RBACMiddlewareOptions = {}) {
 
       // Check permission requirement
       if (routeConfig.permissions) {
-        const userProfile = {
-          id: profile.id,
-          role: profile.role,
-          permissions: profile.permissions || [],
-          tenant_id: profile.tenant_id,
-        };
-
         const hasRequiredPermission = hasAnyPermission(
           userProfile,
-          routeConfig.permissions,
+          routeConfig.permissions
         );
 
         if (!hasRequiredPermission) {

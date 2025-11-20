@@ -47,8 +47,8 @@ export default function SignInPage() {
       description: "Signed in successfully!",
     });
 
-    router.push("/dashboard");
-    router.refresh();
+    // Use window.location for full page reload to ensure session is properly loaded
+    window.location.href = "/dashboard";
   }
 
   return (

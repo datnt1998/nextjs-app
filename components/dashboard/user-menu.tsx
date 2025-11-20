@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Icons } from "@/components/icons/registry";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +15,6 @@ import { createClient } from "@/lib/supabase/client";
 import { useUserStore } from "@/stores/user.store";
 
 export function UserMenu() {
-  const router = useRouter();
   const { toast } = useToast();
   const user = useUserStore((s) => s.user);
   const clearUser = useUserStore((s) => s.clearUser);
@@ -34,9 +32,11 @@ export function UserMenu() {
       return;
     }
 
+    // Clear user state
     clearUser();
-    router.push("/sign-in");
-    router.refresh();
+
+    // Use window.location for full page reload to clear session completely
+    window.location.href = "/sign-in";
   };
 
   if (!user) {

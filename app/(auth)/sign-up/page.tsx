@@ -34,8 +34,8 @@ export default function SignUpPage() {
       options: {
         data: {
           full_name: fullName,
-          role: "viewer",
-          tenant_id: "default",
+          // NOTE: role and tenant_id are assigned server-side by database trigger
+          // for security - never trust client-provided role data
         },
       },
     });

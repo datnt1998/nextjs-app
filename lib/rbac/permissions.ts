@@ -1,12 +1,15 @@
 /**
  * RBAC Permission Engine
  * Defines role-based permissions and provides utilities for permission checking
+ * Updated to work with Supabase JWT-based RBAC pattern
  */
 
-import type { Database } from "@/types/database.types";
+import type { User } from "@supabase/supabase-js";
+import type { AppRole, JWTUserProfile } from "./jwt-utils";
+import { getUserProfileFromJWT } from "./jwt-utils";
 
-// Type alias for user role
-export type UserRole = Database["public"]["Tables"]["profiles"]["Row"]["role"];
+// Type alias for user role (matches AppRole from JWT)
+export type UserRole = AppRole;
 
 // Define all available permissions in the system
 export const PERMISSIONS = {
@@ -99,11 +102,12 @@ export const RolePermissions: Record<UserRole, Permission[]> = {
 
 /**
  * User profile with RBAC information
+ * Updated to work with JWT-based roles (permissions derived from role)
  */
 export interface UserProfile {
   id: string;
   role: UserRole;
-  permissions: string[];
+  permissions: string[]; // Derived from role, kept for backward compatibility
   tenant_id: string;
 }
 
@@ -115,7 +119,7 @@ export interface UserProfile {
  */
 export function hasPermission(
   user: UserProfile | null | undefined,
-  permission: Permission,
+  permission: Permission
 ): boolean {
   if (!user) {
     return false;
@@ -148,7 +152,7 @@ export function hasPermission(
  */
 export function hasAnyPermission(
   user: UserProfile | null | undefined,
-  permissions: Permission[],
+  permissions: Permission[]
 ): boolean {
   if (!user) {
     return false;
@@ -171,7 +175,7 @@ export function hasAnyPermission(
  */
 export function hasAllPermissions(
   user: UserProfile | null | undefined,
-  permissions: Permission[],
+  permissions: Permission[]
 ): boolean {
   if (!user) {
     return false;
@@ -192,7 +196,7 @@ export function hasAllPermissions(
  * @returns Array of all permissions the user has
  */
 export function getUserPermissions(
-  user: UserProfile | null | undefined,
+  user: UserProfile | null | undefined
 ): Permission[] {
   if (!user) {
     return [];
@@ -203,8 +207,7 @@ export function getUserPermissions(
 
   // Combine with user-specific permissions
   const customPermissions = (user.permissions || []).filter(
-    (p): p is Permission =>
-      Object.values(PERMISSIONS).includes(p as Permission),
+    (p): p is Permission => Object.values(PERMISSIONS).includes(p as Permission)
   );
 
   // Return unique permissions
@@ -221,7 +224,7 @@ export function getUserPermissions(
 export function canPerformAction(
   user: UserProfile | null | undefined,
   permission: Permission,
-  resourceOwnerId?: string,
+  resourceOwnerId?: string
 ): boolean {
   if (!user) {
     return false;
@@ -242,4 +245,38 @@ export function canPerformAction(
   }
 
   return false;
+}
+
+/**
+ * Create UserProfile from Supabase User and JWT access token
+ * This is the recommended way to get user profile with JWT-based RBAC
+ *
+ * @param user - Supabase User object
+ * @param accessToken - JWT access token from session (optional but recommended)
+ * @returns UserProfile for permission checking
+ */
+export function createUserProfileFromJWT(
+  user: User,
+  accessToken?: string
+): UserProfile {
+  const jwtProfile = getUserProfileFromJWT(user, accessToken);
+
+  // Get permissions from role
+  const rolePermissions = RolePermissions[jwtProfile.role] || [];
+
+  return {
+    id: jwtProfile.id,
+    role: jwtProfile.role,
+    tenant_id: jwtProfile.tenant_id,
+    permissions: rolePermissions,
+  };
+}
+
+/**
+ * Get permissions array from a role
+ * @param role - User role
+ * @returns Array of permissions for that role
+ */
+export function getPermissionsFromRole(role: UserRole): Permission[] {
+  return RolePermissions[role] || [];
 }
