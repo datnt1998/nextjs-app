@@ -4,6 +4,67 @@ This folder contains custom-built components that extend the base UI components 
 
 ## Components
 
+### InputWithAddons
+
+An input field with optional leading and trailing addons for icons, text, or other elements.
+
+**Features:**
+
+- Leading and trailing addon support
+- Uses core Input component for consistency
+- Flexible addon content (icons, text, or custom elements)
+- Proper focus states and styling
+- Fully typed with TypeScript
+- Forward ref support
+
+**Usage:**
+
+```tsx
+import { InputWithAddons } from "@/components/shared/custom";
+import { DollarSign } from "lucide-react";
+
+function PriceInput() {
+  return (
+    <>
+      {/* With icon leading */}
+      <InputWithAddons
+        leading={<DollarSign className="h-4 w-4" />}
+        placeholder="0.00"
+        type="number"
+      />
+
+      {/* With text trailing */}
+      <InputWithAddons trailing=".com" placeholder="example" type="text" />
+
+      {/* With both leading and trailing */}
+      <InputWithAddons
+        leading="https://"
+        trailing=".com"
+        placeholder="example"
+        type="text"
+      />
+    </>
+  );
+}
+```
+
+**Props:**
+
+- `leading` (optional): `React.ReactNode` - Content to display before the input
+- `trailing` (optional): `React.ReactNode` - Content to display after the input
+- `containerClassName` (optional): `string` - Additional CSS classes for the container
+- `className` (optional): `string` - Additional CSS classes for the input
+- All other standard HTML input props
+
+**Styling:**
+
+- Container has focus-within ring for better UX
+- Addons have muted background and border
+- Input has no border/shadow to blend with container
+- Proper height alignment for all elements
+
+---
+
 ### TextWithTooltip
 
 A smart text component that automatically shows a tooltip when the text is truncated.

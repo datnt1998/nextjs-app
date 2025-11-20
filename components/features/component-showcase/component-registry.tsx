@@ -1,6 +1,10 @@
-import { Archive, ChevronDown, Info, Search } from "lucide-react";
+import { Archive, ChevronDown, DollarSign, Info, Search } from "lucide-react";
 import type { ReactNode } from "react";
-import { PasswordInput, TextWithTooltip } from "@/components/shared/custom";
+import {
+  InputWithAddons,
+  PasswordInput,
+  TextWithTooltip,
+} from "@/components/shared/custom";
 import {
   Accordion,
   AccordionContent,
@@ -223,6 +227,28 @@ export const componentRegistry: ComponentExample[] = [
     description: "Password input with show/hide toggle",
     category: "form",
     component: <PasswordInput placeholder="Enter password..." />,
+  },
+  {
+    id: "input-with-addons",
+    name: "Input with Addons",
+    description: "Input with leading and trailing addons",
+    category: "form",
+    component: (
+      <div className="space-y-2">
+        <InputWithAddons
+          leading={<DollarSign className="h-4 w-4" />}
+          placeholder="0.00"
+          type="number"
+        />
+        <InputWithAddons trailing=".com" placeholder="example" type="text" />
+        <InputWithAddons
+          leading="https://"
+          trailing=".com"
+          placeholder="example"
+          type="text"
+        />
+      </div>
+    ),
   },
   {
     id: "textarea",
