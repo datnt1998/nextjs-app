@@ -2,12 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Icons } from "@/components/icons/registry";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useCreateItem, useUpdateItem } from "@/hooks/use-items";
-import { useToast } from "@/hooks/use-toast";
 import { uploadFile, validateFile } from "@/lib/imagekit/upload";
 import type { Database } from "@/types/database.types";
 
@@ -21,7 +21,6 @@ interface ItemFormProps {
 
 export function ItemForm({ item, mode }: ItemFormProps) {
   const router = useRouter();
-  const { toast } = useToast();
   const createItem = useCreateItem();
   const updateItem = useUpdateItem();
 
@@ -31,7 +30,7 @@ export function ItemForm({ item, mode }: ItemFormProps) {
   const [imageUrl, _setImageUrl] = useState(item?.image_url || "");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(
-    item?.image_url || null,
+    item?.image_url || null
   );
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,10 +46,8 @@ export function ItemForm({ item, mode }: ItemFormProps) {
     });
 
     if (!validation.valid) {
-      toast({
-        title: "Invalid file",
+      toast.error("Invalid file", {
         description: validation.error,
-        variant: "destructive",
       });
       return;
     }
@@ -83,13 +80,11 @@ export function ItemForm({ item, mode }: ItemFormProps) {
           });
           finalImageUrl = uploadResult.url;
         } catch (uploadError) {
-          toast({
-            title: "Image upload failed",
+          toast.error("Image upload failed", {
             description:
               uploadError instanceof Error
                 ? uploadError.message
                 : "Failed to upload image",
-            variant: "destructive",
           });
           setIsSubmitting(false);
           setIsUploading(false);
@@ -107,28 +102,20 @@ export function ItemForm({ item, mode }: ItemFormProps) {
 
       if (mode === "create") {
         await createItem.mutateAsync(itemData as any);
-        toast({
-          title: "Success",
-          description: "Item created successfully",
-        });
+        toast.success("Item created successfully");
         router.push("/dashboard/items");
       } else if (item) {
         await updateItem.mutateAsync({
           id: item.id,
           ...itemData,
         });
-        toast({
-          title: "Success",
-          description: "Item updated successfully",
-        });
+        toast.success("Item updated successfully");
         router.push(`/dashboard/items/${item.id}`);
       }
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error("Failed to save item", {
         description:
-          error instanceof Error ? error.message : "Failed to save item",
-        variant: "destructive",
+          error instanceof Error ? error.message : "An error occurred",
       });
     } finally {
       setIsSubmitting(false);

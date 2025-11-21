@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { toast } from "sonner";
 import {
   InputWithAddons,
+  LoadingButton,
   PasswordInput,
   TextWithTooltip,
 } from "@/components/shared/custom";
@@ -93,6 +94,18 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
+  ItemGroup,
+  ItemHeader,
+  ItemMedia,
+  ItemSeparator,
+  ItemTitle,
+} from "@/components/ui/item";
 import { Kbd } from "@/components/ui/kbd";
 import { Label } from "@/components/ui/label";
 import {
@@ -167,6 +180,37 @@ export const componentRegistry: ComponentExample[] = [
         <Button variant="outline">Outline</Button>
         <Button variant="ghost">Ghost</Button>
         <Button variant="link">Link</Button>
+      </div>
+    ),
+  },
+  {
+    id: "loading-button",
+    name: "Loading Button",
+    description: "Button with loading state and icon support",
+    category: "form",
+    component: (
+      <div className="flex flex-wrap gap-2">
+        <LoadingButton>Normal</LoadingButton>
+        <LoadingButton loading>Loading</LoadingButton>
+        <LoadingButton loading loadingText="Saving...">
+          Save
+        </LoadingButton>
+        <LoadingButton icon={<Search className="h-4 w-4" />}>
+          Search
+        </LoadingButton>
+        <LoadingButton
+          icon={<Archive className="h-4 w-4" />}
+          iconPosition="right"
+        >
+          Archive
+        </LoadingButton>
+        <LoadingButton
+          variant="outline"
+          icon={<Info className="h-4 w-4" />}
+          loading
+        >
+          Info
+        </LoadingButton>
       </div>
     ),
   },
@@ -383,11 +427,13 @@ export const componentRegistry: ComponentExample[] = [
     component: (
       <div className="flex gap-2">
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback>JD</AvatarFallback>
         </Avatar>
         <Avatar>
           <AvatarFallback>AB</AvatarFallback>
+        </Avatar>
+        <Avatar>
+          <AvatarFallback>MK</AvatarFallback>
         </Avatar>
       </div>
     ),
@@ -928,6 +974,107 @@ export const componentRegistry: ComponentExample[] = [
         <ToggleGroupItem value="center">Center</ToggleGroupItem>
         <ToggleGroupItem value="right">Right</ToggleGroupItem>
       </ToggleGroup>
+    ),
+  },
+
+  // Item Components
+  {
+    id: "item",
+    name: "Item",
+    description: "Flexible item component for lists",
+    category: "data",
+    component: (
+      <div className="w-full space-y-4">
+        <Item>
+          <ItemMedia variant="icon">
+            <Info className="h-4 w-4" />
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle>Default Item</ItemTitle>
+            <ItemDescription>
+              A flexible item component with media, content, and actions
+            </ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <Button size="sm" variant="outline">
+              Action
+            </Button>
+          </ItemActions>
+        </Item>
+
+        <Item variant="outline">
+          <ItemMedia variant="image">
+            <div className="size-10 rounded-sm bg-linear-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+              <span className="text-xs font-semibold text-primary">IMG</span>
+            </div>
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle>Item with Image</ItemTitle>
+            <ItemDescription>
+              Item with image media variant and outline style
+            </ItemDescription>
+          </ItemContent>
+        </Item>
+
+        <Item variant="muted">
+          <ItemContent>
+            <ItemHeader>
+              <ItemTitle>Item with Header & Footer</ItemTitle>
+              <Badge variant="soft-success">Active</Badge>
+            </ItemHeader>
+            <ItemDescription>
+              This item demonstrates header and footer sections
+            </ItemDescription>
+            <ItemFooter>
+              <span className="text-xs text-muted-foreground">
+                Updated 2 hours ago
+              </span>
+              <Button size="sm" variant="ghost">
+                View
+              </Button>
+            </ItemFooter>
+          </ItemContent>
+        </Item>
+      </div>
+    ),
+  },
+  {
+    id: "item-group",
+    name: "Item Group",
+    description: "Group of items with separators",
+    category: "data",
+    component: (
+      <ItemGroup className="w-full border rounded-lg overflow-hidden">
+        <Item>
+          <ItemMedia variant="icon">
+            <Archive className="h-4 w-4" />
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle>First Item</ItemTitle>
+            <ItemDescription>Item in a group</ItemDescription>
+          </ItemContent>
+        </Item>
+        <ItemSeparator />
+        <Item>
+          <ItemMedia variant="icon">
+            <Info className="h-4 w-4" />
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle>Second Item</ItemTitle>
+            <ItemDescription>Another item in the group</ItemDescription>
+          </ItemContent>
+        </Item>
+        <ItemSeparator />
+        <Item>
+          <ItemMedia variant="icon">
+            <Search className="h-4 w-4" />
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle>Third Item</ItemTitle>
+            <ItemDescription>Last item in the group</ItemDescription>
+          </ItemContent>
+        </Item>
+      </ItemGroup>
     ),
   },
 ];

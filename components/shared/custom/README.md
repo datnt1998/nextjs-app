@@ -4,6 +4,78 @@ This folder contains custom-built components that extend the base UI components 
 
 ## Components
 
+### LoadingButton
+
+A button component with built-in loading state and icon support.
+
+**Features:**
+
+- Loading state with spinner animation
+- Optional custom loading text
+- Icon support with left/right positioning
+- Extends base Button component with all variants
+- Automatically disables during loading
+- Fully typed with TypeScript
+- Forward ref support
+
+**Usage:**
+
+```tsx
+import { LoadingButton } from "@/components/shared/custom";
+import { Save, Send } from "lucide-react";
+
+function MyForm() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    // ... async operation
+    setIsLoading(false);
+  };
+
+  return (
+    <>
+      {/* Basic loading button */}
+      <LoadingButton loading={isLoading} onClick={handleSubmit}>
+        Submit
+      </LoadingButton>
+
+      {/* With custom loading text */}
+      <LoadingButton loading={isLoading} loadingText="Saving...">
+        Save
+      </LoadingButton>
+
+      {/* With icon */}
+      <LoadingButton icon={<Save className="h-4 w-4" />}>Save</LoadingButton>
+
+      {/* Icon on right */}
+      <LoadingButton icon={<Send className="h-4 w-4" />} iconPosition="right">
+        Send
+      </LoadingButton>
+    </>
+  );
+}
+```
+
+**Props:**
+
+Extends all `ButtonProps` plus:
+
+- `loading` (optional): `boolean` - Shows loading spinner and disables button
+- `icon` (optional): `React.ReactNode` - Icon to display (hidden during loading)
+- `iconPosition` (optional): `"left" | "right"` - Icon position (default: "left")
+- `loadingText` (optional): `string` - Custom text to show during loading
+- All other Button props (variant, size, etc.)
+
+**Behavior:**
+
+- When `loading={true}`, shows spinner and optional loading text
+- Button is automatically disabled during loading
+- Icon is hidden during loading state
+- Supports all Button variants and sizes
+
+---
+
 ### InputWithAddons
 
 An input field with optional leading and trailing addons for icons, text, or other elements.

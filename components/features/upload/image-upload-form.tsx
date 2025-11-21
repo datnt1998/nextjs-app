@@ -1,11 +1,11 @@
 "use client";
 
 import { type ChangeEvent, useRef, useState } from "react";
+import { toast } from "sonner";
 import { Icons } from "@/components/icons/registry";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
 import {
   type UploadResponse,
   uploadFile,
@@ -28,11 +28,10 @@ export function ImageUploadForm({
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<UploadResponse | null>(
-    null,
+    null
   );
   const [imageLoading, setImageLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { toast } = useToast();
 
   const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -51,10 +50,8 @@ export function ImageUploadForm({
     });
 
     if (!validation.valid) {
-      toast({
-        title: "Invalid file",
+      toast.error("Invalid file", {
         description: validation.error,
-        variant: "destructive",
       });
       return;
     }
@@ -85,8 +82,7 @@ export function ImageUploadForm({
       setUploadedImage(result);
       setImageLoading(true);
 
-      toast({
-        title: "Upload successful",
+      toast.success("Upload successful", {
         description: "Your image has been uploaded successfully.",
       });
 
@@ -100,11 +96,9 @@ export function ImageUploadForm({
       }
     } catch (error) {
       console.error("Upload error:", error);
-      toast({
-        title: "Upload failed",
+      toast.error("Upload failed", {
         description:
           error instanceof Error ? error.message : "Failed to upload image",
-        variant: "destructive",
       });
     } finally {
       setUploading(false);

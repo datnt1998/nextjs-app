@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { use, useState } from "react";
+import { toast } from "sonner";
 import { Icons } from "@/components/icons/registry";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,7 +19,6 @@ import {
 } from "@/components/ui/dialog";
 import { Stack } from "@/components/ui/stack";
 import { useDeleteItem, useItem } from "@/hooks/use-items";
-import { useToast } from "@/hooks/use-toast";
 import { buildImageUrl } from "@/lib/imagekit/url-builder";
 import { canPerformAction, PERMISSIONS } from "@/lib/rbac/permissions";
 import { useUserStore } from "@/stores/user.store";
@@ -34,7 +34,6 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
   const resolvedParams = use(params);
   const { id } = resolvedParams;
   const router = useRouter();
-  const { toast } = useToast();
   const user = useUserStore((state) => state.user);
   const deleteItem = useDeleteItem();
 
@@ -69,17 +68,12 @@ export default function ItemDetailPage({ params }: ItemDetailPageProps) {
     setIsDeleting(true);
     try {
       await deleteItem.mutateAsync(item.id);
-      toast({
-        title: "Success",
-        description: "Item deleted successfully",
-      });
+      toast.success("Item deleted successfully");
       router.push("/dashboard/items");
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error("Failed to delete item", {
         description:
-          error instanceof Error ? error.message : "Failed to delete item",
-        variant: "destructive",
+          error instanceof Error ? error.message : "An error occurred",
       });
       setIsDeleting(false);
       setIsDeleteDialogOpen(false);

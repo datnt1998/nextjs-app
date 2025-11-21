@@ -2,7 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import type { APIError } from "@/lib/api/errors";
 
 /**
@@ -64,10 +64,8 @@ function handleMutationError(error: unknown) {
   const errorMessage = parseErrorMessage(error);
   const errorTitle = getErrorTitle(error);
 
-  toast({
-    title: errorTitle,
+  toast.error(errorTitle, {
     description: errorMessage,
-    variant: "destructive",
   });
 }
 
@@ -81,10 +79,8 @@ export function handleQueryError(error: unknown) {
   const errorMessage = parseErrorMessage(error);
   const errorTitle = getErrorTitle(error);
 
-  toast({
-    title: errorTitle,
+  toast.error(errorTitle, {
     description: errorMessage,
-    variant: "destructive",
   });
 }
 
@@ -125,7 +121,7 @@ export function TanStackProvider({ children }: { children: React.ReactNode }) {
             // Individual mutations can override this by providing their own onError
           },
         },
-      }),
+      })
   );
 
   return (

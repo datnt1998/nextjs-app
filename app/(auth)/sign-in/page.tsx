@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,12 +11,9 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
 import { createClient } from "@/lib/supabase/client";
 
 export default function SignInPage() {
-  const router = useRouter();
-  const { toast } = useToast();
   const supabase = createClient();
 
   const [email, setEmail] = useState("");
@@ -33,19 +30,12 @@ export default function SignInPage() {
     });
 
     if (error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
+      toast.error(error.message);
       setIsLoading(false);
       return;
     }
 
-    toast({
-      title: "Success",
-      description: "Signed in successfully!",
-    });
+    toast.success("Signed in successfully!");
 
     // Use window.location for full page reload to ensure session is properly loaded
     window.location.href = "/dashboard";
