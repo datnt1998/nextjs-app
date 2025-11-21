@@ -1,5 +1,3 @@
-import type { SortingState } from "@tanstack/react-table";
-
 /**
  * Extended sorting state with type-safe column IDs
  */

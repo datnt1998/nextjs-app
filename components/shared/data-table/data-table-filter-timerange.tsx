@@ -32,7 +32,7 @@ export function DataTableFilterTimerange<TData, TValue>({
   const value = column?.getFilterValue() as [string, string] | undefined;
 
   const [date, setDate] = React.useState<DateRange | undefined>(() => {
-    if (value && value[0] && value[1]) {
+    if (value?.[0] && value[1]) {
       return {
         from: new Date(value[0]),
         to: new Date(value[1]),

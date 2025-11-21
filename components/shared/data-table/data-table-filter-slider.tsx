@@ -1,7 +1,6 @@
 "use client";
 
 import type { Column } from "@tanstack/react-table";
-import * as React from "react";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 

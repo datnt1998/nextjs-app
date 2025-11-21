@@ -34,11 +34,10 @@ import { cn } from "@/lib/utils";
 import type { Database } from "@/types/database.types";
 import type { DataTableFilterField } from "@/types/table";
 
-type ItemStatus = Database["public"]["Tables"]["items"]["Row"]["status"];
 type Item = Database["public"]["Tables"]["items"]["Row"];
 
 // Filter field definitions for the new data table hook
-const filterFields: DataTableFilterField<Item>[] = [
+const _filterFields: DataTableFilterField<Item>[] = [
   {
     type: "input",
     id: "title",

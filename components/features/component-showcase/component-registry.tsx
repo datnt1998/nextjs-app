@@ -26,7 +26,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
   Breadcrumb,
@@ -933,7 +933,7 @@ export const componentRegistry: ComponentExample[] = [
       <ScrollArea className="h-[100px] w-full rounded-md border p-4">
         <div className="space-y-2">
           {Array.from({ length: 10 }, (_, i) => (
-            <div key={`scroll-item-${i}`} className="text-sm">
+            <div key={`item-${i + 1}`} className="text-sm">
               Scrollable item {i + 1}
             </div>
           ))}

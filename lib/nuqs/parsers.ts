@@ -1,4 +1,4 @@
-import type { ColumnFiltersState, SortingState } from "@tanstack/react-table";
+import type { ColumnFiltersState } from "@tanstack/react-table";
 import { createParser } from "nuqs";
 import { serializeColumnFilters } from "@/lib/data-table/utils";
 import type { DataTableFilterField, ExtendedSortingState } from "@/types/table";

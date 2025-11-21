@@ -67,7 +67,7 @@ export function NavProjects({ projects }: NavProjectsProps) {
             <DropdownMenuLabel className="text-xs text-muted-foreground">
               Workspaces
             </DropdownMenuLabel>
-            {projects.map((project, index) => {
+            {projects.map((project, _index) => {
               const Icon = Icons[project.icon] || Icons.grid;
               return (
                 <DropdownMenuItem

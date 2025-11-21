@@ -5,7 +5,7 @@
  */
 
 import type { User } from "@supabase/supabase-js";
-import type { AppRole, JWTUserProfile } from "./jwt-utils";
+import type { AppRole } from "./jwt-utils";
 import { getUserProfileFromJWT } from "./jwt-utils";
 
 // Type alias for user role (matches AppRole from JWT)

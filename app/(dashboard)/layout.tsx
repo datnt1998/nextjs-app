@@ -2,7 +2,6 @@
 
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
-import { NavUser } from "@/components/dashboard/nav-user";
 import {
   SidebarInset,
   SidebarProvider,
