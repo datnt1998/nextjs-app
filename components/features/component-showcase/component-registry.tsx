@@ -1,5 +1,6 @@
 import { Archive, ChevronDown, DollarSign, Info, Search } from "lucide-react";
 import type { ReactNode } from "react";
+import { toast } from "sonner";
 import {
   InputWithAddons,
   PasswordInput,
@@ -495,6 +496,51 @@ export const componentRegistry: ComponentExample[] = [
         <div>Above</div>
         <Separator />
         <div>Below</div>
+      </div>
+    ),
+  },
+  {
+    id: "toast",
+    name: "Toast (Sonner)",
+    description: "Toast notifications with color variants",
+    category: "display",
+    component: (
+      <div className="flex flex-wrap gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => toast.success("Success! Operation completed.")}
+        >
+          Success
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => toast.error("Error! Something went wrong.")}
+        >
+          Error
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => toast.warning("Warning! Please be careful.")}
+        >
+          Warning
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => toast.info("Info: Here's some information.")}
+        >
+          Info
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => toast("Default toast message")}
+        >
+          Default
+        </Button>
       </div>
     ),
   },
