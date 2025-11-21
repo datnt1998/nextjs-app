@@ -9,6 +9,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -25,13 +26,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useToast } from "@/hooks/use-toast";
 import { createClient } from "@/lib/supabase/client";
 import { useUserStore } from "@/stores/user.store";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const { toast } = useToast();
   const user = useUserStore((s) => s.user);
   const clearUser = useUserStore((s) => s.clearUser);
   const supabase = createClient();
@@ -40,11 +39,7 @@ export function NavUser() {
     const { error } = await supabase.auth.signOut();
 
     if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to sign out. Please try again.",
-        variant: "destructive",
-      });
+      toast.error("Failed to sign out. Please try again.");
       return;
     }
 
