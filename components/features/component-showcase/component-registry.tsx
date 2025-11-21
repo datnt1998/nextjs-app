@@ -445,10 +445,11 @@ export const componentRegistry: ComponentExample[] = [
     description: "Loading placeholder animation",
     category: "display",
     component: (
-      <div className="space-y-2">
+      <div className="w-full space-y-2">
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-3/4" />
         <Skeleton className="h-4 w-1/2" />
+        <Skeleton className="h-12 w-full" />
       </div>
     ),
   },
