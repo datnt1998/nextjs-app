@@ -1,0 +1,36 @@
+{
+  "title": "Image Upload",
+  "subtitle": "Upload images and see real-time transformations powered by ImageKit",
+  "form": {
+    "selectImage": "Select Image",
+    "supportedFormats": "Supported formats: JPEG, PNG, WebP, GIF. Max size: {maxSize}MB",
+    "preview": "Preview",
+    "file": "File",
+    "size": "Size",
+    "type": "Type",
+    "uploadImage": "Upload Image",
+    "uploading": "Uploading...",
+    "clear": "Clear",
+    "uploadSuccess": "Upload successful",
+    "uploadSuccessDescription": "Your image has been uploaded successfully.",
+    "uploadFailed": "Upload failed",
+    "invalidFile": "Invalid file"
+  },
+  "uploaded": {
+    "title": "Uploaded Image",
+    "original": "Original (with LQIP)",
+    "loadingPlaceholder": "Loading placeholder",
+    "transformations": "Transformations",
+    "thumbnail": "Thumbnail (200×200)",
+    "webpFormat": "WebP Format (400px)",
+    "blurred": "Blurred (blur: 20)",
+    "lowQuality": "Low Quality (quality: 20)",
+    "cropped": "Cropped (300×300)",
+    "highQuality": "High Quality (quality: 95)",
+    "imageDetails": "Image Details",
+    "fileId": "File ID:",
+    "filePath": "File Path:",
+    "fileType": "File Type:",
+    "dimensions": "Dimensions:"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "403": {
+    "title": "Access Denied",
+    "subtitle": "You don't have permission to access this resource",
+    "description": "If you believe this is an error, please contact your administrator or try signing in with a different account.",
+    "goHome": "Go Home",
+    "returnToDashboard": "Return to Dashboard"
+  },
+  "404": {
+    "title": "Page Not Found",
+    "subtitle": "The page you're looking for doesn't exist",
+    "description": "The page may have been moved or deleted.",
+    "goHome": "Go Home"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist.",
+    "goHome": "Go to Home"
+  },
+  "500": {
+    "title": "Server Error",
+    "subtitle": "Something went wrong on our end",
+    "description": "We're working to fix the issue. Please try again later.",
+    "goHome": "Go Home"
+  },
+  "generic": {
+    "title": "Error",
+    "subtitle": "An unexpected error occurred",
+    "tryAgain": "Try Again"
+  }
+}

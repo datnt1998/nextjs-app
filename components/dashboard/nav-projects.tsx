@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Icons } from "@/components/icons/registry";
 import {
@@ -31,6 +32,17 @@ interface NavProjectsProps {
 export function NavProjects({ projects }: NavProjectsProps) {
   const { isMobile } = useSidebar();
   const [activeProject, setActiveProject] = useState(projects[0]);
+  const t = useTranslations("navigation.projects");
+
+  // Helper to translate project names
+  const translateProjectName = (name: string): string => {
+    const nameMap: Record<string, string> = {
+      "Main Workspace": t("mainWorkspace"),
+      "Team Alpha": t("teamAlpha"),
+      "Team Beta": t("teamBeta"),
+    };
+    return nameMap[name] || name;
+  };
 
   return (
     <SidebarMenu>
@@ -49,10 +61,10 @@ export function NavProjects({ projects }: NavProjectsProps) {
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
-                  {activeProject.name}
+                  {translateProjectName(activeProject.name)}
                 </span>
                 <span className="truncate text-xs text-muted-foreground">
-                  Enterprise
+                  {t("enterprise")}
                 </span>
               </div>
               <ChevronDown className="ml-auto size-4" />
@@ -65,7 +77,7 @@ export function NavProjects({ projects }: NavProjectsProps) {
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">
-              Workspaces
+              {t("label")}
             </DropdownMenuLabel>
             {projects.map((project, _index) => {
               const Icon = Icons[project.icon] || Icons.grid;
@@ -78,7 +90,7 @@ export function NavProjects({ projects }: NavProjectsProps) {
                   <div className="flex size-6 items-center justify-center rounded-sm border">
                     <Icon className="size-4 shrink-0" />
                   </div>
-                  {project.name}
+                  {translateProjectName(project.name)}
                 </DropdownMenuItem>
               );
             })}
@@ -88,7 +100,7 @@ export function NavProjects({ projects }: NavProjectsProps) {
                 <Plus className="size-4" />
               </div>
               <div className="font-medium text-muted-foreground">
-                Add workspace
+                {t("addWorkspace")}
               </div>
             </DropdownMenuItem>
           </DropdownMenuContent>

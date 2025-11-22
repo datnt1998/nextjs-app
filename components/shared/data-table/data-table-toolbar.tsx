@@ -2,6 +2,7 @@
 
 import type { Table } from "@tanstack/react-table";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,7 @@ export function DataTableToolbar<TData>({
   density,
   onDensityChange,
 }: DataTableToolbarProps<TData>) {
+  const t = useTranslations("table.toolbar");
   const isFiltered = table.getState().columnFilters.length > 0;
 
   // Get the first input filter field for the search bar
@@ -36,7 +38,7 @@ export function DataTableToolbar<TData>({
           <Input
             placeholder={
               searchField.placeholder ||
-              `Search ${searchField.label.toLowerCase()}...`
+              t("search", { field: searchField.label.toLowerCase() })
             }
             value={
               (table.getColumn(searchField.id)?.getFilterValue() as string) ??
@@ -57,7 +59,7 @@ export function DataTableToolbar<TData>({
             onClick={() => table.resetColumnFilters()}
             className="h-8 px-2 lg:px-3"
           >
-            Reset
+            {t("reset")}
             <X className="ml-2 h-4 w-4" />
           </Button>
         )}

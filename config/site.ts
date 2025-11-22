@@ -1,4 +1,5 @@
 import type { Icons } from "@/components/icons/registry";
+import type { Locale } from "@/i18n/config";
 
 export type SiteConfig = typeof siteConfig;
 
@@ -35,10 +36,15 @@ export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
 
+// Locale-specific site metadata
+export interface LocaleSiteMetadata {
+  name: string;
+  description: string;
+  keywords: string[];
+}
+
+// Base site configuration (locale-independent)
 export const siteConfig = {
-  name: "NextJS Starter Kit",
-  description:
-    "A modern, lightweight, and highly extensible NextJS starter kit optimized for SaaS dashboards and management systems.",
   url: "https://nextjs-starter-kit.vercel.app",
   ogImage: "https://nextjs-starter-kit.vercel.app/og.jpg",
   links: {
@@ -49,22 +55,45 @@ export const siteConfig = {
     name: "Your Name",
     url: "https://yourwebsite.com",
   },
-  keywords: [
-    "Next.js",
-    "React",
-    "Tailwind CSS",
-    "TypeScript",
-    "Supabase",
-    "SaaS",
-    "Dashboard",
-    "Starter Kit",
-  ] as string[],
   authors: [
     {
       name: "Your Name",
       url: "https://yourwebsite.com",
     },
   ] as Array<{ name: string; url: string }>,
+  // Locale-specific metadata
+  localeMetadata: {
+    en: {
+      name: "NextJS Starter Kit",
+      description:
+        "A modern, lightweight, and highly extensible NextJS starter kit optimized for SaaS dashboards and management systems.",
+      keywords: [
+        "Next.js",
+        "React",
+        "Tailwind CSS",
+        "TypeScript",
+        "Supabase",
+        "SaaS",
+        "Dashboard",
+        "Starter Kit",
+      ],
+    },
+    vi: {
+      name: "Bộ công cụ khởi động NextJS",
+      description:
+        "Bộ công cụ khởi động NextJS hiện đại, nhẹ và có khả năng mở rộng cao được tối ưu hóa cho bảng điều khiển SaaS và hệ thống quản lý.",
+      keywords: [
+        "Next.js",
+        "React",
+        "Tailwind CSS",
+        "TypeScript",
+        "Supabase",
+        "SaaS",
+        "Bảng điều khiển",
+        "Bộ công cụ khởi động",
+      ],
+    },
+  } as Record<Locale, LocaleSiteMetadata>,
   mainNav: [
     {
       title: "Features",
@@ -257,3 +286,39 @@ export const siteConfig = {
     },
   ] satisfies FooterItem[],
 } as const;
+
+/**
+ * Get locale-specific site metadata
+ * @param locale - The locale to get metadata for
+ * @returns Locale-specific site name, description, and keywords
+ */
+export function getLocaleSiteConfig(locale: Locale): LocaleSiteMetadata {
+  return siteConfig.localeMetadata[locale];
+}
+
+/**
+ * Get the site name for a specific locale
+ * @param locale - The locale to get the site name for
+ * @returns Localized site name
+ */
+export function getSiteName(locale: Locale): string {
+  return siteConfig.localeMetadata[locale].name;
+}
+
+/**
+ * Get the site description for a specific locale
+ * @param locale - The locale to get the site description for
+ * @returns Localized site description
+ */
+export function getSiteDescription(locale: Locale): string {
+  return siteConfig.localeMetadata[locale].description;
+}
+
+/**
+ * Get the site keywords for a specific locale
+ * @param locale - The locale to get the site keywords for
+ * @returns Localized site keywords
+ */
+export function getSiteKeywords(locale: Locale): string[] {
+  return siteConfig.localeMetadata[locale].keywords;
+}

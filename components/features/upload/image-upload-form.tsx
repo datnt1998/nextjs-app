@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { type ChangeEvent, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Icons } from "@/components/icons/registry";
@@ -24,11 +25,13 @@ export function ImageUploadForm({
   folder = "/uploads",
   maxSizeMB = 10,
 }: ImageUploadFormProps) {
+  const t = useTranslations("upload.form");
+  const tUploaded = useTranslations("upload.uploaded");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<UploadResponse | null>(
-    null
+    null,
   );
   const [imageLoading, setImageLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -50,7 +53,7 @@ export function ImageUploadForm({
     });
 
     if (!validation.valid) {
-      toast.error("Invalid file", {
+      toast.error(t("invalidFile"), {
         description: validation.error,
       });
       return;
@@ -82,8 +85,8 @@ export function ImageUploadForm({
       setUploadedImage(result);
       setImageLoading(true);
 
-      toast.success("Upload successful", {
-        description: "Your image has been uploaded successfully.",
+      toast.success(t("uploadSuccess"), {
+        description: t("uploadSuccessDescription"),
       });
 
       onUploadSuccess?.(result);
@@ -96,9 +99,8 @@ export function ImageUploadForm({
       }
     } catch (error) {
       console.error("Upload error:", error);
-      toast.error("Upload failed", {
-        description:
-          error instanceof Error ? error.message : "Failed to upload image",
+      toast.error(t("uploadFailed"), {
+        description: error instanceof Error ? error.message : t("uploadFailed"),
       });
     } finally {
       setUploading(false);
@@ -131,7 +133,7 @@ export function ImageUploadForm({
               htmlFor="file-upload"
               className="block text-sm font-medium mb-2"
             >
-              Select Image
+              {t("selectImage")}
             </label>
             <Input
               id="file-upload"
@@ -142,7 +144,7 @@ export function ImageUploadForm({
               disabled={uploading}
             />
             <p className="text-sm text-muted-foreground mt-2">
-              Supported formats: JPEG, PNG, WebP, GIF. Max size: {maxSizeMB}MB
+              {t("supportedFormats", { maxSize: maxSizeMB })}
             </p>
           </div>
 
@@ -152,19 +154,20 @@ export function ImageUploadForm({
               <div className="relative w-full h-64 bg-muted rounded-lg overflow-hidden">
                 <img
                   src={preview}
-                  alt="Preview"
+                  alt={t("preview")}
                   className="w-full h-full object-contain"
                 />
               </div>
               <div className="text-sm text-muted-foreground">
                 <p>
-                  <strong>File:</strong> {selectedFile.name}
+                  <strong>{t("file")}:</strong> {selectedFile.name}
                 </p>
                 <p>
-                  <strong>Size:</strong> {formatFileSize(selectedFile.size)}
+                  <strong>{t("size")}:</strong>{" "}
+                  {formatFileSize(selectedFile.size)}
                 </p>
                 <p>
-                  <strong>Type:</strong> {selectedFile.type}
+                  <strong>{t("type")}:</strong> {selectedFile.type}
                 </p>
               </div>
             </div>
@@ -180,15 +183,15 @@ export function ImageUploadForm({
               {uploading ? (
                 <>
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                  Uploading...
+                  {t("uploading")}
                 </>
               ) : (
-                "Upload Image"
+                t("uploadImage")
               )}
             </Button>
             {selectedFile && !uploading && (
               <Button onClick={handleClear} variant="outline">
-                Clear
+                {t("clear")}
               </Button>
             )}
           </div>
@@ -198,16 +201,18 @@ export function ImageUploadForm({
       {/* Uploaded Image Display with Transformations */}
       {uploadedImage && (
         <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4">Uploaded Image</h3>
+          <h3 className="text-lg font-semibold mb-4">{tUploaded("title")}</h3>
           <div className="space-y-6">
             {/* Original with LQIP */}
             <div>
-              <h4 className="text-sm font-medium mb-2">Original (with LQIP)</h4>
+              <h4 className="text-sm font-medium mb-2">
+                {tUploaded("original")}
+              </h4>
               <div className="relative w-full h-96 bg-muted rounded-lg overflow-hidden">
                 {imageLoading && (
                   <img
                     src={buildLQIP(uploadedImage.filePath)}
-                    alt="Loading placeholder"
+                    alt={tUploaded("loadingPlaceholder")}
                     className="absolute inset-0 w-full h-full object-contain blur-sm"
                   />
                 )}
@@ -228,12 +233,14 @@ export function ImageUploadForm({
 
             {/* Transformations Examples */}
             <div>
-              <h4 className="text-sm font-medium mb-3">Transformations</h4>
+              <h4 className="text-sm font-medium mb-3">
+                {tUploaded("transformations")}
+              </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {/* Thumbnail */}
                 <div>
                   <p className="text-xs text-muted-foreground mb-2">
-                    Thumbnail (200×200)
+                    {tUploaded("thumbnail")}
                   </p>
                   <div className="relative w-full h-48 bg-muted rounded-lg overflow-hidden">
                     <img
@@ -243,7 +250,7 @@ export function ImageUploadForm({
                         crop: "maintain_ratio",
                         quality: 80,
                       })}
-                      alt="Thumbnail"
+                      alt={tUploaded("thumbnail")}
                       className="w-full h-full object-contain"
                     />
                   </div>
@@ -252,7 +259,7 @@ export function ImageUploadForm({
                 {/* WebP Format */}
                 <div>
                   <p className="text-xs text-muted-foreground mb-2">
-                    WebP Format (400px)
+                    {tUploaded("webpFormat")}
                   </p>
                   <div className="relative w-full h-48 bg-muted rounded-lg overflow-hidden">
                     <img
@@ -261,7 +268,7 @@ export function ImageUploadForm({
                         format: "webp",
                         quality: 85,
                       })}
-                      alt="WebP"
+                      alt={tUploaded("webpFormat")}
                       className="w-full h-full object-contain"
                     />
                   </div>
@@ -270,7 +277,7 @@ export function ImageUploadForm({
                 {/* Blurred */}
                 <div>
                   <p className="text-xs text-muted-foreground mb-2">
-                    Blurred (blur: 20)
+                    {tUploaded("blurred")}
                   </p>
                   <div className="relative w-full h-48 bg-muted rounded-lg overflow-hidden">
                     <img
@@ -278,7 +285,7 @@ export function ImageUploadForm({
                         width: 400,
                         blur: 20,
                       })}
-                      alt="Blurred"
+                      alt={tUploaded("blurred")}
                       className="w-full h-full object-contain"
                     />
                   </div>
@@ -287,7 +294,7 @@ export function ImageUploadForm({
                 {/* Low Quality */}
                 <div>
                   <p className="text-xs text-muted-foreground mb-2">
-                    Low Quality (quality: 20)
+                    {tUploaded("lowQuality")}
                   </p>
                   <div className="relative w-full h-48 bg-muted rounded-lg overflow-hidden">
                     <img
@@ -295,7 +302,7 @@ export function ImageUploadForm({
                         width: 400,
                         quality: 20,
                       })}
-                      alt="Low Quality"
+                      alt={tUploaded("lowQuality")}
                       className="w-full h-full object-contain"
                     />
                   </div>
@@ -304,7 +311,7 @@ export function ImageUploadForm({
                 {/* Cropped */}
                 <div>
                   <p className="text-xs text-muted-foreground mb-2">
-                    Cropped (300×300)
+                    {tUploaded("cropped")}
                   </p>
                   <div className="relative w-full h-48 bg-muted rounded-lg overflow-hidden">
                     <img
@@ -313,7 +320,7 @@ export function ImageUploadForm({
                         height: 300,
                         crop: "force",
                       })}
-                      alt="Cropped"
+                      alt={tUploaded("cropped")}
                       className="w-full h-full object-contain"
                     />
                   </div>
@@ -322,7 +329,7 @@ export function ImageUploadForm({
                 {/* High Quality */}
                 <div>
                   <p className="text-xs text-muted-foreground mb-2">
-                    High Quality (quality: 95)
+                    {tUploaded("highQuality")}
                   </p>
                   <div className="relative w-full h-48 bg-muted rounded-lg overflow-hidden">
                     <img
@@ -330,7 +337,7 @@ export function ImageUploadForm({
                         width: 400,
                         quality: 95,
                       })}
-                      alt="High Quality"
+                      alt={tUploaded("highQuality")}
                       className="w-full h-full object-contain"
                     />
                   </div>
@@ -340,26 +347,36 @@ export function ImageUploadForm({
 
             {/* Image Details */}
             <div className="border-t pt-4">
-              <h4 className="text-sm font-medium mb-2">Image Details</h4>
+              <h4 className="text-sm font-medium mb-2">
+                {tUploaded("imageDetails")}
+              </h4>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div>
-                  <span className="text-muted-foreground">File ID:</span>
+                  <span className="text-muted-foreground">
+                    {tUploaded("fileId")}
+                  </span>
                   <p className="font-mono text-xs break-all">
                     {uploadedImage.fileId}
                   </p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">File Path:</span>
+                  <span className="text-muted-foreground">
+                    {tUploaded("filePath")}
+                  </span>
                   <p className="font-mono text-xs break-all">
                     {uploadedImage.filePath}
                   </p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">File Type:</span>
+                  <span className="text-muted-foreground">
+                    {tUploaded("fileType")}
+                  </span>
                   <p>{uploadedImage.fileType}</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Dimensions:</span>
+                  <span className="text-muted-foreground">
+                    {tUploaded("dimensions")}
+                  </span>
                   <p>
                     {uploadedImage.width} × {uploadedImage.height}
                   </p>

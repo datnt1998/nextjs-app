@@ -1,0 +1,73 @@
+{
+  "title": "Ví dụ bảng dữ liệu",
+  "subtitle": "Bảng dữ liệu nâng cao với bộ lọc, sắp xếp, phân trang, điều khiển mật độ và quản lý trạng thái URL",
+  "search": {
+    "placeholder": "Tìm kiếm sản phẩm..."
+  },
+  "filters": {
+    "status": "Trạng thái",
+    "category": "Danh mục",
+    "priceRange": "Khoảng giá"
+  },
+  "status": {
+    "inStock": "Còn hàng",
+    "lowStock": "Sắp hết hàng",
+    "outOfStock": "Hết hàng"
+  },
+  "categories": {
+    "electronics": "Điện tử",
+    "furniture": "Nội thất",
+    "stationery": "Văn phòng phẩm"
+  },
+  "columns": {
+    "product": "Sản phẩm",
+    "category": "Danh mục",
+    "price": "Giá",
+    "stock": "Tồn kho",
+    "status": "Trạng thái",
+    "created": "Đã tạo"
+  },
+  "actions": {
+    "copyId": "Sao chép ID sản phẩm",
+    "viewDetails": "Xem chi tiết",
+    "editProduct": "Chỉnh sửa sản phẩm"
+  },
+  "empty": "Không tìm thấy sản phẩm.",
+  "features": {
+    "urlState": {
+      "title": "Đồng bộ trạng thái URL",
+      "description": "Tất cả bộ lọc, sắp xếp và phân trang được tự động đồng bộ với URL. Thử lọc hoặc sắp xếp, sau đó làm mới trang."
+    },
+    "density": {
+      "title": "Điều khiển mật độ",
+      "description": "Điều chỉnh khoảng cách bảng với ba mức mật độ: Gọn, Thoải mái và Rộng rãi."
+    },
+    "compactUrl": {
+      "title": "Định dạng URL gọn",
+      "description": "Bộ lọc được tuần tự hóa bằng định dạng gọn: status:in-stock,low-stock"
+    }
+  },
+  "toolbar": {
+    "reset": "Đặt lại",
+    "search": "Tìm kiếm {field}..."
+  },
+  "pagination": {
+    "rowsSelected": "{selected} trong {total} hàng được chọn.",
+    "rowsPerPage": "Số hàng mỗi trang",
+    "page": "Trang {current} / {total}",
+    "firstPage": "Đi đến trang đầu",
+    "previousPage": "Đi đến trang trước",
+    "nextPage": "Đi đến trang sau",
+    "lastPage": "Đi đến trang cuối"
+  },
+  "facetedFilter": {
+    "selected": "{count} đã chọn",
+    "noResults": "Không tìm thấy kết quả.",
+    "clearFilters": "Xóa bộ lọc"
+  },
+  "viewOptions": {
+    "view": "Xem",
+    "density": "Mật độ",
+    "toggleColumns": "Chuyển đổi cột"
+  }
+}

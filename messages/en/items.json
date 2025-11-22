@@ -1,0 +1,92 @@
+{
+  "title": "Items",
+  "subtitle": "Manage your items collection",
+  "actions": {
+    "createItem": "Create Item",
+    "tableView": "Table View",
+    "gridView": "Grid View",
+    "backToItems": "Back to Items",
+    "backToItem": "Back to Item"
+  },
+  "search": {
+    "placeholder": "Search items by title or description...",
+    "submit": "Search",
+    "searchByTitle": "Search by title..."
+  },
+  "filters": {
+    "title": "Filter by status:",
+    "active": "Active",
+    "inactive": "Inactive",
+    "archived": "Archived",
+    "clear": "Clear"
+  },
+  "empty": {
+    "noItems": "No items yet. Create your first item to get started.",
+    "noResults": "No items found matching your filters."
+  },
+  "errors": {
+    "loadFailed": "Failed to load items. Please try again.",
+    "itemNotFound": "Item not found.",
+    "deleteFailed": "Failed to delete item"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "showing": "Showing {from} to {to} of {total} items"
+  },
+  "detail": {
+    "description": "Description",
+    "metadata": "Metadata",
+    "created": "Created",
+    "lastUpdated": "Last Updated",
+    "itemId": "Item ID",
+    "ownerId": "Owner ID"
+  },
+  "table": {
+    "title": "Items Table",
+    "subtitle": "Advanced data table with sorting, filtering, and pagination",
+    "columns": {
+      "title": "Title",
+      "description": "Description",
+      "status": "Status",
+      "image": "Image",
+      "created": "Created",
+      "actions": "Actions"
+    },
+    "noResults": "No results found."
+  },
+  "delete": {
+    "title": "Delete Item",
+    "description": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
+    "confirm": "Delete",
+    "cancel": "Cancel",
+    "deleting": "Deleting...",
+    "success": "Item deleted successfully"
+  },
+  "form": {
+    "createTitle": "Create New Item",
+    "editTitle": "Edit Item",
+    "title": "Title",
+    "titlePlaceholder": "Enter item title",
+    "description": "Description",
+    "descriptionPlaceholder": "Enter item description",
+    "descriptionCounter": "{count}/500 characters",
+    "status": "Status",
+    "statusActive": "Active",
+    "statusInactive": "Inactive",
+    "statusArchived": "Archived",
+    "image": "Image",
+    "imageHint": "Max file size: 5MB. Supported formats: JPEG, PNG, WebP",
+    "imagePreview": "Preview:",
+    "submit": "Create Item",
+    "update": "Update Item",
+    "cancel": "Cancel",
+    "uploading": "Uploading...",
+    "saving": "Saving...",
+    "createSuccess": "Item created successfully",
+    "updateSuccess": "Item updated successfully",
+    "saveFailed": "Failed to save item",
+    "uploadFailed": "Image upload failed",
+    "invalidFile": "Invalid file"
+  }
+}

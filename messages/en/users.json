@@ -1,0 +1,76 @@
+{
+  "title": "Team Members",
+  "subtitle": "Manage your team members and their roles across the organization",
+  "actions": {
+    "inviteUser": "Invite User",
+    "editUser": "Edit User",
+    "viewProfile": "View Profile",
+    "manageRoles": "Manage Roles",
+    "deleteUser": "Delete User"
+  },
+  "stats": {
+    "totalUsers": "Total Users",
+    "active": "Active",
+    "admins": "Admins",
+    "thisMonth": "This Month"
+  },
+  "search": {
+    "placeholder": "Search users by name or email..."
+  },
+  "filters": {
+    "role": "Role",
+    "status": "Status",
+    "reset": "Reset"
+  },
+  "roles": {
+    "owner": "Owner",
+    "admin": "Admin",
+    "manager": "Manager",
+    "editor": "Editor",
+    "viewer": "Viewer"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "table": {
+    "columns": {
+      "user": "User",
+      "role": "Role",
+      "status": "Status",
+      "lastSeen": "Last Seen",
+      "joined": "Joined",
+      "actions": "Actions"
+    },
+    "noUsers": "No users found"
+  },
+  "dialog": {
+    "invite": {
+      "title": "Invite New User",
+      "description": "Send an invitation to add a new team member to your organization.",
+      "email": "Email Address",
+      "emailPlaceholder": "colleague@company.com",
+      "name": "Full Name",
+      "namePlaceholder": "John Doe",
+      "role": "Role",
+      "cancel": "Cancel",
+      "submit": "Send Invitation"
+    },
+    "edit": {
+      "title": "Edit User",
+      "description": "Update user information and permissions for {name}.",
+      "cancel": "Cancel",
+      "submit": "Save Changes"
+    },
+    "delete": {
+      "title": "Delete User",
+      "description": "Are you sure you want to delete {name}? This action cannot be undone and will revoke all their access to the organization.",
+      "cancel": "Cancel",
+      "confirm": "Delete User"
+    }
+  },
+  "messages": {
+    "uiExample": "This is a UI example",
+    "notImplemented": "This feature is not yet implemented. This is a visual demonstration."
+  }
+}

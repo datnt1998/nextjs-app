@@ -1,0 +1,22 @@
+{
+  "title": "Component Gallery",
+  "description": "A curated showcase of all UI components in the design system",
+  "showcase": {
+    "hero": {
+      "title": "UI Component Showcase",
+      "description": "Explore our comprehensive collection of beautifully designed, accessible UI components built with Radix UI and Tailwind CSS.",
+      "stats": {
+        "components": "Production-ready components",
+        "customizable": "Customizable",
+        "accessible": "Accessible"
+      }
+    },
+    "search": {
+      "placeholder": "Search components..."
+    },
+    "categories": {
+      "all": "all"
+    },
+    "noResults": "No components found matching your criteria."
+  }
+}

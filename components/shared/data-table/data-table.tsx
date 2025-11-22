@@ -66,14 +66,15 @@ export function DataTable<TData, TValue>({
                     key={header.id}
                     className={cn(
                       densityClass,
-                      header.column.getCanSort() && "cursor-pointer select-none"
+                      header.column.getCanSort() &&
+                        "cursor-pointer select-none",
                     )}
                   >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -102,7 +103,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id} className={densityClass}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

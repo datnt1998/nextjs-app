@@ -1,0 +1,73 @@
+{
+  "title": "Data Table Example",
+  "subtitle": "Advanced data table with filters, sorting, pagination, density control, and URL state management",
+  "search": {
+    "placeholder": "Search products..."
+  },
+  "filters": {
+    "status": "Status",
+    "category": "Category",
+    "priceRange": "Price Range"
+  },
+  "status": {
+    "inStock": "In Stock",
+    "lowStock": "Low Stock",
+    "outOfStock": "Out of Stock"
+  },
+  "categories": {
+    "electronics": "Electronics",
+    "furniture": "Furniture",
+    "stationery": "Stationery"
+  },
+  "columns": {
+    "product": "Product",
+    "category": "Category",
+    "price": "Price",
+    "stock": "Stock",
+    "status": "Status",
+    "created": "Created"
+  },
+  "actions": {
+    "copyId": "Copy product ID",
+    "viewDetails": "View details",
+    "editProduct": "Edit product"
+  },
+  "empty": "No products found.",
+  "features": {
+    "urlState": {
+      "title": "URL State Sync",
+      "description": "All filters, sorting, and pagination are automatically synced to the URL. Try filtering or sorting, then refresh the page."
+    },
+    "density": {
+      "title": "Density Control",
+      "description": "Adjust table spacing with three density levels: Compact, Comfortable, and Spacious."
+    },
+    "compactUrl": {
+      "title": "Compact URL Format",
+      "description": "Filters are serialized using a compact format: status:in-stock,low-stock"
+    }
+  },
+  "toolbar": {
+    "reset": "Reset",
+    "search": "Search {field}..."
+  },
+  "pagination": {
+    "rowsSelected": "{selected} of {total} row(s) selected.",
+    "rowsPerPage": "Rows per page",
+    "page": "Page {current} of {total}",
+    "firstPage": "Go to first page",
+    "previousPage": "Go to previous page",
+    "nextPage": "Go to next page",
+    "lastPage": "Go to last page"
+  },
+  "facetedFilter": {
+    "selected": "{count} selected",
+    "noResults": "No results found.",
+    "clearFilters": "Clear filters"
+  },
+  "viewOptions": {
+    "view": "View",
+    "density": "Density",
+    "toggleColumns": "Toggle columns"
+  }
+}

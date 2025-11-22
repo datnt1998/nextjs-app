@@ -1,0 +1,36 @@
+{
+  "title": "Tải lên hình ảnh",
+  "subtitle": "Tải lên hình ảnh và xem các chuyển đổi thời gian thực được hỗ trợ bởi ImageKit",
+  "form": {
+    "selectImage": "Chọn hình ảnh",
+    "supportedFormats": "Định dạng được hỗ trợ: JPEG, PNG, WebP, GIF. Kích thước tối đa: {maxSize}MB",
+    "preview": "Xem trước",
+    "file": "Tệp",
+    "size": "Kích thước",
+    "type": "Loại",
+    "uploadImage": "Tải lên hình ảnh",
+    "uploading": "Đang tải lên...",
+    "clear": "Xóa",
+    "uploadSuccess": "Tải lên thành công",
+    "uploadSuccessDescription": "Hình ảnh của bạn đã được tải lên thành công.",
+    "uploadFailed": "Tải lên thất bại",
+    "invalidFile": "Tệp không hợp lệ"
+  },
+  "uploaded": {
+    "title": "Hình ảnh đã tải lên",
+    "original": "Gốc (với LQIP)",
+    "loadingPlaceholder": "Trình giữ chỗ đang tải",
+    "transformations": "Chuyển đổi",
+    "thumbnail": "Hình thu nhỏ (200×200)",
+    "webpFormat": "Định dạng WebP (400px)",
+    "blurred": "Làm mờ (blur: 20)",
+    "lowQuality": "Chất lượng thấp (quality: 20)",
+    "cropped": "Đã cắt (300×300)",
+    "highQuality": "Chất lượng cao (quality: 95)",
+    "imageDetails": "Chi tiết hình ảnh",
+    "fileId": "ID tệp:",
+    "filePath": "Đường dẫn tệp:",
+    "fileType": "Loại tệp:",
+    "dimensions": "Kích thước:"
+  }
+}

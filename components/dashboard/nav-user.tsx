@@ -9,7 +9,9 @@ import {
   Sparkles,
 } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -34,6 +36,7 @@ export function NavUser() {
   const user = useUserStore((s) => s.user);
   const clearUser = useUserStore((s) => s.clearUser);
   const supabase = createClient();
+  const t = useTranslations("navigation.user");
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -130,28 +133,32 @@ export function NavUser() {
               <DropdownMenuItem asChild>
                 <Link href="/dashboard/upgrade">
                   <Sparkles className="mr-2 h-4 w-4" />
-                  Upgrade to Pro
+                  {t("upgradeToPro")}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <div className="px-2 py-1.5">
+              <LanguageSwitcher showIcon={true} />
+            </div>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <Link href="/profile">
                   <BadgeCheck className="mr-2 h-4 w-4" />
-                  Account
+                  {t("account")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/billing">
                   <CreditCard className="mr-2 h-4 w-4" />
-                  Billing
+                  {t("billing")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/notifications">
                   <Bell className="mr-2 h-4 w-4" />
-                  Notifications
+                  {t("notifications")}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -161,7 +168,7 @@ export function NavUser() {
               className="cursor-pointer"
             >
               <LogOut className="mr-2 h-4 w-4" />
-              Log out
+              {t("logOut")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

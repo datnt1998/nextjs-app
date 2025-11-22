@@ -1,0 +1,50 @@
+{
+  "site": {
+    "name": "Bộ công cụ khởi động NextJS",
+    "description": "Bộ công cụ khởi động NextJS hiện đại, nhẹ và có khả năng mở rộng cao được tối ưu hóa cho bảng điều khiển SaaS và hệ thống quản lý."
+  },
+  "home": {
+    "title": "Trang chủ - Bộ công cụ khởi động NextJS",
+    "description": "Bắt đầu với Bộ công cụ khởi động NextJS - Bộ công cụ khởi động hiện đại, nhẹ và có khả năng mở rộng cao để xây dựng bảng điều khiển SaaS.",
+    "heading": "Để bắt đầu, hãy chỉnh sửa tệp page.tsx.",
+    "subheading": "Đang tìm kiếm điểm khởi đầu hoặc hướng dẫn thêm? Hãy truy cập mẫu hoặc trung tâm học tập.",
+    "deployNow": "Triển khai ngay",
+    "documentation": "Tài liệu"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Đăng nhập - Bộ công cụ khởi động NextJS",
+      "description": "Đăng nhập vào tài khoản Bộ công cụ khởi động NextJS của bạn"
+    },
+    "signUp": {
+      "title": "Đăng ký - Bộ công cụ khởi động NextJS",
+      "description": "Tạo tài khoản Bộ công cụ khởi động NextJS mới"
+    }
+  },
+  "dashboard": {
+    "title": "Bảng điều khiển - Bộ công cụ khởi động NextJS",
+    "description": "Tổng quan và thống kê bảng điều khiển của bạn",
+    "home": {
+      "title": "Bảng điều khiển - Bộ công cụ khởi động NextJS",
+      "description": "Tổng quan và thống kê bảng điều khiển của bạn"
+    },
+    "items": {
+      "title": "Mục - Bộ công cụ khởi động NextJS",
+      "description": "Quản lý bộ sưu tập mục của bạn"
+    },
+    "users": {
+      "title": "Người dùng - Bộ công cụ khởi động NextJS",
+      "description": "Quản lý người dùng và quyền"
+    },
+    "settings": {
+      "title": "Cài đặt - Bộ công cụ khởi động NextJS",
+      "description": "Cấu hình cài đặt tài khoản của bạn"
+    }
+  },
+  "errors": {
+    "403": {
+      "title": "403 Cấm - Bộ công cụ khởi động NextJS",
+      "description": "Bạn không có quyền truy cập tài nguyên này"
+    }
+  }
+}

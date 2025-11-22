@@ -15,7 +15,7 @@ export interface SessionUpdateResult {
 }
 
 export async function updateSession(
-  request: NextRequest
+  request: NextRequest,
 ): Promise<SessionUpdateResult> {
   let supabaseResponse = NextResponse.next({
     request,

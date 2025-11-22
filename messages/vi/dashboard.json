@@ -1,0 +1,27 @@
+{
+  "title": "Bảng điều khiển",
+  "welcome": "Chào mừng trở lại, {name}!",
+  "subtitle": "Đây là những gì đang diễn ra với các dự án của bạn hôm nay.",
+  "stats": {
+    "totalItems": "Tổng số mục",
+    "activeUsers": "Người dùng hoạt động",
+    "projects": "Dự án",
+    "completion": "Hoàn thành",
+    "noItemsYet": "Chưa có mục nào được tạo",
+    "itemsFromLastMonth": "+{count} từ tháng trước",
+    "firstUser": "Bạn là người dùng đầu tiên",
+    "registeredUsers": "{count} người dùng đã đăng ký",
+    "startFirstProject": "Bắt đầu dự án đầu tiên của bạn",
+    "noTasksCompleted": "Chưa có nhiệm vụ nào hoàn thành"
+  },
+  "overview": {
+    "title": "Tổng quan",
+    "subtitle": "Tổng quan bảng điều khiển của bạn sẽ xuất hiện ở đây. Đây là phần giữ chỗ cho biểu đồ và phân tích.",
+    "chartPlaceholder": "Phần giữ chỗ biểu đồ"
+  },
+  "recentActivity": {
+    "title": "Hoạt động gần đây",
+    "noActivity": "Không có hoạt động gần đây để hiển thị.",
+    "itemsCreated": "{count} mục đã được tạo"
+  }
+}

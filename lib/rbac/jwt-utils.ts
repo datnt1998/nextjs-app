@@ -84,7 +84,7 @@ export function getTenantIdFromJWT(accessToken: string): string {
  */
 export function getUserProfileFromJWT(
   user: User,
-  accessToken?: string
+  accessToken?: string,
 ): JWTUserProfile {
   // If access token provided, decode it to get claims
   if (accessToken) {

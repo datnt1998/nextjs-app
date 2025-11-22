@@ -1,0 +1,50 @@
+{
+  "site": {
+    "name": "NextJS Starter Kit",
+    "description": "A modern, lightweight, and highly extensible NextJS starter kit optimized for SaaS dashboards and management systems."
+  },
+  "home": {
+    "title": "Home - NextJS Starter Kit",
+    "description": "Get started with NextJS Starter Kit - A modern, lightweight, and highly extensible starter kit for building SaaS dashboards.",
+    "heading": "To get started, edit the page.tsx file.",
+    "subheading": "Looking for a starting point or more instructions? Head over to the templates or learning center.",
+    "deployNow": "Deploy Now",
+    "documentation": "Documentation"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign In - NextJS Starter Kit",
+      "description": "Sign in to your NextJS Starter Kit account"
+    },
+    "signUp": {
+      "title": "Sign Up - NextJS Starter Kit",
+      "description": "Create a new NextJS Starter Kit account"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard - NextJS Starter Kit",
+    "description": "Your dashboard overview and statistics",
+    "home": {
+      "title": "Dashboard - NextJS Starter Kit",
+      "description": "Your dashboard overview and statistics"
+    },
+    "items": {
+      "title": "Items - NextJS Starter Kit",
+      "description": "Manage your items collection"
+    },
+    "users": {
+      "title": "Users - NextJS Starter Kit",
+      "description": "Manage users and permissions"
+    },
+    "settings": {
+      "title": "Settings - NextJS Starter Kit",
+      "description": "Configure your account settings"
+    }
+  },
+  "errors": {
+    "403": {
+      "title": "403 Forbidden - NextJS Starter Kit",
+      "description": "You don't have permission to access this resource"
+    }
+  }
+}

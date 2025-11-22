@@ -1,6 +1,11 @@
+"use client";
+
 import { Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function ComponentHero() {
+  const t = useTranslations("components.showcase.hero");
+
   return (
     <div className="relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24 sm:py-32">
@@ -9,26 +14,25 @@ export function ComponentHero() {
             <Sparkles className="h-6 w-6 text-primary" />
           </div>
           <h1 className="text-4xl font-bold tracking-tight sm:text-6xl bg-linear-to-br from-slate-900 to-slate-700 bg-clip-text text-transparent">
-            UI Component Showcase
+            {t("title")}
           </h1>
           <p className="mt-6 text-lg leading-8 text-slate-600 max-w-2xl mx-auto">
-            Explore our comprehensive collection of beautifully designed,
-            accessible UI components built with Radix UI and Tailwind CSS.
+            {t("description")}
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <div className="text-sm text-slate-600">
               <span className="font-semibold text-primary">50+</span>{" "}
-              Production-ready components
+              {t("stats.components")}
             </div>
             <div className="h-4 w-px bg-slate-300" />
             <div className="text-sm text-slate-600">
               <span className="font-semibold text-primary">100%</span>{" "}
-              Customizable
+              {t("stats.customizable")}
             </div>
             <div className="h-4 w-px bg-slate-300" />
             <div className="text-sm text-slate-600">
               <span className="font-semibold text-primary">Fully</span>{" "}
-              Accessible
+              {t("stats.accessible")}
             </div>
           </div>
         </div>

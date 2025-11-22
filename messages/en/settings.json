@@ -1,0 +1,125 @@
+{
+  "title": "Settings",
+  "subtitle": "Manage your account settings and preferences",
+  "tabs": {
+    "profile": "Profile",
+    "account": "Account",
+    "appearance": "Appearance",
+    "team": "Team"
+  },
+  "profile": {
+    "title": "Profile Information",
+    "description": "Update your personal information and public profile details.",
+    "avatar": {
+      "title": "Profile Picture",
+      "description": "Upload a new avatar to personalize your profile. JPG, PNG or GIF (max. 2MB).",
+      "upload": "Upload",
+      "remove": "Remove"
+    },
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "email": "Email Address",
+    "emailPlaceholder": "your.email@company.com",
+    "emailHint": "This is your primary email for notifications and account recovery.",
+    "bio": "Bio",
+    "bioPlaceholder": "Tell us a little about yourself...",
+    "bioHint": "Brief description for your profile. Max 160 characters.",
+    "save": "Save Changes"
+  },
+  "account": {
+    "security": {
+      "title": "Security",
+      "description": "Manage your password and authentication settings.",
+      "currentPassword": "Current Password",
+      "currentPasswordPlaceholder": "Enter current password",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm new password",
+      "passwordHint": "Password must be at least 8 characters with a mix of letters and numbers.",
+      "twoFactor": "Two-Factor Authentication",
+      "twoFactorDescription": "Add an extra layer of security to your account",
+      "updatePassword": "Update Password"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Configure how you receive notifications and updates.",
+      "email": "Email Notifications",
+      "emailDescription": "Receive email updates about your account activity",
+      "security": "Security Alerts",
+      "securityDescription": "Get notified about important security events",
+      "marketing": "Marketing Emails",
+      "marketingDescription": "Receive updates about new features and tips",
+      "save": "Save Preferences"
+    },
+    "dangerZone": {
+      "title": "Danger Zone",
+      "description": "Irreversible actions that will affect your account permanently.",
+      "deleteAccount": "Delete Account",
+      "deleteAccountDescription": "Permanently delete your account and all associated data",
+      "delete": "Delete"
+    }
+  },
+  "appearance": {
+    "title": "Appearance",
+    "description": "Customize the look and feel of your interface.",
+    "theme": {
+      "title": "Theme",
+      "description": "Choose your preferred color scheme",
+      "light": "Light",
+      "lightDescription": "Bright & clean",
+      "dark": "Dark",
+      "darkDescription": "Easy on eyes",
+      "system": "System",
+      "systemDescription": "Auto-detect"
+    },
+    "language": {
+      "title": "Language",
+      "description": "Select your preferred language"
+    },
+    "fontSize": {
+      "title": "Font Size",
+      "description": "Adjust the base font size for better readability",
+      "small": "Small (12px)",
+      "large": "Large (20px)",
+      "preview": "The quick brown fox jumps over the lazy dog. This is how your text will appear with the selected font size."
+    },
+    "save": "Save Preferences"
+  },
+  "team": {
+    "organization": {
+      "title": "Organization Settings",
+      "description": "Manage your organization's profile and workspace settings.",
+      "logo": "Organization Logo",
+      "logoDescription": "Upload your organization's logo. Recommended size: 400x400px.",
+      "uploadLogo": "Upload Logo",
+      "name": "Organization Name",
+      "namePlaceholder": "Enter organization name",
+      "url": "Workspace URL",
+      "urlPlaceholder": "workspace-name",
+      "urlSuffix": ".yourapp.com",
+      "urlHint": "This will be your organization's unique URL.",
+      "members": "Team Members",
+      "membersDescription": "You're using {used} of {total} available seats",
+      "managePlan": "Manage Plan",
+      "save": "Save Changes"
+    },
+    "billing": {
+      "title": "Billing & Subscription",
+      "description": "Manage your subscription and billing details.",
+      "plan": "Professional Plan",
+      "active": "Active",
+      "renews": "$99/month • Renews on December 1, 2024",
+      "manageBilling": "Manage Billing",
+      "upgrade": {
+        "title": "Need more features?",
+        "description": "Upgrade to Enterprise for advanced security, SSO, and dedicated support.",
+        "learnMore": "Learn more about Enterprise →"
+      }
+    }
+  },
+  "messages": {
+    "uiExample": "This is a UI example",
+    "notImplemented": "{section} changes are not yet implemented. This is a visual demonstration."
+  }
+}

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Icons } from "@/components/icons/registry";
 import {
   SidebarGroup,
@@ -14,6 +15,16 @@ import type { NavItem } from "@/config/site";
 
 export function NavSecondary({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
+  const t = useTranslations("navigation");
+
+  // Helper to translate navigation item titles
+  const translateTitle = (title: string): string => {
+    const titleMap: Record<string, string> = {
+      Documentation: t("secondary.documentation"),
+      Support: t("secondary.support"),
+    };
+    return titleMap[title] || title;
+  };
 
   // Helper to check if a route is active
   const isActive = (href: string) => {
@@ -39,7 +50,7 @@ export function NavSecondary({ items }: { items: NavItem[] }) {
                 <SidebarMenuButton asChild isActive={active} size="sm">
                   <Link href={item.href}>
                     <Icon className="size-4" />
-                    <span>{item.title}</span>
+                    <span>{translateTitle(item.title)}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

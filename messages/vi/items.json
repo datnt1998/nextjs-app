@@ -1,0 +1,92 @@
+{
+  "title": "Mục",
+  "subtitle": "Quản lý bộ sưu tập mục của bạn",
+  "actions": {
+    "createItem": "Tạo mục",
+    "tableView": "Xem bảng",
+    "gridView": "Xem lưới",
+    "backToItems": "Quay lại Mục",
+    "backToItem": "Quay lại Mục"
+  },
+  "search": {
+    "placeholder": "Tìm kiếm mục theo tiêu đề hoặc mô tả...",
+    "submit": "Tìm kiếm",
+    "searchByTitle": "Tìm kiếm theo tiêu đề..."
+  },
+  "filters": {
+    "title": "Lọc theo trạng thái:",
+    "active": "Hoạt động",
+    "inactive": "Không hoạt động",
+    "archived": "Đã lưu trữ",
+    "clear": "Xóa"
+  },
+  "empty": {
+    "noItems": "Chưa có mục nào. Tạo mục đầu tiên của bạn để bắt đầu.",
+    "noResults": "Không tìm thấy mục nào phù hợp với bộ lọc của bạn."
+  },
+  "errors": {
+    "loadFailed": "Không thể tải mục. Vui lòng thử lại.",
+    "itemNotFound": "Không tìm thấy mục.",
+    "deleteFailed": "Không thể xóa mục"
+  },
+  "pagination": {
+    "previous": "Trước",
+    "next": "Tiếp theo",
+    "showing": "Hiển thị {from} đến {to} trong tổng số {total} mục"
+  },
+  "detail": {
+    "description": "Mô tả",
+    "metadata": "Siêu dữ liệu",
+    "created": "Đã tạo",
+    "lastUpdated": "Cập nhật lần cuối",
+    "itemId": "ID Mục",
+    "ownerId": "ID Chủ sở hữu"
+  },
+  "table": {
+    "title": "Bảng Mục",
+    "subtitle": "Bảng dữ liệu nâng cao với sắp xếp, lọc và phân trang",
+    "columns": {
+      "title": "Tiêu đề",
+      "description": "Mô tả",
+      "status": "Trạng thái",
+      "image": "Hình ảnh",
+      "created": "Đã tạo",
+      "actions": "Hành động"
+    },
+    "noResults": "Không tìm thấy kết quả."
+  },
+  "delete": {
+    "title": "Xóa Mục",
+    "description": "Bạn có chắc chắn muốn xóa \"{title}\"? Hành động này không thể hoàn tác.",
+    "confirm": "Xóa",
+    "cancel": "Hủy",
+    "deleting": "Đang xóa...",
+    "success": "Xóa mục thành công"
+  },
+  "form": {
+    "createTitle": "Tạo mục mới",
+    "editTitle": "Chỉnh sửa mục",
+    "title": "Tiêu đề",
+    "titlePlaceholder": "Nhập tiêu đề mục",
+    "description": "Mô tả",
+    "descriptionPlaceholder": "Nhập mô tả mục",
+    "descriptionCounter": "{count}/500 ký tự",
+    "status": "Trạng thái",
+    "statusActive": "Hoạt động",
+    "statusInactive": "Không hoạt động",
+    "statusArchived": "Đã lưu trữ",
+    "image": "Hình ảnh",
+    "imageHint": "Kích thước tệp tối đa: 5MB. Định dạng được hỗ trợ: JPEG, PNG, WebP",
+    "imagePreview": "Xem trước:",
+    "submit": "Tạo mục",
+    "update": "Cập nhật mục",
+    "cancel": "Hủy",
+    "uploading": "Đang tải lên...",
+    "saving": "Đang lưu...",
+    "createSuccess": "Tạo mục thành công",
+    "updateSuccess": "Cập nhật mục thành công",
+    "saveFailed": "Không thể lưu mục",
+    "uploadFailed": "Tải lên hình ảnh thất bại",
+    "invalidFile": "Tệp không hợp lệ"
+  }
+}

@@ -2,6 +2,7 @@
 
 import type { Table } from "@tanstack/react-table";
 import { Check, Settings2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -26,6 +27,8 @@ export function DataTableViewOptions<TData>({
   density = "comfortable",
   onDensityChange,
 }: DataTableViewOptionsProps<TData>) {
+  const t = useTranslations("table.viewOptions");
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -35,14 +38,14 @@ export function DataTableViewOptions<TData>({
           className="ml-auto hidden h-8 lg:flex"
         >
           <Settings2 className="mr-2 h-4 w-4" />
-          View
+          {t("view")}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[200px]">
         {/* Density Options */}
         {onDensityChange && (
           <>
-            <DropdownMenuLabel>Density</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("density")}</DropdownMenuLabel>
             {DENSITY_OPTIONS.map((option) => (
               <DropdownMenuItem
                 key={option.value}
@@ -51,7 +54,7 @@ export function DataTableViewOptions<TData>({
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    density === option.value ? "opacity-100" : "opacity-0"
+                    density === option.value ? "opacity-100" : "opacity-0",
                   )}
                 />
                 <div className="flex flex-col">
@@ -64,12 +67,12 @@ export function DataTableViewOptions<TData>({
         )}
 
         {/* Column Visibility */}
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuLabel>{t("toggleColumns")}</DropdownMenuLabel>
         {table
           .getAllColumns()
           .filter(
             (column) =>
-              typeof column.accessorFn !== "undefined" && column.getCanHide()
+              typeof column.accessorFn !== "undefined" && column.getCanHide(),
           )
           .map((column) => {
             return (

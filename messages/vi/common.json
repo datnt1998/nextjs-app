@@ -1,0 +1,39 @@
+{
+  "actions": {
+    "submit": "Gửi",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "create": "Tạo",
+    "update": "Cập nhật",
+    "search": "Tìm kiếm",
+    "filter": "Lọc",
+    "clear": "Xóa",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "previous": "Trước",
+    "close": "Đóng",
+    "confirm": "Xác nhận",
+    "loading": "Đang tải...",
+    "uploading": "Đang tải lên...",
+    "saving": "Đang lưu..."
+  },
+  "status": {
+    "active": "Hoạt động",
+    "inactive": "Không hoạt động",
+    "archived": "Đã lưu trữ"
+  },
+  "messages": {
+    "success": "Thành công",
+    "error": "Đã xảy ra lỗi",
+    "noResults": "Không tìm thấy kết quả",
+    "tryAgain": "Vui lòng thử lại"
+  },
+  "validation": {
+    "required": "Trường này là bắt buộc",
+    "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ",
+    "minLength": "Phải có ít nhất {min} ký tự",
+    "maxLength": "Không được vượt quá {max} ký tự"
+  }
+}

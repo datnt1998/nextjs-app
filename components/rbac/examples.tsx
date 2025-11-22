@@ -69,7 +69,7 @@ export function Example3_MultipleActions() {
       </Can>
 
       <Can permission={PERMISSIONS.ITEMS_DELETE}>
-        <Button variant="danger">Delete</Button>
+        <Button variant="destructive">Delete</Button>
       </Can>
 
       <Can permission={PERMISSIONS.ITEMS_UPDATE_ANY}>
@@ -116,7 +116,7 @@ export function Example5_AllPermissions() {
         <h3>Full User Management</h3>
         <Button>Add User</Button>
         <Button>Edit Users</Button>
-        <Button variant="danger">Delete Users</Button>
+        <Button variant="destructive">Delete Users</Button>
       </div>
     </CanAll>
   );
@@ -193,7 +193,7 @@ export function Example7_TableActions() {
                     <Button size="sm">Edit</Button>
                   </Can>
                   <Can permission={PERMISSIONS.ITEMS_DELETE}>
-                    <Button size="sm" variant="danger">
+                    <Button size="sm" variant="destructive">
                       Delete
                     </Button>
                   </Can>

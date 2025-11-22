@@ -60,7 +60,7 @@ export function getSortingStateParser<TData>() {
  * Uses compact serialization: "status:active,pending price:10-100"
  */
 export function getColumnFiltersParser<TData>(
-  filterFields?: DataTableFilterField<TData>[]
+  filterFields?: DataTableFilterField<TData>[],
 ) {
   return createParser<Record<string, string | string[] | null>>({
     parse: (value) => {

@@ -36,7 +36,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       if (session?.user && session.access_token) {
         const jwtProfile = getUserProfileFromJWT(
           session.user,
-          session.access_token
+          session.access_token,
         );
 
         // Derive permissions from role
@@ -65,7 +65,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       if (event === "SIGNED_IN" && session?.user && session.access_token) {
         const jwtProfile = getUserProfileFromJWT(
           session.user,
-          session.access_token
+          session.access_token,
         );
 
         // Derive permissions from role
@@ -88,7 +88,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         // Update user profile when token is refreshed (role might have changed)
         const jwtProfile = getUserProfileFromJWT(
           session.user,
-          session.access_token
+          session.access_token,
         );
 
         const permissions = RolePermissions[jwtProfile.role] || [];

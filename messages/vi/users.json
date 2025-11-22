@@ -1,0 +1,76 @@
+{
+  "title": "Thành viên nhóm",
+  "subtitle": "Quản lý thành viên nhóm và vai trò của họ trong tổ chức",
+  "actions": {
+    "inviteUser": "Mời người dùng",
+    "editUser": "Chỉnh sửa người dùng",
+    "viewProfile": "Xem hồ sơ",
+    "manageRoles": "Quản lý vai trò",
+    "deleteUser": "Xóa người dùng"
+  },
+  "stats": {
+    "totalUsers": "Tổng số người dùng",
+    "active": "Hoạt động",
+    "admins": "Quản trị viên",
+    "thisMonth": "Tháng này"
+  },
+  "search": {
+    "placeholder": "Tìm kiếm người dùng theo tên hoặc email..."
+  },
+  "filters": {
+    "role": "Vai trò",
+    "status": "Trạng thái",
+    "reset": "Đặt lại"
+  },
+  "roles": {
+    "owner": "Chủ sở hữu",
+    "admin": "Quản trị viên",
+    "manager": "Người quản lý",
+    "editor": "Biên tập viên",
+    "viewer": "Người xem"
+  },
+  "status": {
+    "active": "Hoạt động",
+    "inactive": "Không hoạt động"
+  },
+  "table": {
+    "columns": {
+      "user": "Người dùng",
+      "role": "Vai trò",
+      "status": "Trạng thái",
+      "lastSeen": "Lần cuối truy cập",
+      "joined": "Đã tham gia",
+      "actions": "Hành động"
+    },
+    "noUsers": "Không tìm thấy người dùng"
+  },
+  "dialog": {
+    "invite": {
+      "title": "Mời người dùng mới",
+      "description": "Gửi lời mời để thêm thành viên mới vào tổ chức của bạn.",
+      "email": "Địa chỉ email",
+      "emailPlaceholder": "dongnghi@congty.com",
+      "name": "Họ và tên",
+      "namePlaceholder": "Nguyễn Văn A",
+      "role": "Vai trò",
+      "cancel": "Hủy",
+      "submit": "Gửi lời mời"
+    },
+    "edit": {
+      "title": "Chỉnh sửa người dùng",
+      "description": "Cập nhật thông tin và quyền của {name}.",
+      "cancel": "Hủy",
+      "submit": "Lưu thay đổi"
+    },
+    "delete": {
+      "title": "Xóa người dùng",
+      "description": "Bạn có chắc chắn muốn xóa {name}? Hành động này không thể hoàn tác và sẽ thu hồi tất cả quyền truy cập của họ vào tổ chức.",
+      "cancel": "Hủy",
+      "confirm": "Xóa người dùng"
+    }
+  },
+  "messages": {
+    "uiExample": "Đây là ví dụ giao diện",
+    "notImplemented": "Tính năng này chưa được triển khai. Đây là minh họa trực quan."
+  }
+}

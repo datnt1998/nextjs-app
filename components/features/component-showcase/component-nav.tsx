@@ -28,7 +28,7 @@ export function ComponentNav({
                 "capitalize transition-all duration-200",
                 selectedCategory === category
                   ? "shadow-lg shadow-primary/20"
-                  : "hover:bg-primary/10"
+                  : "hover:bg-primary/10",
               )}
             >
               {category}

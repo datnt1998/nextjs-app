@@ -1,0 +1,31 @@
+{
+  "403": {
+    "title": "Truy cập bị từ chối",
+    "subtitle": "Bạn không có quyền truy cập tài nguyên này",
+    "description": "Nếu bạn cho rằng đây là lỗi, vui lòng liên hệ với quản trị viên hoặc thử đăng nhập bằng tài khoản khác.",
+    "goHome": "Về trang chủ",
+    "returnToDashboard": "Quay lại bảng điều khiển"
+  },
+  "404": {
+    "title": "Không tìm thấy trang",
+    "subtitle": "Trang bạn đang tìm kiếm không tồn tại",
+    "description": "Trang có thể đã được di chuyển hoặc xóa.",
+    "goHome": "Về trang chủ"
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang",
+    "description": "Trang bạn đang tìm kiếm không tồn tại.",
+    "goHome": "Về trang chủ"
+  },
+  "500": {
+    "title": "Lỗi máy chủ",
+    "subtitle": "Đã xảy ra sự cố ở phía chúng tôi",
+    "description": "Chúng tôi đang làm việc để khắc phục sự cố. Vui lòng thử lại sau.",
+    "goHome": "Về trang chủ"
+  },
+  "generic": {
+    "title": "Lỗi",
+    "subtitle": "Đã xảy ra lỗi không mong muốn",
+    "tryAgain": "Thử lại"
+  }
+}

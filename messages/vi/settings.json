@@ -1,0 +1,125 @@
+{
+  "title": "Cài đặt",
+  "subtitle": "Quản lý cài đặt tài khoản và tùy chọn của bạn",
+  "tabs": {
+    "profile": "Hồ sơ",
+    "account": "Tài khoản",
+    "appearance": "Giao diện",
+    "team": "Nhóm"
+  },
+  "profile": {
+    "title": "Thông tin hồ sơ",
+    "description": "Cập nhật thông tin cá nhân và chi tiết hồ sơ công khai của bạn.",
+    "avatar": {
+      "title": "Ảnh đại diện",
+      "description": "Tải lên ảnh đại diện mới để cá nhân hóa hồ sơ của bạn. JPG, PNG hoặc GIF (tối đa 2MB).",
+      "upload": "Tải lên",
+      "remove": "Xóa"
+    },
+    "fullName": "Họ và tên",
+    "fullNamePlaceholder": "Nhập họ và tên của bạn",
+    "email": "Địa chỉ email",
+    "emailPlaceholder": "email.cua.ban@congty.com",
+    "emailHint": "Đây là email chính của bạn để nhận thông báo và khôi phục tài khoản.",
+    "bio": "Tiểu sử",
+    "bioPlaceholder": "Hãy cho chúng tôi biết một chút về bạn...",
+    "bioHint": "Mô tả ngắn gọn cho hồ sơ của bạn. Tối đa 160 ký tự.",
+    "save": "Lưu thay đổi"
+  },
+  "account": {
+    "security": {
+      "title": "Bảo mật",
+      "description": "Quản lý mật khẩu và cài đặt xác thực của bạn.",
+      "currentPassword": "Mật khẩu hiện tại",
+      "currentPasswordPlaceholder": "Nhập mật khẩu hiện tại",
+      "newPassword": "Mật khẩu mới",
+      "newPasswordPlaceholder": "Nhập mật khẩu mới",
+      "confirmPassword": "Xác nhận mật khẩu",
+      "confirmPasswordPlaceholder": "Xác nhận mật khẩu mới",
+      "passwordHint": "Mật khẩu phải có ít nhất 8 ký tự với sự kết hợp của chữ cái và số.",
+      "twoFactor": "Xác thực hai yếu tố",
+      "twoFactorDescription": "Thêm một lớp bảo mật bổ sung cho tài khoản của bạn",
+      "updatePassword": "Cập nhật mật khẩu"
+    },
+    "notifications": {
+      "title": "Thông báo",
+      "description": "Cấu hình cách bạn nhận thông báo và cập nhật.",
+      "email": "Thông báo qua email",
+      "emailDescription": "Nhận cập nhật qua email về hoạt động tài khoản của bạn",
+      "security": "Cảnh báo bảo mật",
+      "securityDescription": "Nhận thông báo về các sự kiện bảo mật quan trọng",
+      "marketing": "Email tiếp thị",
+      "marketingDescription": "Nhận cập nhật về tính năng mới và mẹo",
+      "save": "Lưu tùy chọn"
+    },
+    "dangerZone": {
+      "title": "Vùng nguy hiểm",
+      "description": "Các hành động không thể hoàn tác sẽ ảnh hưởng vĩnh viễn đến tài khoản của bạn.",
+      "deleteAccount": "Xóa tài khoản",
+      "deleteAccountDescription": "Xóa vĩnh viễn tài khoản và tất cả dữ liệu liên quan",
+      "delete": "Xóa"
+    }
+  },
+  "appearance": {
+    "title": "Giao diện",
+    "description": "Tùy chỉnh giao diện của bạn.",
+    "theme": {
+      "title": "Chủ đề",
+      "description": "Chọn bảng màu ưa thích của bạn",
+      "light": "Sáng",
+      "lightDescription": "Sáng & sạch",
+      "dark": "Tối",
+      "darkDescription": "Dễ nhìn",
+      "system": "Hệ thống",
+      "systemDescription": "Tự động phát hiện"
+    },
+    "language": {
+      "title": "Ngôn ngữ",
+      "description": "Chọn ngôn ngữ ưa thích của bạn"
+    },
+    "fontSize": {
+      "title": "Kích thước phông chữ",
+      "description": "Điều chỉnh kích thước phông chữ cơ bản để dễ đọc hơn",
+      "small": "Nhỏ (12px)",
+      "large": "Lớn (20px)",
+      "preview": "Con cáo nâu nhanh nhẹn nhảy qua con chó lười biếng. Đây là cách văn bản của bạn sẽ xuất hiện với kích thước phông chữ đã chọn."
+    },
+    "save": "Lưu tùy chọn"
+  },
+  "team": {
+    "organization": {
+      "title": "Cài đặt tổ chức",
+      "description": "Quản lý hồ sơ tổ chức và cài đặt không gian làm việc của bạn.",
+      "logo": "Logo tổ chức",
+      "logoDescription": "Tải lên logo tổ chức của bạn. Kích thước đề xuất: 400x400px.",
+      "uploadLogo": "Tải lên logo",
+      "name": "Tên tổ chức",
+      "namePlaceholder": "Nhập tên tổ chức",
+      "url": "URL không gian làm việc",
+      "urlPlaceholder": "ten-khong-gian",
+      "urlSuffix": ".ungdung.com",
+      "urlHint": "Đây sẽ là URL duy nhất của tổ chức bạn.",
+      "members": "Thành viên nhóm",
+      "membersDescription": "Bạn đang sử dụng {used} trong số {total} chỗ có sẵn",
+      "managePlan": "Quản lý gói",
+      "save": "Lưu thay đổi"
+    },
+    "billing": {
+      "title": "Thanh toán & Đăng ký",
+      "description": "Quản lý đăng ký và chi tiết thanh toán của bạn.",
+      "plan": "Gói chuyên nghiệp",
+      "active": "Hoạt động",
+      "renews": "$99/tháng • Gia hạn vào ngày 1 tháng 12, 2024",
+      "manageBilling": "Quản lý thanh toán",
+      "upgrade": {
+        "title": "Cần thêm tính năng?",
+        "description": "Nâng cấp lên Enterprise để có bảo mật nâng cao, SSO và hỗ trợ chuyên dụng.",
+        "learnMore": "Tìm hiểu thêm về Enterprise →"
+      }
+    }
+  },
+  "messages": {
+    "uiExample": "Đây là ví dụ giao diện",
+    "notImplemented": "Thay đổi {section} chưa được triển khai. Đây là minh họa trực quan."
+  }
+}

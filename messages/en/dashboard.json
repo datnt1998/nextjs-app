@@ -1,0 +1,27 @@
+{
+  "title": "Dashboard",
+  "welcome": "Welcome back, {name}!",
+  "subtitle": "Here's what's happening with your projects today.",
+  "stats": {
+    "totalItems": "Total Items",
+    "activeUsers": "Active Users",
+    "projects": "Projects",
+    "completion": "Completion",
+    "noItemsYet": "No items created yet",
+    "itemsFromLastMonth": "+{count} from last month",
+    "firstUser": "You are the first user",
+    "registeredUsers": "{count} registered users",
+    "startFirstProject": "Start your first project",
+    "noTasksCompleted": "No tasks completed"
+  },
+  "overview": {
+    "title": "Overview",
+    "subtitle": "Your dashboard overview will appear here. This is a placeholder for charts and analytics.",
+    "chartPlaceholder": "Chart placeholder"
+  },
+  "recentActivity": {
+    "title": "Recent Activity",
+    "noActivity": "No recent activity to display.",
+    "itemsCreated": "{count} items created"
+  }
+}

@@ -17,7 +17,7 @@ import { useCallback, useEffect, useRef } from "react";
 // biome-ignore lint/suspicious/noExplicitAny: Generic callback function needs flexible typing
 export function useDebouncedCallback<T extends (...args: any[]) => any>(
   callback: T,
-  delay: number
+  delay: number,
 ): (...args: Parameters<T>) => void {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const callbackRef = useRef(callback);
@@ -46,6 +46,6 @@ export function useDebouncedCallback<T extends (...args: any[]) => any>(
         callbackRef.current(...args);
       }, delay);
     },
-    [delay]
+    [delay],
   );
 }

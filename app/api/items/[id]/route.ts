@@ -18,7 +18,7 @@ type Item = Database["public"]["Tables"]["items"]["Row"];
  */
 export async function GET(
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -71,7 +71,7 @@ export async function GET(
     const errorResponse = handleAPIError(error);
     return NextResponse.json(
       { error: errorResponse.error, code: errorResponse.code },
-      { status: errorResponse.statusCode }
+      { status: errorResponse.statusCode },
     );
   }
 }
@@ -82,7 +82,7 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -129,12 +129,12 @@ export async function PATCH(
     const canUpdate = canPerformAction(
       userProfile,
       PERMISSIONS.ITEMS_UPDATE_ANY,
-      existingItem.user_id
+      existingItem.user_id,
     );
 
     if (!canUpdate) {
       throw ApiErrors.forbidden(
-        "You don't have permission to update this item"
+        "You don't have permission to update this item",
       );
     }
 
@@ -144,7 +144,7 @@ export async function PATCH(
 
     if (!validation.success) {
       throw ApiErrors.badRequest(
-        `Validation failed: ${validation.error.issues.map((e: { message: string }) => e.message).join(", ")}`
+        `Validation failed: ${validation.error.issues.map((e: { message: string }) => e.message).join(", ")}`,
       );
     }
 
@@ -166,7 +166,7 @@ export async function PATCH(
     const errorResponse = handleAPIError(error);
     return NextResponse.json(
       { error: errorResponse.error, code: errorResponse.code },
-      { status: errorResponse.statusCode }
+      { status: errorResponse.statusCode },
     );
   }
 }
@@ -177,7 +177,7 @@ export async function PATCH(
  */
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -224,12 +224,12 @@ export async function DELETE(
     const canDelete = canPerformAction(
       userProfile,
       PERMISSIONS.ITEMS_DELETE_ANY,
-      existingItem.user_id
+      existingItem.user_id,
     );
 
     if (!canDelete) {
       throw ApiErrors.forbidden(
-        "You don't have permission to delete this item"
+        "You don't have permission to delete this item",
       );
     }
 
@@ -246,7 +246,7 @@ export async function DELETE(
     const errorResponse = handleAPIError(error);
     return NextResponse.json(
       { error: errorResponse.error, code: errorResponse.code },
-      { status: errorResponse.statusCode }
+      { status: errorResponse.statusCode },
     );
   }
 }

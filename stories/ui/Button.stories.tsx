@@ -33,7 +33,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    variant: "primary",
+    variant: "default",
     children: "Primary Button",
   },
 };
@@ -54,28 +54,28 @@ export const Outline: Story = {
 
 export const Subtle: Story = {
   args: {
-    variant: "subtle",
+    variant: "ghost",
     children: "Subtle Button",
   },
 };
 
 export const Soft: Story = {
   args: {
-    variant: "soft",
+    variant: "secondary",
     children: "Soft Button",
   },
 };
 
 export const Danger: Story = {
   args: {
-    variant: "danger",
+    variant: "destructive",
     children: "Danger Button",
   },
 };
 
 export const Gradient: Story = {
   args: {
-    variant: "gradient",
+    variant: "default",
     children: "Gradient Button",
   },
 };

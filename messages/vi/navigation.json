@@ -1,0 +1,50 @@
+{
+  "label": "Điều hướng",
+  "main": {
+    "dashboard": "Bảng điều khiển",
+    "users": "Người dùng",
+    "items": "Mục",
+    "dataTable": "Bảng dữ liệu",
+    "components": "Thành phần",
+    "upload": "Tải lên",
+    "settings": "Cài đặt"
+  },
+  "items": {
+    "gridView": "Xem lưới",
+    "tableView": "Xem bảng",
+    "createNew": "Tạo mới"
+  },
+  "secondary": {
+    "documentation": "Tài liệu",
+    "support": "Hỗ trợ"
+  },
+  "projects": {
+    "label": "Không gian làm việc",
+    "mainWorkspace": "Không gian làm việc chính",
+    "teamAlpha": "Nhóm Alpha",
+    "teamBeta": "Nhóm Beta",
+    "enterprise": "Doanh nghiệp",
+    "addWorkspace": "Thêm không gian làm việc"
+  },
+  "user": {
+    "upgradeToPro": "Nâng cấp lên Pro",
+    "account": "Tài khoản",
+    "billing": "Thanh toán",
+    "notifications": "Thông báo",
+    "logOut": "Đăng xuất"
+  },
+  "footer": {
+    "product": "Sản phẩm",
+    "features": "Tính năng",
+    "pricing": "Giá cả",
+    "changelog": "Nhật ký thay đổi",
+    "resources": "Tài nguyên",
+    "blog": "Blog",
+    "company": "Công ty",
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "privacy": "Quyền riêng tư",
+    "terms": "Điều khoản",
+    "community": "Cộng đồng"
+  }
+}

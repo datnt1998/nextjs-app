@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
     const errorResponse = handleAPIError(error);
     return NextResponse.json(
       { error: errorResponse.error, code: errorResponse.code },
-      { status: errorResponse.statusCode }
+      { status: errorResponse.statusCode },
     );
   }
 }
@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
 
     if (!validation.success) {
       throw ApiErrors.badRequest(
-        `Validation failed: ${validation.error.issues.map((e: { message: string }) => e.message).join(", ")}`
+        `Validation failed: ${validation.error.issues.map((e: { message: string }) => e.message).join(", ")}`,
       );
     }
 
@@ -163,7 +163,7 @@ export async function POST(request: NextRequest) {
     const errorResponse = handleAPIError(error);
     return NextResponse.json(
       { error: errorResponse.error, code: errorResponse.code },
-      { status: errorResponse.statusCode }
+      { status: errorResponse.statusCode },
     );
   }
 }

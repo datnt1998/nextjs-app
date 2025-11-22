@@ -1,5 +1,8 @@
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const nextConfig: NextConfig = {
   // Turbopack configuration for Next.js 16+
@@ -47,4 +50,5 @@ const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
-export default bundleAnalyzer(nextConfig);
+// Wrap with next-intl plugin first, then bundle analyzer
+export default bundleAnalyzer(withNextIntl(nextConfig));

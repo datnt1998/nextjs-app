@@ -1,0 +1,22 @@
+{
+  "title": "Thư viện thành phần",
+  "description": "Bộ sưu tập được tuyển chọn của tất cả các thành phần giao diện trong hệ thống thiết kế",
+  "showcase": {
+    "hero": {
+      "title": "Trưng bày thành phần giao diện",
+      "description": "Khám phá bộ sưu tập toàn diện các thành phần giao diện được thiết kế đẹp mắt, dễ tiếp cận được xây dựng với Radix UI và Tailwind CSS.",
+      "stats": {
+        "components": "Thành phần sẵn sàng sản xuất",
+        "customizable": "Có thể tùy chỉnh",
+        "accessible": "Dễ tiếp cận"
+      }
+    },
+    "search": {
+      "placeholder": "Tìm kiếm thành phần..."
+    },
+    "categories": {
+      "all": "tất cả"
+    },
+    "noResults": "Không tìm thấy thành phần nào phù hợp với tiêu chí của bạn."
+  }
+}

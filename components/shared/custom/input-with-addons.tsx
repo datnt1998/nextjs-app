@@ -19,7 +19,7 @@ const InputWithAddons = React.forwardRef<
     <div
       className={cn(
         "border-input ring-offset-background focus-within:ring-ring group flex h-9 w-full items-center rounded-md border bg-transparent text-sm focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 overflow-hidden",
-        containerClassName
+        containerClassName,
       )}
     >
       {leading ? (
@@ -30,7 +30,7 @@ const InputWithAddons = React.forwardRef<
       <Input
         className={cn(
           "h-full border-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
-          className
+          className,
         )}
         ref={ref}
         {...props}

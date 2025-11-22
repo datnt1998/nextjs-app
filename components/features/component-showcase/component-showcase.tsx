@@ -1,6 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { ComponentCard } from "./component-card";
@@ -9,6 +10,7 @@ import { ComponentNav } from "./component-nav";
 import { componentRegistry } from "./component-registry";
 
 export function ComponentShowcase() {
+  const t = useTranslations("components.showcase");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -53,7 +55,7 @@ export function ComponentShowcase() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
               type="text"
-              placeholder="Search components..."
+              placeholder={t("search.placeholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 bg-white/60 backdrop-blur-sm border-slate-200"
@@ -75,9 +77,7 @@ export function ComponentShowcase() {
 
           {filteredComponents.length === 0 && (
             <div className="text-center py-24">
-              <p className="text-slate-600 text-lg">
-                No components found matching your criteria.
-              </p>
+              <p className="text-slate-600 text-lg">{t("noResults")}</p>
             </div>
           )}
         </div>

@@ -29,6 +29,10 @@ jobs:
         working-directory: nextjs-app
         run: npm ci
 
+      - name: Validate translations
+        working-directory: nextjs-app
+        run: npm run validate:translations
+
       - name: Type check
         working-directory: nextjs-app
         run: npm run type-check
@@ -43,13 +47,17 @@ jobs:
 
       - name: Build
         working-directory: nextjs-app
-        run: npm run build
+        run: npm run build:skip-validation
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY: ${{ secrets.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY }}
           NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT: ${{ secrets.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT }}
           IMAGEKIT_PRIVATE_KEY: ${{ secrets.IMAGEKIT_PRIVATE_KEY }}
+
+      - name: Verify build
+        working-directory: nextjs-app
+        run: npm run verify:build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

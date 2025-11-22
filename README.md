@@ -6,10 +6,11 @@ A modern, lightweight, and highly extensible NextJS starter kit optimized for Sa
 
 - ⚡️ **Next.js 16** with App Router and TypeScript
 - 🎨 **Tailwind CSS v4** with CSS variables for theming
-- � **Supab\*ase** for authentication and database
-- � **\*Biome** for fast linting
-- � **Pretytier** for code formatting
-- � **CHusky** for Git hooks
+- 🌍 **Internationalization (i18n)** with next-intl v3 - [See i18n Guide](./docs/I18N_GUIDE.md)
+- 🔐 **Supabase** for authentication and database
+- 🔍 **Biome** for fast linting
+- 💅 **Prettier** for code formatting
+- 🪝 **Husky** for Git hooks
 - � **\*Commitlint** for conventional commits
 - 🚀 **Production-ready** configuration
 
@@ -453,10 +454,60 @@ See [`supabase/common-queries.sql`](./supabase/common-queries.sql) for helpful S
 - Testing RLS policies
 - Audit and monitoring
 
+## Internationalization (i18n)
+
+This application supports multiple languages using next-intl v3:
+
+- **Supported Locales:** English (en), Vietnamese (vi)
+- **Locale-based Routing:** `/en/dashboard`, `/vi/dashboard`
+- **Server & Client Components:** Full translation support
+- **Type-safe Translations:** TypeScript autocomplete for translation keys
+- **SEO Optimized:** Proper hreflang tags and locale-specific metadata
+
+### Quick Start
+
+```typescript
+// Server Component
+import { getTranslations } from 'next-intl/server';
+
+export default async function Page() {
+  const t = await getTranslations('namespace');
+  return <h1>{t('title')}</h1>;
+}
+
+// Client Component
+'use client';
+import { useTranslations } from 'next-intl';
+
+export function Component() {
+  const t = useTranslations('namespace');
+  return <button>{t('submit')}</button>;
+}
+```
+
+### Documentation
+
+- **[i18n Guide](./docs/I18N_GUIDE.md)** - Complete guide for using i18n features
+- **[Quick Reference](./docs/I18N_QUICK_REFERENCE.md)** - Cheat sheet for common tasks
+- **[Code Examples](./docs/I18N_EXAMPLES.md)** - Practical examples for common scenarios
+
+### Adding Translations
+
+1. Add key to `messages/en/namespace.json`
+2. Add translation to `messages/vi/namespace.json`
+3. Use in your code with `t('key')`
+
+### Validation
+
+```bash
+npm run validate:translations  # Check for missing keys
+```
+
 ## Learn More
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Tailwind CSS v4](https://tailwindcss.com/docs)
 - [Supabase Documentation](https://supabase.com/docs)
+- [next-intl Documentation](https://next-intl-docs.vercel.app/)
 - [Biome](https://biomejs.dev/)
 - [Conventional Commits](https://www.conventionalcommits.org/)

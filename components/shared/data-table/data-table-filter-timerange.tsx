@@ -62,7 +62,7 @@ export function DataTableFilterTimerange<TData, TValue>({
             size="sm"
             className={cn(
               "h-8 w-[250px] justify-start text-left font-normal",
-              !date && "text-muted-foreground"
+              !date && "text-muted-foreground",
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />

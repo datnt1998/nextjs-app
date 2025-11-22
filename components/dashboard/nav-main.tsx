@@ -3,6 +3,7 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Icons } from "@/components/icons/registry";
 import {
   Collapsible,
@@ -27,6 +28,24 @@ import { useUserStore } from "@/stores/user.store";
 export function NavMain({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
   const user = useUserStore((s) => s.user);
+  const t = useTranslations("navigation");
+
+  // Helper to translate navigation item titles
+  const translateTitle = (title: string): string => {
+    const titleMap: Record<string, string> = {
+      Dashboard: t("main.dashboard"),
+      Users: t("main.users"),
+      Items: t("main.items"),
+      DataTable: t("main.dataTable"),
+      Components: t("main.components"),
+      Upload: t("main.upload"),
+      Settings: t("main.settings"),
+      "Grid View": t("items.gridView"),
+      "Table View": t("items.tableView"),
+      "Create New": t("items.createNew"),
+    };
+    return titleMap[title] || title;
+  };
 
   // Helper to check if a route is active (for parent items with children)
   // Uses prefix matching to keep parent highlighted when on any child route
@@ -68,7 +87,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
     };
 
     return item.permissions.some((permission) =>
-      hasPermission(userProfile, permission as Permission)
+      hasPermission(userProfile, permission as Permission),
     );
   };
 
@@ -77,7 +96,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+      <SidebarGroupLabel>{t("label")}</SidebarGroupLabel>
       <SidebarMenu>
         {visibleItems.map((item) => {
           const Icon = item.icon ? Icons[item.icon] : Icons.folder;
@@ -98,9 +117,12 @@ export function NavMain({ items }: { items: NavItem[] }) {
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={item.title} isActive={active}>
+                    <SidebarMenuButton
+                      tooltip={translateTitle(item.title)}
+                      isActive={active}
+                    >
                       <Icon className="size-4" />
-                      <span>{item.title}</span>
+                      <span>{translateTitle(item.title)}</span>
                       <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -112,7 +134,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
                           <SidebarMenuSubItem key={subItem.title}>
                             <SidebarMenuSubButton asChild isActive={subActive}>
                               <Link href={subItem.href}>
-                                <span>{subItem.title}</span>
+                                <span>{translateTitle(subItem.title)}</span>
                               </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
@@ -127,10 +149,14 @@ export function NavMain({ items }: { items: NavItem[] }) {
 
           return (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild tooltip={item.title} isActive={active}>
+              <SidebarMenuButton
+                asChild
+                tooltip={translateTitle(item.title)}
+                isActive={active}
+              >
                 <Link href={item.href}>
                   <Icon className="size-4" />
-                  <span>{item.title}</span>
+                  <span>{translateTitle(item.title)}</span>
                   {item.badge && (
                     <span className="ml-auto inline-flex items-center justify-center rounded-full bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
                       {item.badge}

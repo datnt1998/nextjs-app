@@ -115,31 +115,31 @@ export function useDataTable<TData, TValue>({
     {
       page: numberParser.withDefault(1),
       perPage: numberParser.withDefault(
-        initialState?.pagination?.pageSize ?? 10
+        initialState?.pagination?.pageSize ?? 10,
       ),
       sort: getSortingStateParser<TData>().withDefault(
-        (initialState?.sorting ?? []) as any
+        (initialState?.sorting ?? []) as any,
       ),
       filters: getColumnFiltersParser<TData>(filterFields).withDefault({}),
     },
     {
       history: "replace",
       shallow: true,
-    }
+    },
   );
 
   // Local state (fallback when URL state is disabled)
   const [localPage, setLocalPage] = React.useState(
-    initialState?.pagination?.pageIndex ?? 0
+    initialState?.pagination?.pageIndex ?? 0,
   );
   const [localPageSize, setLocalPageSize] = React.useState(
-    initialState?.pagination?.pageSize ?? 10
+    initialState?.pagination?.pageSize ?? 10,
   );
   const [localSorting, setLocalSorting] = React.useState<SortingState>(
-    initialState?.sorting ?? []
+    initialState?.sorting ?? [],
   );
   const [localFilters, setLocalFilters] = React.useState<ColumnFiltersState>(
-    initialState?.columnFilters ?? []
+    initialState?.columnFilters ?? [],
   );
 
   // Use URL state or local state based on enableUrlState flag
@@ -189,12 +189,12 @@ export function useDataTable<TData, TValue>({
       pageIndex: page - 1,
       pageSize,
     }),
-    [page, pageSize]
+    [page, pageSize],
   );
 
   const onPaginationChangeHandler = React.useCallback(
     (
-      updater: PaginationState | ((old: PaginationState) => PaginationState)
+      updater: PaginationState | ((old: PaginationState) => PaginationState),
     ) => {
       const newState =
         typeof updater === "function" ? updater(paginationState) : updater;
@@ -211,7 +211,7 @@ export function useDataTable<TData, TValue>({
 
       onPaginationChange?.(newState);
     },
-    [enableUrlState, paginationState, setUrlState, onPaginationChange]
+    [enableUrlState, paginationState, setUrlState, onPaginationChange],
   );
 
   // Sorting state handlers
@@ -228,7 +228,7 @@ export function useDataTable<TData, TValue>({
 
       onSortingChange?.(newState);
     },
-    [enableUrlState, sorting, setUrlState, onSortingChange]
+    [enableUrlState, sorting, setUrlState, onSortingChange],
   );
 
   // Column filters state handlers
@@ -236,7 +236,7 @@ export function useDataTable<TData, TValue>({
     (
       updater:
         | ColumnFiltersState
-        | ((old: ColumnFiltersState) => ColumnFiltersState)
+        | ((old: ColumnFiltersState) => ColumnFiltersState),
     ) => {
       const newState =
         typeof updater === "function" ? updater(columnFilters) : updater;
@@ -253,7 +253,7 @@ export function useDataTable<TData, TValue>({
         setLocalPage(0); // Reset to first page
       }
     },
-    [enableUrlState, columnFilters, setUrlState]
+    [enableUrlState, columnFilters, setUrlState],
   );
 
   // Create table instance

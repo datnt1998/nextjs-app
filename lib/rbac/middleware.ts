@@ -83,7 +83,7 @@ function matchesPath(pathname: string, pattern: string): boolean {
  */
 function findMatchingRoute(
   pathname: string,
-  routes: RouteConfig[]
+  routes: RouteConfig[],
 ): RouteConfig | null {
   // Routes should already be sorted by path length (longest first)
   // This eliminates O(n log n) sorting on every request
@@ -138,7 +138,7 @@ export function createRBACMiddleware(options: RBACMiddlewareOptions = {}) {
 
   // Pre-sort routes once for better performance (O(1) vs O(n log n) per request)
   const sortedRoutes = [...routes].sort(
-    (a, b) => b.path.length - a.path.length
+    (a, b) => b.path.length - a.path.length,
   );
 
   return async function rbacMiddleware(request: NextRequest) {
@@ -245,7 +245,7 @@ export function createRBACMiddleware(options: RBACMiddlewareOptions = {}) {
       if (routeConfig.permissions) {
         const hasRequiredPermission = hasAnyPermission(
           userProfile,
-          routeConfig.permissions
+          routeConfig.permissions,
         );
 
         if (!hasRequiredPermission) {

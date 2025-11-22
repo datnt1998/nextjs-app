@@ -1,0 +1,50 @@
+{
+  "label": "Navigation",
+  "main": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "items": "Items",
+    "dataTable": "DataTable",
+    "components": "Components",
+    "upload": "Upload",
+    "settings": "Settings"
+  },
+  "items": {
+    "gridView": "Grid View",
+    "tableView": "Table View",
+    "createNew": "Create New"
+  },
+  "secondary": {
+    "documentation": "Documentation",
+    "support": "Support"
+  },
+  "projects": {
+    "label": "Workspaces",
+    "mainWorkspace": "Main Workspace",
+    "teamAlpha": "Team Alpha",
+    "teamBeta": "Team Beta",
+    "enterprise": "Enterprise",
+    "addWorkspace": "Add workspace"
+  },
+  "user": {
+    "upgradeToPro": "Upgrade to Pro",
+    "account": "Account",
+    "billing": "Billing",
+    "notifications": "Notifications",
+    "logOut": "Log out"
+  },
+  "footer": {
+    "product": "Product",
+    "features": "Features",
+    "pricing": "Pricing",
+    "changelog": "Changelog",
+    "resources": "Resources",
+    "blog": "Blog",
+    "company": "Company",
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "community": "Community"
+  }
+}

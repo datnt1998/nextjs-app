@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Icons } from "@/components/icons/registry";
@@ -20,6 +21,7 @@ interface ItemFormProps {
 }
 
 export function ItemForm({ item, mode }: ItemFormProps) {
+  const t = useTranslations("items.form");
   const router = useRouter();
   const createItem = useCreateItem();
   const updateItem = useUpdateItem();
@@ -30,7 +32,7 @@ export function ItemForm({ item, mode }: ItemFormProps) {
   const [imageUrl, _setImageUrl] = useState(item?.image_url || "");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(
-    item?.image_url || null
+    item?.image_url || null,
   );
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,7 +48,7 @@ export function ItemForm({ item, mode }: ItemFormProps) {
     });
 
     if (!validation.valid) {
-      toast.error("Invalid file", {
+      toast.error(t("invalidFile"), {
         description: validation.error,
       });
       return;
@@ -80,11 +82,11 @@ export function ItemForm({ item, mode }: ItemFormProps) {
           });
           finalImageUrl = uploadResult.url;
         } catch (uploadError) {
-          toast.error("Image upload failed", {
+          toast.error(t("uploadFailed"), {
             description:
               uploadError instanceof Error
                 ? uploadError.message
-                : "Failed to upload image",
+                : t("uploadFailed"),
           });
           setIsSubmitting(false);
           setIsUploading(false);
@@ -102,20 +104,19 @@ export function ItemForm({ item, mode }: ItemFormProps) {
 
       if (mode === "create") {
         await createItem.mutateAsync(itemData as any);
-        toast.success("Item created successfully");
+        toast.success(t("createSuccess"));
         router.push("/dashboard/items");
       } else if (item) {
         await updateItem.mutateAsync({
           id: item.id,
           ...itemData,
         });
-        toast.success("Item updated successfully");
+        toast.success(t("updateSuccess"));
         router.push(`/dashboard/items/${item.id}`);
       }
     } catch (error) {
-      toast.error("Failed to save item", {
-        description:
-          error instanceof Error ? error.message : "An error occurred",
+      toast.error(t("saveFailed"), {
+        description: error instanceof Error ? error.message : t("saveFailed"),
       });
     } finally {
       setIsSubmitting(false);
@@ -126,7 +127,7 @@ export function ItemForm({ item, mode }: ItemFormProps) {
     <Card>
       <CardHeader>
         <h2 className="text-2xl font-semibold">
-          {mode === "create" ? "Create New Item" : "Edit Item"}
+          {mode === "create" ? t("createTitle") : t("editTitle")}
         </h2>
       </CardHeader>
       <CardContent>
@@ -134,12 +135,12 @@ export function ItemForm({ item, mode }: ItemFormProps) {
           {/* Title */}
           <div className="space-y-2">
             <label htmlFor="title" className="text-sm font-medium">
-              Title <span className="text-danger">*</span>
+              {t("title")} <span className="text-danger">*</span>
             </label>
             <Input
               id="title"
               type="text"
-              placeholder="Enter item title"
+              placeholder={t("titlePlaceholder")}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
@@ -150,11 +151,11 @@ export function ItemForm({ item, mode }: ItemFormProps) {
           {/* Description */}
           <div className="space-y-2">
             <label htmlFor="description" className="text-sm font-medium">
-              Description
+              {t("description")}
             </label>
             <textarea
               id="description"
-              placeholder="Enter item description"
+              placeholder={t("descriptionPlaceholder")}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               maxLength={500}
@@ -162,14 +163,14 @@ export function ItemForm({ item, mode }: ItemFormProps) {
               className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             />
             <p className="text-xs text-muted-foreground">
-              {description.length}/500 characters
+              {t("descriptionCounter", { count: description.length })}
             </p>
           </div>
 
           {/* Status */}
           <div className="space-y-2">
             <label htmlFor="status" className="text-sm font-medium">
-              Status <span className="text-danger">*</span>
+              {t("status")} <span className="text-danger">*</span>
             </label>
             <select
               id="status"
@@ -178,16 +179,16 @@ export function ItemForm({ item, mode }: ItemFormProps) {
               className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               required
             >
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="archived">Archived</option>
+              <option value="active">{t("statusActive")}</option>
+              <option value="inactive">{t("statusInactive")}</option>
+              <option value="archived">{t("statusArchived")}</option>
             </select>
           </div>
 
           {/* Image Upload */}
           <div className="space-y-2">
             <label htmlFor="image" className="text-sm font-medium">
-              Image
+              {t("image")}
             </label>
             <Input
               id="image"
@@ -196,18 +197,16 @@ export function ItemForm({ item, mode }: ItemFormProps) {
               onChange={handleImageChange}
               disabled={isUploading}
             />
-            <p className="text-xs text-muted-foreground">
-              Max file size: 5MB. Supported formats: JPEG, PNG, WebP
-            </p>
+            <p className="text-xs text-muted-foreground">{t("imageHint")}</p>
 
             {/* Image Preview */}
             {imagePreview && (
               <div className="mt-4">
-                <p className="mb-2 text-sm font-medium">Preview:</p>
+                <p className="mb-2 text-sm font-medium">{t("imagePreview")}</p>
                 <div className="relative h-48 w-full overflow-hidden rounded-md border border-border">
                   <img
                     src={imagePreview}
-                    alt="Preview"
+                    alt={t("imagePreview")}
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -225,12 +224,12 @@ export function ItemForm({ item, mode }: ItemFormProps) {
               {isSubmitting || isUploading ? (
                 <>
                   <Icons.spinner className="h-4 w-4 animate-spin" />
-                  {isUploading ? "Uploading..." : "Saving..."}
+                  {isUploading ? t("uploading") : t("saving")}
                 </>
               ) : mode === "create" ? (
-                "Create Item"
+                t("submit")
               ) : (
-                "Update Item"
+                t("update")
               )}
             </Button>
             <Button
@@ -239,7 +238,7 @@ export function ItemForm({ item, mode }: ItemFormProps) {
               onClick={() => router.back()}
               disabled={isSubmitting || isUploading}
             >
-              Cancel
+              {t("cancel")}
             </Button>
           </div>
         </form>

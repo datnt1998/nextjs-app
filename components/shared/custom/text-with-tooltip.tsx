@@ -52,7 +52,7 @@ export function TextWithTooltip({ text, className }: TextWithTooltipProps) {
             className={cn(
               "truncate",
               !isTruncated && "pointer-events-none",
-              className
+              className,
             )}
           >
             {text}

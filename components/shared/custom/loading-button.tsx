@@ -28,7 +28,7 @@ const LoadingButton = React.forwardRef<HTMLButtonElement, LoadingButtonProps>(
       className,
       ...props
     },
-    ref
+    ref,
   ) => {
     const isDisabled = disabled || loading;
 
@@ -57,7 +57,7 @@ const LoadingButton = React.forwardRef<HTMLButtonElement, LoadingButtonProps>(
         )}
       </Button>
     );
-  }
+  },
 );
 
 LoadingButton.displayName = "LoadingButton";
