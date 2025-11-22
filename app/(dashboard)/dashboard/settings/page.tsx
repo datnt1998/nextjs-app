@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Icons } from "@/components/icons/registry";
@@ -594,9 +595,11 @@ export default function SettingsPage() {
                   <div className="flex items-start gap-6">
                     <div className="flex h-20 w-20 items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted/30">
                       {MOCK_USER.tenant_logo ? (
-                        <img
+                        <Image
                           src={MOCK_USER.tenant_logo}
                           alt={MOCK_USER.tenant_name}
+                          width={80}
+                          height={80}
                           className="h-full w-full rounded-lg object-cover"
                         />
                       ) : (
