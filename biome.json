@@ -14,6 +14,14 @@
     "indentStyle": "space",
     "indentWidth": 2
   },
+  "javascript": {
+    "formatter": {
+      "trailingCommas": "es5",
+      "quoteStyle": "double",
+      "semicolons": "always",
+      "arrowParentheses": "always"
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {

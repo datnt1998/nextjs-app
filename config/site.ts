@@ -1,8 +1,12 @@
 import type { Icons } from "@/components/icons/registry";
 import type { Locale } from "@/i18n/config";
+import type { Permission } from "@/lib/rbac/permissions";
 
 export type SiteConfig = typeof siteConfig;
 
+/**
+ * Base navigation item with all common properties
+ */
 export interface NavItem {
   title: string;
   href: string;
@@ -11,7 +15,17 @@ export interface NavItem {
   icon?: keyof typeof Icons;
   label?: string;
   badge?: string | number;
-  permissions?: string[]; // Required permissions to view this item
+  /**
+   * Translation key for the item title
+   * e.g., "main.dashboard" will use navigation.main.dashboard from translations
+   */
+  translationKey?: string;
+  /**
+   * Required permissions to view this item.
+   * User must have at least one of these permissions.
+   * If not specified, item is visible to all authenticated users.
+   */
+  permissions?: Permission[];
   items?: NavItem[]; // Sub-navigation items
 }
 
@@ -21,6 +35,19 @@ export interface NavItemWithChildren extends NavItem {
 
 export interface NavItemWithOptionalChildren extends NavItem {
   items?: NavItemWithChildren[];
+}
+
+/**
+ * Navigation group for organizing sidebar items
+ */
+export interface SidebarNavGroup {
+  title: string;
+  /**
+   * Translation key for the group title
+   * e.g., "groups.main" will use navigation.groups.main from translations
+   */
+  translationKey?: string;
+  items: NavItem[];
 }
 
 export interface FooterItem {
@@ -35,6 +62,21 @@ export interface FooterItem {
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
+
+/**
+ * Navigation group containing multiple items
+ */
+export type NavGroup = {
+  title: string;
+  items: NavItem[];
+};
+
+/**
+ * Complete sidebar data structure
+ */
+export type SidebarData = {
+  navGroups: NavGroup[];
+};
 
 // Locale-specific site metadata
 export interface LocaleSiteMetadata {
@@ -94,26 +136,102 @@ export const siteConfig = {
       ],
     },
   } as Record<Locale, LocaleSiteMetadata>,
-  mainNav: [
+  // Navigation groups for organized sidebar
+  dashboardNavGroups: [
     {
-      title: "Features",
-      href: "/#features",
+      title: "Main",
+      translationKey: "groups.main",
+      items: [
+        {
+          title: "Dashboard",
+          translationKey: "main.dashboard",
+          href: "/dashboard",
+          icon: "home",
+          // No permissions required - visible to all authenticated users
+        },
+        {
+          title: "Users",
+          translationKey: "main.users",
+          href: "/dashboard/users",
+          icon: "users",
+          permissions: ["users:view"],
+        },
+        {
+          title: "Items",
+          translationKey: "main.items",
+          href: "/dashboard/items",
+          icon: "folder",
+          permissions: ["items:view"],
+          items: [
+            {
+              title: "Grid View",
+              translationKey: "items.gridView",
+              href: "/dashboard/items",
+              permissions: ["items:view"],
+            },
+            {
+              title: "Table View",
+              translationKey: "items.tableView",
+              href: "/dashboard/items/table",
+              permissions: ["items:view"],
+            },
+            {
+              title: "Create New",
+              translationKey: "items.createNew",
+              href: "/dashboard/items/new",
+              permissions: ["items:create"],
+            },
+          ],
+        },
+      ],
     },
     {
-      title: "Documentation",
-      href: "/docs",
+      title: "Tools",
+      translationKey: "groups.tools",
+      items: [
+        {
+          title: "DataTable",
+          translationKey: "main.dataTable",
+          href: "/dashboard/table",
+          icon: "grid",
+          // Demo page - no permissions required
+        },
+        {
+          title: "Components",
+          translationKey: "main.components",
+          href: "/dashboard/components",
+          icon: "grid",
+          // Demo page - no permissions required
+        },
+        {
+          title: "Upload",
+          translationKey: "main.upload",
+          href: "/dashboard/upload",
+          icon: "upload",
+          permissions: ["items:create"],
+        },
+      ],
     },
     {
-      title: "Dashboard",
-      href: "/dashboard",
+      title: "Settings",
+      translationKey: "groups.settings",
+      items: [
+        {
+          title: "Settings",
+          translationKey: "main.settings",
+          href: "/dashboard/settings",
+          icon: "settings",
+          permissions: ["settings:view"],
+        },
+      ],
     },
-  ] satisfies MainNavItem[],
+  ] satisfies SidebarNavGroup[],
+  // Flat navigation for backward compatibility
   dashboardNav: [
     {
       title: "Dashboard",
       href: "/dashboard",
       icon: "home",
-      // No permissions required - visible to all authenticated users
     },
     {
       title: "Users",
@@ -148,13 +266,11 @@ export const siteConfig = {
       title: "DataTable",
       href: "/dashboard/table",
       icon: "grid",
-      // Demo page - no permissions required
     },
     {
       title: "Components",
       href: "/dashboard/components",
       icon: "grid",
-      // Demo page - no permissions required
     },
     {
       title: "Upload",
@@ -172,11 +288,13 @@ export const siteConfig = {
   secondaryNav: [
     {
       title: "Documentation",
+      translationKey: "secondary.documentation",
       href: "/docs",
       icon: "folder",
     },
     {
       title: "Support",
+      translationKey: "secondary.support",
       href: "/support",
       icon: "search",
     },
@@ -198,93 +316,6 @@ export const siteConfig = {
       icon: "users",
     },
   ] as const,
-  footerNav: [
-    {
-      title: "Product",
-      items: [
-        {
-          title: "Features",
-          href: "/#features",
-          external: false,
-        },
-        {
-          title: "Pricing",
-          href: "/pricing",
-          external: false,
-        },
-        {
-          title: "Changelog",
-          href: "/changelog",
-          external: false,
-        },
-      ],
-    },
-    {
-      title: "Resources",
-      items: [
-        {
-          title: "Documentation",
-          href: "/docs",
-          external: false,
-        },
-        {
-          title: "Blog",
-          href: "/blog",
-          external: false,
-        },
-        {
-          title: "Support",
-          href: "/support",
-          external: false,
-        },
-      ],
-    },
-    {
-      title: "Company",
-      items: [
-        {
-          title: "About",
-          href: "/about",
-          external: false,
-        },
-        {
-          title: "Contact",
-          href: "/contact",
-          external: false,
-        },
-        {
-          title: "Privacy",
-          href: "/privacy",
-          external: false,
-        },
-        {
-          title: "Terms",
-          href: "/terms",
-          external: false,
-        },
-      ],
-    },
-    {
-      title: "Community",
-      items: [
-        {
-          title: "GitHub",
-          href: "https://github.com/yourusername/nextjs-starter-kit",
-          external: true,
-        },
-        {
-          title: "Twitter",
-          href: "https://twitter.com/yourusername",
-          external: true,
-        },
-        {
-          title: "Discord",
-          href: "https://discord.gg/yourinvite",
-          external: true,
-        },
-      ],
-    },
-  ] satisfies FooterItem[],
 } as const;
 
 /**

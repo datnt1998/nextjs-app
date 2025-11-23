@@ -1,5 +1,10 @@
 {
   "label": "Điều hướng",
+  "groups": {
+    "main": "Chính",
+    "tools": "Công cụ",
+    "settings": "Cài đặt"
+  },
   "main": {
     "dashboard": "Bảng điều khiển",
     "users": "Người dùng",

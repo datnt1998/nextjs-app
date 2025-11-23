@@ -6,6 +6,7 @@ import { SupabaseProvider } from "./supabase-provider";
 import { TanStackProvider } from "./tanstack-provider";
 import { ThemeProvider } from "./theme-provider";
 import { UserProvider } from "./user-provider";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -14,7 +15,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <UserProvider>
           <TanStackProvider>
             <TooltipProvider>
-              {children}
+              <NuqsAdapter>{children}</NuqsAdapter>
               <Toaster richColors />
             </TooltipProvider>
           </TanStackProvider>

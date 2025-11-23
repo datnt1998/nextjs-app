@@ -35,5 +35,11 @@
     "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ",
     "minLength": "Phải có ít nhất {min} ký tự",
     "maxLength": "Không được vượt quá {max} ký tự"
+  },
+  "theme": {
+    "toggle": "Chuyển đổi giao diện",
+    "light": "Sáng",
+    "dark": "Tối",
+    "system": "Hệ thống"
   }
 }
