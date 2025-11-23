@@ -6,7 +6,7 @@ import {
   PERMISSIONS,
 } from "@/lib/rbac/permissions";
 import { createClient } from "@/lib/supabase/server";
-import { itemSchema } from "@/lib/zod/schemas";
+import { itemCreateSchema } from "@/lib/zod/schemas";
 
 /**
  * GET /api/items
@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
     const errorResponse = handleAPIError(error);
     return NextResponse.json(
       { error: errorResponse.error, code: errorResponse.code },
-      { status: errorResponse.statusCode },
+      { status: errorResponse.statusCode }
     );
   }
 }
@@ -135,26 +135,36 @@ export async function POST(request: NextRequest) {
 
     // Parse and validate request body
     const body = await request.json();
-    const validation = itemSchema.safeParse(body);
+    const validation = itemCreateSchema.safeParse(body);
 
     if (!validation.success) {
       throw ApiErrors.badRequest(
-        `Validation failed: ${validation.error.issues.map((e: { message: string }) => e.message).join(", ")}`,
+        `Validation failed: ${validation.error.issues.map((e: { message: string }) => e.message).join(", ")}`
       );
     }
+
+    // Prepare data for insertion
+    const insertData = {
+      ...validation.data,
+      user_id: user.id,
+    };
+
+    // Debug log
+    console.log(
+      "Inserting item with data:",
+      JSON.stringify(insertData, null, 2)
+    );
 
     // Create item
     const { data, error } = await supabase
       .from("items")
-      .insert({
-        ...validation.data,
-        user_id: user.id,
-      })
+      .insert(insertData)
       .select()
       .single();
 
     if (error) {
       console.error("Error creating item:", error);
+      console.error("Error details:", JSON.stringify(error, null, 2));
       throw ApiErrors.internalServer("Failed to create item");
     }
 
@@ -163,7 +173,7 @@ export async function POST(request: NextRequest) {
     const errorResponse = handleAPIError(error);
     return NextResponse.json(
       { error: errorResponse.error, code: errorResponse.code },
-      { status: errorResponse.statusCode },
+      { status: errorResponse.statusCode }
     );
   }
 }

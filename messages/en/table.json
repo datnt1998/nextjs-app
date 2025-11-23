@@ -69,5 +69,13 @@
     "view": "View",
     "density": "Density",
     "toggleColumns": "Toggle columns"
+  },
+  "density": {
+    "compact": "Compact",
+    "compactDescription": "Minimal padding for more rows",
+    "comfortable": "Comfortable",
+    "comfortableDescription": "Balanced spacing (default)",
+    "spacious": "Spacious",
+    "spaciousDescription": "Maximum padding for readability"
   }
 }

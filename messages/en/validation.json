@@ -1,0 +1,31 @@
+{
+  "email": {
+    "required": "Email is required",
+    "invalid": "Invalid email address"
+  },
+  "password": {
+    "required": "Password is required",
+    "minLength": "Password must be at least {min} characters",
+    "maxLength": "Password is too long"
+  },
+  "fullName": {
+    "required": "Full name is required",
+    "maxLength": "Full name is too long"
+  },
+  "title": {
+    "required": "Title is required",
+    "maxLength": "Title too long"
+  },
+  "description": {
+    "maxLength": "Description too long"
+  },
+  "imageUrl": {
+    "invalid": "Invalid image URL"
+  },
+  "common": {
+    "required": "{field} is required",
+    "invalid": "Invalid {field}",
+    "tooShort": "{field} is too short",
+    "tooLong": "{field} is too long"
+  }
+}

@@ -30,9 +30,28 @@ export const signUpSchema = z.object({
 });
 
 /**
- * Item schema for CRUD operations
+ * Item schema for CRUD operations (for forms)
  */
 export const itemSchema = z.object({
+  title: z.string().min(1, "Title is required").max(100, "Title too long"),
+  description: z
+    .string()
+    .max(500, "Description too long")
+    .optional()
+    .nullable(),
+  status: z.enum(["active", "inactive", "archived"]),
+  image_url: z
+    .string()
+    .url({ message: "Invalid image URL" })
+    .optional()
+    .nullable()
+    .or(z.literal("")),
+});
+
+/**
+ * Item create schema (for API - with defaults)
+ */
+export const itemCreateSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title too long"),
   description: z
     .string()
@@ -59,4 +78,5 @@ export const itemUpdateSchema = itemSchema.partial();
 export type LoginInput = z.infer<typeof loginSchema>;
 export type SignUpInput = z.infer<typeof signUpSchema>;
 export type ItemInput = z.infer<typeof itemSchema>;
+export type ItemCreateInput = z.infer<typeof itemCreateSchema>;
 export type ItemUpdateInput = z.infer<typeof itemUpdateSchema>;

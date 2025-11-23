@@ -1,0 +1,31 @@
+{
+  "email": {
+    "required": "Email là bắt buộc",
+    "invalid": "Địa chỉ email không hợp lệ"
+  },
+  "password": {
+    "required": "Mật khẩu là bắt buộc",
+    "minLength": "Mật khẩu phải có ít nhất {min} ký tự",
+    "maxLength": "Mật khẩu quá dài"
+  },
+  "fullName": {
+    "required": "Họ tên là bắt buộc",
+    "maxLength": "Họ tên quá dài"
+  },
+  "title": {
+    "required": "Tiêu đề là bắt buộc",
+    "maxLength": "Tiêu đề quá dài"
+  },
+  "description": {
+    "maxLength": "Mô tả quá dài"
+  },
+  "imageUrl": {
+    "invalid": "URL hình ảnh không hợp lệ"
+  },
+  "common": {
+    "required": "{field} là bắt buộc",
+    "invalid": "{field} không hợp lệ",
+    "tooShort": "{field} quá ngắn",
+    "tooLong": "{field} quá dài"
+  }
+}

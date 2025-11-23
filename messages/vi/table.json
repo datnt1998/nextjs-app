@@ -69,5 +69,13 @@
     "view": "Xem",
     "density": "Mật độ",
     "toggleColumns": "Chuyển đổi cột"
+  },
+  "density": {
+    "compact": "Gọn",
+    "compactDescription": "Khoảng cách tối thiểu cho nhiều hàng hơn",
+    "comfortable": "Thoải mái",
+    "comfortableDescription": "Khoảng cách cân bằng (mặc định)",
+    "spacious": "Rộng rãi",
+    "spaciousDescription": "Khoảng cách tối đa để dễ đọc"
   }
 }

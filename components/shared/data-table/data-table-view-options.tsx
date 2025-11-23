@@ -28,6 +28,7 @@ export function DataTableViewOptions<TData>({
   onDensityChange,
 }: DataTableViewOptionsProps<TData>) {
   const t = useTranslations("table.viewOptions");
+  const tDensity = useTranslations("table.density");
 
   return (
     <DropdownMenu>
@@ -54,11 +55,11 @@ export function DataTableViewOptions<TData>({
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    density === option.value ? "opacity-100" : "opacity-0",
+                    density === option.value ? "opacity-100" : "opacity-0"
                   )}
                 />
                 <div className="flex flex-col">
-                  <span className="text-sm">{option.label}</span>
+                  <span className="text-sm">{tDensity(option.value)}</span>
                 </div>
               </DropdownMenuItem>
             ))}
@@ -72,7 +73,7 @@ export function DataTableViewOptions<TData>({
           .getAllColumns()
           .filter(
             (column) =>
-              typeof column.accessorFn !== "undefined" && column.getCanHide(),
+              typeof column.accessorFn !== "undefined" && column.getCanHide()
           )
           .map((column) => {
             return (
