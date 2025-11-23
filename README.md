@@ -1,75 +1,51 @@
-# NextJS Starter Kit
+# Next.js Starter Kit
 
-A modern, lightweight, and highly extensible NextJS starter kit optimized for SaaS dashboards and management systems.
+Modern, production-ready starter kit for SaaS dashboards and management systems.
 
 ## Features
 
-- ⚡️ **Next.js 16** with App Router and TypeScript
-- 🎨 **Tailwind CSS v4** with CSS variables for theming
-- 🌍 **Internationalization (i18n)** with next-intl v3 - [See i18n Guide](./docs/I18N_GUIDE.md)
-- 🔐 **Supabase** for authentication and database
-- 🔍 **Biome** for fast linting
-- 💅 **Prettier** for code formatting
-- 🪝 **Husky** for Git hooks
-- � **\*Commitlint** for conventional commits
-- 🚀 **Production-ready** configuration
+- **Next.js 16** - App Router with TypeScript
+- **Tailwind CSS v4** - CSS variables for theming
+- **Internationalization** - next-intl v3 ([Guide](./docs/I18N_GUIDE.md))
+- **Supabase** - Authentication and database
+- **Biome** - Fast linting and formatting
+- **Prettier** - Code formatting
+- **Husky** - Git hooks with Commitlint
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 20+ and npm
+- Node.js 20+
+- npm or yarn
 
 ### Installation
 
 ```bash
 npm install
-```
-
-### Environment Setup
-
-This starter kit requires environment variables for Supabase (authentication & database) and ImageKit (image management).
-
-#### 1. Copy the Environment Template
-
-```bash
 cp .env.example .env.local
 ```
 
-#### 2. Configure Supabase (Required)
+### Environment Configuration
 
-Supabase provides authentication, database, and real-time features.
+Configure the following services in `.env.local`:
 
-**Get your Supabase credentials:**
+**Supabase (Required)**
 
-1. Create a free account at [supabase.com](https://supabase.com)
-2. Create a new project (note: it takes ~2 minutes to provision)
-3. Go to **Project Settings** > **API**
-4. Copy the following values to your `.env.local`:
+1. Create account at [supabase.com](https://supabase.com)
+2. Create new project
+3. Get credentials from **Settings > API**
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ```
 
-**Important Notes:**
+**ImageKit (Required)**
 
-- `NEXT_PUBLIC_SUPABASE_URL` - Your project's API URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Public key (safe to expose in browser)
-- `SUPABASE_SERVICE_ROLE_KEY` - Secret key (server-side only, bypasses RLS)
-
-⚠️ **Security Warning:** Never commit `.env.local` or expose the service role key to the client.
-
-#### 3. Configure ImageKit (Required for Image Uploads)
-
-ImageKit provides image CDN, transformations, and optimization.
-
-**Get your ImageKit credentials:**
-
-1. Create a free account at [imagekit.io](https://imagekit.io)
-2. Go to **Developer Options** > **API Keys**
-3. Copy the following values to your `.env.local`:
+1. Create account at [imagekit.io](https://imagekit.io)
+2. Get credentials from **Developer Options > API Keys**
 
 ```env
 NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY=public_xxxxx
@@ -77,437 +53,162 @@ NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/your-id
 IMAGEKIT_PRIVATE_KEY=private_xxxxx
 ```
 
-**Important Notes:**
-
-- `NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY` - Public key (safe to expose in browser)
-- `NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT` - Your ImageKit URL endpoint
-- `IMAGEKIT_PRIVATE_KEY` - Secret key (server-side only, used for upload signatures)
-
-⚠️ **Security Warning:** Never expose the private key to the client.
-
-#### 4. Configure Site URL (Optional)
-
-Set your application's base URL:
+**Site URL (Optional)**
 
 ```env
-# Development
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-
-# Production
-NEXT_PUBLIC_SITE_URL=https://yourdomain.com
 ```
 
-This is used for generating absolute URLs, redirects, and metadata.
-
-#### 5. Verify Your Configuration
-
-After setting up your environment variables, verify they're loaded correctly:
+### Verify Setup
 
 ```bash
 npm run dev
 ```
 
-If you see errors about missing environment variables, double-check:
-
-1. File is named `.env.local` (not `.env.example`)
-2. File is in the `nextjs-app/` directory
-3. No extra spaces around the `=` sign
-4. Values are copied correctly from your dashboards
-
-#### Environment Variables Reference
-
-| Variable                            | Required | Description                        | Where to Get It                        |
-| ----------------------------------- | -------- | ---------------------------------- | -------------------------------------- |
-| `NEXT_PUBLIC_SUPABASE_URL`          | ✅ Yes   | Supabase project URL               | Supabase Dashboard > Settings > API    |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY`     | ✅ Yes   | Supabase anonymous key (public)    | Supabase Dashboard > Settings > API    |
-| `SUPABASE_SERVICE_ROLE_KEY`         | ✅ Yes   | Supabase service role key (secret) | Supabase Dashboard > Settings > API    |
-| `NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY`   | ✅ Yes   | ImageKit public key                | ImageKit Dashboard > Developer Options |
-| `NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT` | ✅ Yes   | ImageKit URL endpoint              | ImageKit Dashboard > Developer Options |
-| `IMAGEKIT_PRIVATE_KEY`              | ✅ Yes   | ImageKit private key (secret)      | ImageKit Dashboard > Developer Options |
-| `NEXT_PUBLIC_SITE_URL`              | ⚪ No    | Your application's base URL        | Set manually                           |
-
-#### Troubleshooting
-
-**"Missing Supabase environment variables" error:**
-
-- Ensure `.env.local` exists in the `nextjs-app/` directory
-- Verify all three Supabase variables are set
-- Restart the development server after adding variables
-
-**"ImageKit credentials not configured" error:**
-
-- Ensure all three ImageKit variables are set
-- Verify the URL endpoint includes `https://` and your ImageKit ID
-- Check that keys are copied completely (they're quite long)
-
-**Changes not taking effect:**
-
-- Restart the development server (`Ctrl+C` then `npm run dev`)
-- Clear Next.js cache: `rm -rf .next`
-- Verify you're editing `.env.local` not `.env.example`
+Visit [http://localhost:3000](http://localhost:3000)
 
 ### Database Setup
 
-This starter kit includes database migrations for:
+Run migrations from `supabase/migrations/` in order:
 
-- User profiles with RBAC (Role-Based Access Control)
-- Items table for CRUD operations
-- Row Level Security (RLS) policies
-- Multi-tenant support
+1. `20241118000001_create_profiles_table.sql`
+2. `20241118000002_create_items_table.sql`
+3. `20241118000003_add_rbac_support.sql`
 
-**Quick Setup:**
-
-1. Follow the detailed setup guide in [`supabase/SETUP.md`](./supabase/SETUP.md)
-2. Run the migrations in order from the `supabase/migrations/` directory
-3. Verify the setup by signing up a test user
-
-**Migration Files:**
-
-- `20241118000001_create_profiles_table.sql` - User profiles
-- `20241118000002_create_items_table.sql` - Items for CRUD demo
-- `20241118000003_add_rbac_support.sql` - RBAC and multi-tenant support
-
-See [`supabase/migrations/README.md`](./supabase/migrations/README.md) for detailed migration documentation.
+See [`supabase/SETUP.md`](./supabase/SETUP.md) for details.
 
 ### Development
 
-Run the development server:
-
 ```bash
-npm run dev
+npm run dev          # Start dev server
+npm run build        # Build for production
+npm start            # Start production server
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-### Build
-
-Build the application for production:
+## Scripts
 
 ```bash
-npm run build
+npm run dev              # Development server
+npm run build            # Production build
+npm start                # Production server
+npm run lint             # Run linter
+npm run lint:fix         # Fix linting issues
+npm run format           # Format code
+npm run format:check     # Check formatting
+npm run validate:translations  # Validate i18n files
 ```
-
-### Start Production Server
-
-```bash
-npm start
-```
-
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm start` - Start production server
-- `npm run lint` - Run Biome linter
-- `npm run lint:fix` - Fix linting issues
-- `npm run format` - Format code with Prettier
-- `npm run format:check` - Check code formatting
 
 ## Code Quality
 
-### Pre-commit Hooks
+**Pre-commit Hooks** - Husky runs Biome linting and Prettier formatting
 
-This project uses Husky and lint-staged to run checks before commits:
-
-- Biome linting with auto-fix
-- Prettier formatting
-
-### Commit Message Convention
-
-This project follows [Conventional Commits](https://www.conventionalcommits.org/):
+**Commit Convention** - [Conventional Commits](https://www.conventionalcommits.org/)
 
 ```
-<type>(<scope>): <subject>
-```
+<type>: <subject>
 
-Types:
-
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `style`: Code style changes (formatting, etc.)
-- `refactor`: Code refactoring
-- `perf`: Performance improvements
-- `test`: Adding or updating tests
-- `build`: Build system changes
-- `ci`: CI/CD changes
-- `chore`: Other changes
-
-Example:
-
-```bash
-git commit -m "feat: add user authentication"
+Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
 ```
 
 ## Project Structure
 
 ```
 nextjs-app/
-├── app/                  # Next.js App Router
-│   ├── layout.tsx       # Root layout
-│   ├── page.tsx         # Home page
-│   ├── providers/       # React context providers
-│   └── globals.css      # Global styles
-├── components/          # Component library (see Component Architecture below)
-│   ├── ui/              # Atomic UI primitives (Button, Input, Card, etc.)
-│   ├── shared/          # Composite reusable components (DataTable, Pagination)
-│   ├── dashboard/       # Dashboard shell components (Sidebar, Layout)
-│   ├── features/        # Feature-specific components (Items, Upload)
-│   ├── icons/           # Icon registry
-│   └── rbac/            # RBAC components
-├── lib/                 # Library code
-│   ├── supabase/        # Supabase client configurations
-│   ├── imagekit/        # ImageKit integration
-│   ├── nuqs/            # URL state management
-│   ├── rbac/            # RBAC utilities
-│   ├── api/             # API utilities
-│   └── zod/             # Validation schemas
-├── hooks/               # Custom React hooks
-├── stores/              # Zustand state stores
-├── types/               # TypeScript type definitions
-│   └── database.types.ts # Supabase database types
-├── public/              # Static assets
-├── supabase/            # Supabase migrations and setup
-├── .husky/              # Git hooks
-├── middleware.ts        # Next.js middleware
-├── biome.json           # Biome configuration
-├── commitlint.config.js # Commitlint configuration
-├── next.config.ts       # Next.js configuration
-├── package.json         # Dependencies and scripts
-├── postcss.config.mjs   # PostCSS configuration
-├── tsconfig.json        # TypeScript configuration
-└── README.md            # This file
+├── app/                    # Next.js App Router
+├── components/
+│   ├── ui/                 # Atomic UI primitives
+│   ├── shared/             # Reusable composites
+│   ├── dashboard/          # Dashboard shell
+│   └── features/           # Feature-specific
+├── lib/                    # Utilities and clients
+├── hooks/                  # React hooks
+├── stores/                 # Zustand stores
+├── types/                  # TypeScript types
+├── supabase/               # Database migrations
+└── middleware.ts           # Next.js middleware
 ```
 
 ## Component Architecture
 
-This starter kit follows a **layered component architecture** for maintainability and scalability.
+Four-layer architecture for maintainability and scalability:
 
-### Architecture Layers
+| Layer          | Purpose               | Can Use                          |
+| -------------- | --------------------- | -------------------------------- |
+| **ui/**        | Primitive UI elements | Radix UI, theme tokens           |
+| **shared/**    | Reusable composites   | ui/, external libs               |
+| **dashboard/** | App shell/layout      | ui/, shared/, auth               |
+| **features/**  | Feature-specific      | All layers, APIs, business logic |
 
-```
-components/
-├── ui/                    # Layer 1: Atomic UI primitives
-├── shared/                # Layer 2: Composite reusable components
-├── dashboard/             # Layer 3: Dashboard shell components
-└── features/              # Layer 4: Feature-specific components
-```
+**Key Rules:**
 
-### Quick Reference
+- Use ShadCN/Radix UI primitives in `ui/`
+- Support `className`, `forwardRef`, `asChild`
+- Business logic only in `features/`
+- Use absolute imports: `@/components/ui/button`
 
-| Layer          | Purpose               | Can Use                          | Cannot Use             |
-| -------------- | --------------------- | -------------------------------- | ---------------------- |
-| **ui/**        | Primitive UI elements | Radix UI, theme tokens           | Business logic, APIs   |
-| **shared/**    | Reusable composites   | ui/, external libs               | Business logic, APIs   |
-| **dashboard/** | App shell/layout      | ui/, shared/, auth               | Feature-specific logic |
-| **features/**  | Feature-specific      | All layers, APIs, business logic | -                      |
-
-### Key Rules
-
-1. **Atomic UI components** (`ui/`) MUST use ShadCN/Radix UI primitives
-2. **All components** MUST support `className`, `forwardRef`, and `asChild` (where appropriate)
-3. **Business logic** belongs ONLY in `features/` components
-4. **Use absolute imports**: `@/components/ui/button` not `../../components/ui/button`
-
-### Examples
-
-```tsx
-// ✅ Atomic UI (components/ui/button.tsx)
-import { Slot } from "@radix-ui/react-slot";
-export const Button = React.forwardRef(({ asChild, ...props }, ref) => {
-  const Comp = asChild ? Slot : "button";
-  return <Comp ref={ref} {...props} />;
-});
-
-// ✅ Shared Component (components/shared/pagination.tsx)
-import { Button } from "@/components/ui/button";
-export function Pagination({ currentPage, totalPages, onPageChange }) {
-  return <Button onClick={() => onPageChange(currentPage + 1)}>Next</Button>;
-}
-
-// ✅ Feature Component (components/features/items/item-form.tsx)
-import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
-export function ItemForm() {
-  const mutation = useMutation({ mutationFn: saveItem });
-  return <form onSubmit={mutation.mutate}>...</form>;
-}
-```
-
-### Full Documentation
-
-See [COMPONENT_ARCHITECTURE.md](./COMPONENT_ARCHITECTURE.md) for complete architecture documentation including:
-
-- Detailed layer definitions and rules
-- MCP ShadCN enforcement rules
-- Code style checklist
-- Migration guide
-- Testing strategy
-
-## Path Aliases
-
-The project is configured with the following path alias:
-
-- `@/*` - Maps to the root directory
-
-Example:
-
-```typescript
-import { Component } from "@/components/ui/button";
-```
+See [Component Architecture](./docs/COMPONENT_ARCHITECTURE.md) for details.
 
 ## Supabase Integration
 
-### Database Schema
+**Database Schema:**
 
-The starter kit includes a complete database schema with:
+- User profiles with RBAC
+- Items table for CRUD
+- Row Level Security (RLS)
+- Multi-tenant support
 
-**Tables:**
+**Roles:** owner, admin, manager, editor, viewer
 
-- `profiles` - User profiles with role, tenant, and permissions
-- `items` - Demo table for CRUD operations
-
-**Features:**
-
-- Row Level Security (RLS) enabled on all tables
-- Role-Based Access Control (owner, admin, manager, editor, viewer)
-- Multi-tenant support with tenant isolation
-- Automatic profile creation on user signup
-- Automatic timestamp updates
-
-### Client Usage (Browser)
+**Usage:**
 
 ```typescript
+// Client-side
 import { createClient } from "@/lib/supabase/client";
-
 const supabase = createClient();
 
-// Example: Fetch data
-const { data, error } = await supabase.from("items").select("*");
-```
-
-### Server Usage (Server Components, API Routes)
-
-```typescript
+// Server-side
 import { createClient } from "@/lib/supabase/server";
-
 const supabase = await createClient();
-
-// Example: Fetch data with RLS
-const { data, error } = await supabase.from("items").select("*");
 ```
 
-### Authentication Middleware
-
-The middleware automatically:
-
-- Refreshes user sessions
-- Protects `/dashboard/*` routes
-- Redirects unauthenticated users to `/sign-in`
-
-### RBAC (Role-Based Access Control)
-
-**Roles:**
-
-- `owner` - Full access to all resources in tenant
-- `admin` - Full access to all resources in tenant
-- `manager` - Can view and manage items, view users
-- `editor` - Can create and edit own items
-- `viewer` - Can only view items (default role)
-
-**Usage Example:**
-
-```typescript
-// Check user role
-const { data: profile } = await supabase
-  .from("profiles")
-  .select("role")
-  .eq("id", userId)
-  .single();
-
-// RLS automatically enforces permissions
-const { data: items } = await supabase.from("items").select("*");
-// Returns only items user has access to based on role and tenant
-```
-
-### Database Types
-
-Generate TypeScript types from your Supabase schema:
+**Generate Types:**
 
 ```bash
-npx supabase gen types typescript --project-id your-project-id > types/database.types.ts
+npx supabase gen types typescript --project-id ID > types/database.types.ts
 ```
 
-Or if using local Supabase:
+## Internationalization
 
-```bash
-npx supabase gen types typescript --local > types/database.types.ts
-```
+**Supported Locales:** English (en), Vietnamese (vi)
 
-### Common Queries
-
-See [`supabase/common-queries.sql`](./supabase/common-queries.sql) for helpful SQL queries for:
-
-- User management
-- Role management
-- Tenant management
-- Testing RLS policies
-- Audit and monitoring
-
-## Internationalization (i18n)
-
-This application supports multiple languages using next-intl v3:
-
-- **Supported Locales:** English (en), Vietnamese (vi)
-- **Locale-based Routing:** `/en/dashboard`, `/vi/dashboard`
-- **Server & Client Components:** Full translation support
-- **Type-safe Translations:** TypeScript autocomplete for translation keys
-- **SEO Optimized:** Proper hreflang tags and locale-specific metadata
-
-### Quick Start
+**Usage:**
 
 ```typescript
 // Server Component
-import { getTranslations } from 'next-intl/server';
-
-export default async function Page() {
-  const t = await getTranslations('namespace');
-  return <h1>{t('title')}</h1>;
-}
+import { getTranslations } from "next-intl/server";
+const t = await getTranslations("namespace");
 
 // Client Component
-'use client';
-import { useTranslations } from 'next-intl';
-
-export function Component() {
-  const t = useTranslations('namespace');
-  return <button>{t('submit')}</button>;
-}
+import { useTranslations } from "next-intl";
+const t = useTranslations("namespace");
 ```
 
-### Documentation
+**Documentation:**
 
-- **[i18n Guide](./docs/I18N_GUIDE.md)** - Complete guide for using i18n features
-- **[Quick Reference](./docs/I18N_QUICK_REFERENCE.md)** - Cheat sheet for common tasks
-- **[Code Examples](./docs/I18N_EXAMPLES.md)** - Practical examples for common scenarios
+- [i18n Guide](./docs/I18N_GUIDE.md)
+- [Quick Reference](./docs/I18N_QUICK_REFERENCE.md)
+- [Examples](./docs/I18N_EXAMPLES.md)
 
-### Adding Translations
-
-1. Add key to `messages/en/namespace.json`
-2. Add translation to `messages/vi/namespace.json`
-3. Use in your code with `t('key')`
-
-### Validation
+**Validation:**
 
 ```bash
-npm run validate:translations  # Check for missing keys
+npm run validate:translations
 ```
 
-## Learn More
+## Resources
 
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Tailwind CSS v4](https://tailwindcss.com/docs)
-- [Supabase Documentation](https://supabase.com/docs)
-- [next-intl Documentation](https://next-intl-docs.vercel.app/)
+- [Next.js](https://nextjs.org/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [Supabase](https://supabase.com/docs)
+- [next-intl](https://next-intl-docs.vercel.app/)
 - [Biome](https://biomejs.dev/)
-- [Conventional Commits](https://www.conventionalcommits.org/)

@@ -1,12 +1,10 @@
 # Build and Validation Scripts
 
-This directory contains scripts for validating and verifying the Next.js i18n application.
+Scripts for validating and verifying the Next.js i18n application.
 
-## Scripts
+## validate-translations.ts
 
-### validate-translations.ts
-
-Validates all translation files to ensure translation integrity across all locales.
+Validates translation files for integrity across locales.
 
 **Usage:**
 
@@ -14,60 +12,58 @@ Validates all translation files to ensure translation integrity across all local
 npm run validate:translations
 ```
 
-**What it checks:**
+**Checks:**
 
-- All namespace files exist for all locales
-- All JSON files are valid and parseable
-- All translation keys exist in all locales
-- Structure consistency across locales
+- File existence for all locales/namespaces
+- JSON validity
+- Key consistency across locales
+- Structure consistency
 
-**Exit codes:**
+**Exit Codes:**
 
 - `0` - All validations passed
 - `1` - Validation errors found
 
-**Example output:**
+**Success Output:**
 
 ```
-✅ All translation files are valid!
+✅ All translation files valid
    - 2 locales validated
    - 12 namespaces per locale
    - 24 total files checked
 ```
 
-### verify-build.ts
+## verify-build.ts
 
-Verifies the production build output to ensure proper generation and optimization.
+Verifies production build output.
 
 **Usage:**
 
 ```bash
-npm run verify:build
+npm run verify:build  # After building
 ```
 
 **Prerequisites:**
 
 - Must run after `npm run build`
-- Requires `.next` directory to exist
+- Requires `.next` directory
 
-**What it checks:**
+**Checks:**
 
 - Build directory exists
-- Locale-specific pages are generated
-- Bundle optimization (code splitting)
+- Locale pages generated
+- Bundle optimization
 - Translation code splitting
 
-**Exit codes:**
+**Exit Codes:**
 
-- `0` - Build verification passed
+- `0` - Verification passed
 - `1` - Verification errors found
 
-**Example output:**
+**Success Output:**
 
 ```
-✅ Build verification passed!
-
-   Statistics:
+✅ Build verification passed
    - Total pages: 30
    - en pages: 15
    - vi pages: 15
@@ -75,17 +71,13 @@ npm run verify:build
 
 ## Configuration
 
-### Supported Locales
-
-Defined in both scripts:
+**Supported Locales:**
 
 ```typescript
 const LOCALES = ["en", "vi"] as const;
 ```
 
-### Supported Namespaces
-
-Defined in `validate-translations.ts`:
+**Supported Namespaces:**
 
 ```typescript
 const NAMESPACES = [
@@ -104,78 +96,56 @@ const NAMESPACES = [
 ] as const;
 ```
 
-## Adding New Locales
-
-To add a new locale:
+## Adding Locales
 
 1. Update `LOCALES` in both scripts
 2. Create translation files in `messages/[locale]/`
-3. Update `i18n/config.ts` with the new locale
-4. Run validation to ensure all files exist
+3. Update `i18n/config.ts`
+4. Run validation
 
-## Adding New Namespaces
-
-To add a new namespace:
+## Adding Namespaces
 
 1. Update `NAMESPACES` in `validate-translations.ts`
-2. Create the namespace file for all locales
-3. Run validation to ensure consistency
+2. Create namespace files for all locales
+3. Run validation
 
 ## Troubleshooting
-
-### Translation Validation Fails
 
 **Missing files:**
 
 ```
-❌ Found 1 error(s):
-   Missing translation file: messages/vi/common.json
+❌ Missing translation file: messages/vi/common.json
 ```
 
-**Solution:** Create the missing file with the required translations.
+Solution: Create the missing file
 
 **Invalid JSON:**
 
 ```
-❌ Found 1 error(s):
-   Invalid JSON in file: messages/en/auth.json
+❌ Invalid JSON in file: messages/en/auth.json
 ```
 
-**Solution:** Fix the JSON syntax in the specified file.
+Solution: Fix JSON syntax
 
 **Missing keys:**
 
 ```
-❌ Found 1 error(s):
-   Missing translation key "submit" in vi/auth.json
+❌ Missing translation key "submit" in vi/auth.json
 ```
 
-**Solution:** Add the missing key to the specified locale file.
-
-### Build Verification Fails
+Solution: Add missing key
 
 **Build directory not found:**
 
 ```
-❌ Build verification failed!
-   Errors:
-   - Build directory does not exist. Run "npm run build" first.
+❌ Build directory does not exist. Run "npm run build" first.
 ```
 
-**Solution:** Run `npm run build` before verification.
+Solution: Run `npm run build`
 
-**No pages generated:**
+## CI/CD Integration
 
-```
-⚠️  Warnings (1):
-   - No locale-specific pages found in build output
-```
-
-**Solution:** Check that `app/[locale]` directory structure is correct.
-
-## Integration with CI/CD
-
-These scripts are integrated into the CI/CD pipeline:
+Scripts integrated in pipeline:
 
 ```yaml
 - name: Validate translations
@@ -187,8 +157,6 @@ These scripts are integrated into the CI/CD pipeline:
 - name: Verify build
   run: npm run verify:build
 ```
-
-The build script (`npm run build`) automatically runs translation validation before building.
 
 ## Development Workflow
 
@@ -209,20 +177,9 @@ npm run build
 npm run verify:build
 ```
 
-## Maintenance
+## Performance
 
-### Updating Scripts
+- **validate-translations.ts:** < 1 second
+- **verify-build.ts:** < 1 second (requires existing build)
 
-When updating these scripts:
-
-1. Test locally with various scenarios
-2. Update this README with any changes
-3. Update the main documentation in `docs/BUILD_AND_DEPLOYMENT.md`
-4. Ensure CI/CD pipeline still works
-
-### Performance Considerations
-
-- **validate-translations.ts**: Fast, runs in < 1 second
-- **verify-build.ts**: Fast, runs in < 1 second (requires existing build)
-
-Both scripts are designed to be fast and can be run frequently during development.
+Both scripts are fast and can run frequently during development.

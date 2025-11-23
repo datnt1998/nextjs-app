@@ -1,20 +1,18 @@
 # Data Table Components
 
-A comprehensive data table implementation with advanced filtering, sorting, pagination, and URL state management based on openstatusHQ patterns.
+Comprehensive data table with filtering, sorting, pagination, and URL state management.
 
 ## Features
 
-- ✅ **URL State Synchronization** - All table state (filters, sorting, pagination) synced to URL
-- ✅ **Compact URL Serialization** - Space-efficient filter encoding (`status:active,pending`)
-- ✅ **Multiple Filter Types** - Input, checkbox, slider, and timerange filters
-- ✅ **Type-Safe** - Full TypeScript support with discriminated union types
-- ✅ **Flexible** - Works with both client-side and server-side data
-- ✅ **Accessible** - Built on Radix UI primitives
-- ✅ **Customizable** - Extensive configuration options
+- URL state synchronization
+- Compact URL serialization
+- Multiple filter types (input, checkbox, slider, timerange)
+- Type-safe with TypeScript
+- Client and server-side support
+- Accessible (Radix UI)
+- Customizable
 
 ## Quick Start
-
-### Basic Usage
 
 ```tsx
 import {
@@ -33,10 +31,7 @@ type Product = {
 };
 
 const columns: ColumnDef<Product>[] = [
-  {
-    accessorKey: "name",
-    header: "Name",
-  },
+  { accessorKey: "name", header: "Name" },
   {
     accessorKey: "status",
     header: "Status",
@@ -49,7 +44,7 @@ const filterFields: DataTableFilterField<Product>[] = [
     id: "name",
     label: "Product Name",
     type: "input",
-    placeholder: "Search products...",
+    placeholder: "Search...",
   },
   {
     id: "status",
@@ -84,40 +79,25 @@ function MyDataTable({ data }: { data: Product[] }) {
 
 ### DataTable
 
-Main table component that renders the data.
+Main table component.
 
 ```tsx
 <DataTable
   table={table}
   columns={columns}
   isLoading={false}
-  emptyMessage="No results found."
+  emptyMessage="No results."
   bordered={true}
 />
 ```
 
-**Props:**
-
-- `table` - Table instance from `useDataTable`
-- `columns` - Column definitions
-- `isLoading` - Show loading spinner
-- `emptyMessage` - Message when no data
-- `bordered` - Show table border
-- `className` - Custom styles
-
 ### DataTableColumnHeader
 
-Sortable column header with dropdown menu.
+Sortable column header with dropdown.
 
 ```tsx
-<DataTableColumnHeader column={column} title="Product Name" />
+<DataTableColumnHeader column={column} title="Name" />
 ```
-
-**Features:**
-
-- Sort ascending/descending
-- Hide column option
-- Visual sort indicators
 
 ### DataTablePagination
 
@@ -133,7 +113,7 @@ Pagination controls.
 
 ### DataTableToolbar
 
-Toolbar with search and filter controls.
+Toolbar with search and filters.
 
 ```tsx
 <DataTableToolbar table={table} filterFields={filterFields}>
@@ -147,7 +127,7 @@ Toolbar with search and filter controls.
 
 ### DataTableViewOptions
 
-Column visibility toggle dropdown.
+Column visibility toggle.
 
 ```tsx
 <DataTableViewOptions table={table} />
@@ -157,7 +137,7 @@ Column visibility toggle dropdown.
 
 ### DataTableFacetedFilter
 
-Multi-select dropdown filter with badges.
+Multi-select dropdown with badges.
 
 ```tsx
 <DataTableFacetedFilter
@@ -170,13 +150,6 @@ Multi-select dropdown filter with badges.
 />
 ```
 
-**Features:**
-
-- Multi-select with checkboxes
-- Shows selected count
-- Clear all option
-- Displays facet counts
-
 ### DataTableFilterInput
 
 Text input filter.
@@ -184,19 +157,19 @@ Text input filter.
 ```tsx
 <DataTableFilterInput
   column={table.getColumn("name")}
-  title="Product Name"
+  title="Name"
   placeholder="Search..."
 />
 ```
 
 ### DataTableFilterSlider
 
-Numeric range slider filter.
+Numeric range slider.
 
 ```tsx
 <DataTableFilterSlider
   column={table.getColumn("price")}
-  title="Price Range"
+  title="Price"
   min={0}
   max={1000}
   step={10}
@@ -210,7 +183,7 @@ Date range picker with presets.
 ```tsx
 <DataTableFilterTimerange
   column={table.getColumn("createdAt")}
-  title="Created Date"
+  title="Created"
   presets={[
     {
       label: "Last 7 days",
@@ -225,7 +198,7 @@ Date range picker with presets.
 
 ### useDataTable
 
-Main hook for creating table instances.
+Main hook for table instances.
 
 ```tsx
 const { table } = useDataTable({
@@ -246,43 +219,35 @@ const { table } = useDataTable({
 });
 ```
 
-**Options:**
+**Key Options:**
 
-| Option               | Type                     | Default     | Description                   |
-| -------------------- | ------------------------ | ----------- | ----------------------------- |
-| `columns`            | `ColumnDef[]`            | Required    | Column definitions            |
-| `data`               | `TData[]`                | Required    | Data array                    |
-| `pageCount`          | `number`                 | `undefined` | Total pages (for server-side) |
-| `filterFields`       | `DataTableFilterField[]` | `undefined` | Filter configuration          |
-| `initialState`       | `object`                 | `{}`        | Initial table state           |
-| `manualPagination`   | `boolean`                | `false`     | Enable server-side pagination |
-| `manualSorting`      | `boolean`                | `false`     | Enable server-side sorting    |
-| `manualFiltering`    | `boolean`                | `false`     | Enable server-side filtering  |
-| `enableRowSelection` | `boolean`                | `false`     | Enable row selection          |
-| `enableUrlState`     | `boolean`                | `true`      | Sync state to URL             |
-| `debounceMs`         | `number`                 | `500`       | Debounce delay for filters    |
-| `onFiltersChange`    | `function`               | `undefined` | Filter change callback        |
-| `onPaginationChange` | `function`               | `undefined` | Pagination change callback    |
-| `onSortingChange`    | `function`               | `undefined` | Sorting change callback       |
+| Option               | Type      | Default     | Description               |
+| -------------------- | --------- | ----------- | ------------------------- |
+| `columns`            | Required  | -           | Column definitions        |
+| `data`               | Required  | -           | Data array                |
+| `pageCount`          | `number`  | `undefined` | Total pages (server-side) |
+| `filterFields`       | `array`   | `undefined` | Filter configuration      |
+| `manualPagination`   | `boolean` | `false`     | Server-side pagination    |
+| `manualSorting`      | `boolean` | `false`     | Server-side sorting       |
+| `manualFiltering`    | `boolean` | `false`     | Server-side filtering     |
+| `enableRowSelection` | `boolean` | `false`     | Enable row selection      |
+| `enableUrlState`     | `boolean` | `true`      | Sync state to URL         |
+| `debounceMs`         | `number`  | `500`       | Debounce delay            |
 
 ## Filter Field Types
 
 ### Input Filter
 
-Text-based search filter.
-
 ```tsx
 {
   id: "name",
-  label: "Product Name",
+  label: "Name",
   type: "input",
-  placeholder: "Search products...",
+  placeholder: "Search...",
 }
 ```
 
 ### Checkbox Filter
-
-Multi-select dropdown filter.
 
 ```tsx
 {
@@ -307,12 +272,10 @@ Multi-select dropdown filter.
 
 ### Slider Filter
 
-Numeric range filter.
-
 ```tsx
 {
   id: "price",
-  label: "Price Range",
+  label: "Price",
   type: "slider",
   min: 0,
   max: 1000,
@@ -335,12 +298,10 @@ Numeric range filter.
 
 ### Timerange Filter
 
-Date range picker.
-
 ```tsx
 {
   id: "createdAt",
-  label: "Created Date",
+  label: "Created",
   type: "timerange",
   presets: [
     {
@@ -354,29 +315,23 @@ Date range picker.
 
 ## URL State Format
 
-The table state is encoded in the URL using these parameters:
-
-| Parameter | Format                    | Example                                       |
-| --------- | ------------------------- | --------------------------------------------- |
-| `page`    | Number (1-indexed)        | `?page=2`                                     |
-| `perPage` | Number                    | `?perPage=20`                                 |
-| `sort`    | `column.order`            | `?sort=name.asc`                              |
-| `filters` | `key:value key:val1,val2` | `?filters=status:active,pending price:10-100` |
-
-**Example URL:**
-
 ```
-/products?page=1&perPage=10&sort=name.asc&filters=status:active,pending category:Electronics
+/products?page=2&perPage=10&sort=name.asc&filters=status:active,pending category:Electronics
 ```
+
+**Parameters:**
+
+- `page` - Current page (1-indexed)
+- `perPage` - Items per page
+- `sort` - Format: `column.order`
+- `filters` - Format: `key:value key:val1,val2`
 
 ## Server-Side Usage
 
-For server-side data fetching:
-
 ```tsx
 function ServerDataTable() {
-  const [data, setData] = React.useState([]);
-  const [pageCount, setPageCount] = React.useState(0);
+  const [data, setData] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
 
   const { table } = useDataTable({
     columns,
@@ -386,24 +341,17 @@ function ServerDataTable() {
     manualPagination: true,
     manualSorting: true,
     manualFiltering: true,
-    onFiltersChange: (filters) => {
-      // Fetch data with new filters
-      fetchData({ filters });
-    },
-    onPaginationChange: (pagination) => {
-      // Fetch data with new pagination
+    onFiltersChange: (filters) => fetchData({ filters }),
+    onPaginationChange: (pagination) =>
       fetchData({
         page: pagination.pageIndex + 1,
         perPage: pagination.pageSize,
-      });
-    },
-    onSortingChange: (sorting) => {
-      // Fetch data with new sorting
+      }),
+    onSortingChange: (sorting) =>
       fetchData({
         sortBy: sorting[0]?.id,
         sortOrder: sorting[0]?.desc ? "desc" : "asc",
-      });
-    },
+      }),
   });
 
   return (
@@ -418,11 +366,10 @@ function ServerDataTable() {
 
 ## Advanced Patterns
 
-### Custom Filter Component
+### Custom Filters
 
 ```tsx
 <DataTableToolbar table={table} filterFields={filterFields}>
-  {/* Add custom filters */}
   <DataTableFacetedFilter
     column={table.getColumn("status")}
     title="Status"
@@ -445,7 +392,7 @@ For multiple tables on one page:
 const { table } = useDataTable({
   columns,
   data,
-  enableUrlState: false, // Use local state only
+  enableUrlState: false,
 });
 ```
 
@@ -466,7 +413,7 @@ const { table } = useDataTable({
 
 ## TypeScript Types
 
-All types are exported from `@/types/table`:
+All types exported from `@/types/table`:
 
 ```tsx
 import type {
@@ -478,15 +425,13 @@ import type {
   CheckboxFilterField,
   SliderFilterField,
   TimerangeFilterField,
-  SheetField,
-  SerializedFilters,
 } from "@/types/table";
 ```
 
 ## Examples
 
-See `/app/(dashboard)/dashboard/examples/data-table/page.tsx` for a complete working example.
+See `/app/(dashboard)/dashboard/examples/data-table/page.tsx` for complete example.
 
 ## Credits
 
-Inspired by [openstatusHQ/data-table-filters](https://github.com/openstatusHQ/data-table-filters) with enhancements for this starter kit.
+Inspired by [openstatusHQ/data-table-filters](https://github.com/openstatusHQ/data-table-filters).

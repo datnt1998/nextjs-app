@@ -1,93 +1,56 @@
 # Custom Components
 
-This folder contains custom-built components that extend the base UI components with additional functionality.
+Custom-built components extending base UI with additional functionality.
 
-## Components
+## LoadingButton
 
-### LoadingButton
-
-A button component with built-in loading state and icon support.
+Button with built-in loading state and icon support.
 
 **Features:**
 
-- Loading state with spinner animation
-- Optional custom loading text
-- Icon support with left/right positioning
-- Extends base Button component with all variants
-- Automatically disables during loading
-- Fully typed with TypeScript
-- Forward ref support
+- Loading state with spinner
+- Optional loading text
+- Icon support (left/right)
+- Extends base Button
+- Auto-disables during loading
 
 **Usage:**
 
 ```tsx
 import { LoadingButton } from "@/components/shared/custom";
-import { Save, Send } from "lucide-react";
+import { Save } from "lucide-react";
 
-function MyForm() {
-  const [isLoading, setIsLoading] = useState(false);
+<LoadingButton loading={isLoading} onClick={handleSubmit}>
+  Submit
+</LoadingButton>
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    // ... async operation
-    setIsLoading(false);
-  };
+<LoadingButton loading={isLoading} loadingText="Saving...">
+  Save
+</LoadingButton>
 
-  return (
-    <>
-      {/* Basic loading button */}
-      <LoadingButton loading={isLoading} onClick={handleSubmit}>
-        Submit
-      </LoadingButton>
-
-      {/* With custom loading text */}
-      <LoadingButton loading={isLoading} loadingText="Saving...">
-        Save
-      </LoadingButton>
-
-      {/* With icon */}
-      <LoadingButton icon={<Save className="h-4 w-4" />}>Save</LoadingButton>
-
-      {/* Icon on right */}
-      <LoadingButton icon={<Send className="h-4 w-4" />} iconPosition="right">
-        Send
-      </LoadingButton>
-    </>
-  );
-}
+<LoadingButton icon={<Save className="h-4 w-4" />}>
+  Save
+</LoadingButton>
 ```
 
 **Props:**
 
-Extends all `ButtonProps` plus:
+- `loading` - Shows spinner, disables button
+- `icon` - Icon to display (hidden during loading)
+- `iconPosition` - "left" | "right" (default: "left")
+- `loadingText` - Custom loading text
+- All Button props (variant, size, etc.)
 
-- `loading` (optional): `boolean` - Shows loading spinner and disables button
-- `icon` (optional): `React.ReactNode` - Icon to display (hidden during loading)
-- `iconPosition` (optional): `"left" | "right"` - Icon position (default: "left")
-- `loadingText` (optional): `string` - Custom text to show during loading
-- All other Button props (variant, size, etc.)
+## InputWithAddons
 
-**Behavior:**
-
-- When `loading={true}`, shows spinner and optional loading text
-- Button is automatically disabled during loading
-- Icon is hidden during loading state
-- Supports all Button variants and sizes
-
----
-
-### InputWithAddons
-
-An input field with optional leading and trailing addons for icons, text, or other elements.
+Input field with optional leading/trailing addons.
 
 **Features:**
 
 - Leading and trailing addon support
-- Uses core Input component for consistency
-- Flexible addon content (icons, text, or custom elements)
-- Proper focus states and styling
-- Fully typed with TypeScript
-- Forward ref support
+- Uses core Input component
+- Flexible addon content
+- Proper focus states
 
 **Usage:**
 
@@ -95,175 +58,118 @@ An input field with optional leading and trailing addons for icons, text, or oth
 import { InputWithAddons } from "@/components/shared/custom";
 import { DollarSign } from "lucide-react";
 
-function PriceInput() {
-  return (
-    <>
-      {/* With icon leading */}
-      <InputWithAddons
-        leading={<DollarSign className="h-4 w-4" />}
-        placeholder="0.00"
-        type="number"
-      />
+<InputWithAddons
+  leading={<DollarSign className="h-4 w-4" />}
+  placeholder="0.00"
+  type="number"
+/>
 
-      {/* With text trailing */}
-      <InputWithAddons trailing=".com" placeholder="example" type="text" />
+<InputWithAddons
+  trailing=".com"
+  placeholder="example"
+/>
 
-      {/* With both leading and trailing */}
-      <InputWithAddons
-        leading="https://"
-        trailing=".com"
-        placeholder="example"
-        type="text"
-      />
-    </>
-  );
-}
+<InputWithAddons
+  leading="https://"
+  trailing=".com"
+  placeholder="example"
+/>
 ```
 
 **Props:**
 
-- `leading` (optional): `React.ReactNode` - Content to display before the input
-- `trailing` (optional): `React.ReactNode` - Content to display after the input
-- `containerClassName` (optional): `string` - Additional CSS classes for the container
-- `className` (optional): `string` - Additional CSS classes for the input
-- All other standard HTML input props
+- `leading` - Content before input
+- `trailing` - Content after input
+- `containerClassName` - Container CSS classes
+- `className` - Input CSS classes
+- All standard input props
 
-**Styling:**
+## TextWithTooltip
 
-- Container has focus-within ring for better UX
-- Addons have muted background and border
-- Input has no border/shadow to blend with container
-- Proper height alignment for all elements
-
----
-
-### TextWithTooltip
-
-A smart text component that automatically shows a tooltip when the text is truncated.
+Smart text component with automatic tooltip on truncation.
 
 **Features:**
 
-- Automatically detects text truncation
-- Shows tooltip only when text is truncated
-- Uses ResizeObserver for responsive behavior
-- Optimized performance with proper cleanup
-- Fully accessible with Radix UI Tooltip
-- Supports both string and number values
+- Auto-detects truncation
+- Shows tooltip only when truncated
+- ResizeObserver for responsive behavior
+- Optimized performance
+- Accessible with Radix UI
 
 **Usage:**
 
 ```tsx
 import { TextWithTooltip } from "@/components/shared/custom";
 
-function ProductList() {
-  return (
-    <div className="w-[200px]">
-      <TextWithTooltip
-        text="This is a very long product name that will be truncated"
-        className="text-sm font-medium"
-      />
-    </div>
-  );
-}
+<div className="w-[200px]">
+  <TextWithTooltip
+    text="Very long text that will be truncated"
+    className="text-sm font-medium"
+  />
+</div>;
 ```
 
 **Props:**
 
-- `text` (required): `string | number` - The text content to display
-- `className` (optional): `string` - Additional CSS classes for styling
+- `text` - Text content (string | number)
+- `className` - CSS classes
 
 **How it works:**
 
-1. Uses `ResizeObserver` to detect when text is truncated
-2. Compares `scrollWidth` with `clientWidth` to determine truncation
-3. Only enables tooltip when text is actually truncated
-4. Automatically updates on resize or text changes
+1. Uses ResizeObserver to detect truncation
+2. Compares scrollWidth with clientWidth
+3. Enables tooltip only when truncated
+4. Auto-updates on resize/text changes
 5. Cleans up observers on unmount
 
-**Styling:**
+## PasswordInput
 
-The component applies `truncate` class by default and disables pointer events when not truncated to prevent unnecessary tooltip triggers.
-
----
-
-### PasswordInput
-
-A password input field with a toggle button to show/hide the password.
+Password input with show/hide toggle.
 
 **Features:**
 
-- Show/hide password toggle button
-- Uses Tabler icons (IconEye, IconEyeOff)
-- Hides browser's native password reveal button
-- Disabled state when input is empty
-- Accessible with screen reader support
-- Fully typed with TypeScript
+- Show/hide password toggle
+- Uses Tabler icons
+- Hides browser's native reveal
+- Disabled when empty
+- Accessible
 
 **Usage:**
 
 ```tsx
 import { PasswordInput } from "@/components/shared/custom";
 
-function LoginForm() {
-  const [password, setPassword] = useState("");
-
-  return (
-    <PasswordInput
-      placeholder="Enter your password"
-      value={password}
-      onChange={(e) => setPassword(e.target.value)}
-    />
-  );
-}
+<PasswordInput
+  placeholder="Enter password"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+/>;
 ```
 
 **Props:**
 
-Accepts all standard HTML input props (`React.ComponentProps<"input">`):
+- All standard input props
+- `value`, `onChange`, `placeholder`, `disabled`, `className`, `ref`
 
-- `value` - The input value
-- `onChange` - Change handler
-- `placeholder` - Placeholder text
-- `disabled` - Disable the input
-- `className` - Additional CSS classes
-- `ref` - Forward ref to the input element
-- And all other native input attributes
+## Adding Components
 
-**Styling:**
+When adding new custom components:
 
-The component uses the base `Input` component styling and adds:
-
-- Right padding for the toggle button (`pr-10`)
-- Absolute positioned toggle button
-- Hover states for the button
-- Disabled states
-
-**Accessibility:**
-
-- Toggle button has `aria-hidden="true"` for the icon
-- Screen reader text via `sr-only` class
-- Proper button type and disabled states
-- Keyboard accessible
-
-## Adding New Custom Components
-
-When adding new custom components to this folder:
-
-1. Create the component file (e.g., `my-component.tsx`)
-2. Export it from `index.ts`
-3. Add it to the component showcase in `component-registry.tsx`
-4. Update this README with documentation
-5. Follow the existing patterns for:
+1. Create component file
+2. Export from `index.ts`
+3. Add to component showcase
+4. Update this README
+5. Follow patterns:
    - TypeScript types
    - Accessibility
-   - Styling with Tailwind
-   - Using Tabler icons
+   - Tailwind styling
+   - Tabler icons
 
 ## Guidelines
 
 - Use Tabler icons for consistency
-- Extend base UI components when possible
+- Extend base UI components
 - Include proper TypeScript types
-- Add accessibility features (ARIA labels, keyboard support)
-- Follow the existing code style
-- Document props and usage examples
+- Add accessibility features
+- Follow existing code style
+- Document props and usage
