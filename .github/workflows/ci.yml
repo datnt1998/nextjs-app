@@ -23,30 +23,23 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-          cache-dependency-path: nextjs-app/package-lock.json
 
       - name: Install dependencies
-        working-directory: nextjs-app
         run: npm ci
 
       - name: Validate translations
-        working-directory: nextjs-app
         run: npm run validate:translations
 
       - name: Type check
-        working-directory: nextjs-app
         run: npm run type-check
 
       - name: Lint
-        working-directory: nextjs-app
         run: npm run lint
 
       - name: Format check
-        working-directory: nextjs-app
         run: npm run format:check
 
       - name: Build
-        working-directory: nextjs-app
         run: npm run build:skip-validation
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
@@ -56,12 +49,11 @@ jobs:
           IMAGEKIT_PRIVATE_KEY: ${{ secrets.IMAGEKIT_PRIVATE_KEY }}
 
       - name: Verify build
-        working-directory: nextjs-app
         run: npm run verify:build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: nextjs-build-${{ github.sha }}
-          path: nextjs-app/.next
+          path: .next
           retention-days: 7
