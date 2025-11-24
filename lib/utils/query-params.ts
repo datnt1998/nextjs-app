@@ -41,7 +41,7 @@ export function cleanQueryParams<T extends Record<string, unknown>>(
       return acc;
     }
 
-    acc[key as keyof T] = value;
+    acc[key as keyof T] = value as T[keyof T];
     return acc;
   }, {} as Partial<T>);
 }

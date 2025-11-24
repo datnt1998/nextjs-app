@@ -311,14 +311,14 @@ export default function DataTableExamplePage() {
   ];
 
   // Initialize data table
-  const { table, density, setDensity } = useDataTable({
+  const { table } = useDataTable({
     columns,
     data: products,
     filterFields,
-    enableRowSelection: true,
-    enableUrlState: true,
+    pageCount: Math.ceil(products.length / 5),
     initialState: {
       pagination: {
+        pageIndex: 0,
         pageSize: 5,
       },
     },
@@ -335,12 +335,7 @@ export default function DataTableExamplePage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <DataTableToolbar
-            table={table}
-            filterFields={filterFields}
-            density={density}
-            onDensityChange={setDensity}
-          >
+          <DataTableToolbar table={table} filterFields={filterFields}>
             <DataTableFacetedFilter
               column={table.getColumn("status")}
               title="Status"
@@ -368,7 +363,6 @@ export default function DataTableExamplePage() {
             columns={columns}
             isLoading={false}
             emptyMessage="No products found."
-            density={density}
           />
 
           <DataTablePagination table={table} />
