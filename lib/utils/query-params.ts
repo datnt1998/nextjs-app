@@ -30,18 +30,21 @@ export function optimizeFilter<T>(
 export function cleanQueryParams<T extends Record<string, unknown>>(
   params: T
 ): Partial<T> {
-  return Object.entries(params).reduce((acc, [key, value]) => {
-    // Skip undefined, null, empty string, or empty array
-    if (
-      value === undefined ||
-      value === null ||
-      value === "" ||
-      (Array.isArray(value) && value.length === 0)
-    ) {
-      return acc;
-    }
+  return Object.entries(params).reduce(
+    (acc, [key, value]) => {
+      // Skip undefined, null, empty string, or empty array
+      if (
+        value === undefined ||
+        value === null ||
+        value === "" ||
+        (Array.isArray(value) && value.length === 0)
+      ) {
+        return acc;
+      }
 
-    acc[key as keyof T] = value as T[keyof T];
-    return acc;
-  }, {} as Partial<T>);
+      acc[key as keyof T] = value as T[keyof T];
+      return acc;
+    },
+    {} as Partial<T>
+  );
 }
