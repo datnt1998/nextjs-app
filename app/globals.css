@@ -19,7 +19,7 @@
 
   /* Override Radix scroll locking for sticky headers */
   body[data-scroll-locked] {
-    overflow: unset !important;
+    overflow: unset;
   }
 
   /* Cursor pointer for buttons */
@@ -33,7 +33,7 @@
     input,
     select,
     textarea {
-      font-size: 16px !important;
+      font-size: 16px;
     }
   }
 }

@@ -11,7 +11,7 @@ interface StackProps extends React.HTMLAttributes<HTMLDivElement> {
 export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
   (
     { direction = "vertical", gap = "md", align, justify, className, ...props },
-    ref,
+    ref
   ) => {
     return (
       <div
@@ -39,11 +39,11 @@ export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
             "justify-end": justify === "end",
             "justify-between": justify === "between",
           },
-          className,
+          className
         )}
         {...props}
       />
     );
-  },
+  }
 );
 Stack.displayName = "Stack";

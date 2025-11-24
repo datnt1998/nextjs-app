@@ -1,12 +1,12 @@
 "use client";
 
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SupabaseProvider } from "./supabase-provider";
 import { TanStackProvider } from "./tanstack-provider";
 import { ThemeProvider } from "./theme-provider";
 import { UserProvider } from "./user-provider";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (

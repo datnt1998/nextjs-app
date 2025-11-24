@@ -40,7 +40,7 @@ export interface ImageTransformations {
  */
 export const buildImageUrl = (
   path: string,
-  transformations?: ImageTransformations,
+  transformations?: ImageTransformations
 ): string => {
   if (!transformations) {
     return imagekit.url({

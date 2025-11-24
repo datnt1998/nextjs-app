@@ -411,7 +411,7 @@ export default function SettingsPage() {
                           htmlFor="theme-light"
                           className={cn(
                             "flex flex-col items-center justify-between rounded-lg border-2 border-border bg-background p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer",
-                            "peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5",
+                            "peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5"
                           )}
                         >
                           <Icons.sun className="mb-3 h-6 w-6" />
@@ -435,7 +435,7 @@ export default function SettingsPage() {
                           htmlFor="theme-dark"
                           className={cn(
                             "flex flex-col items-center justify-between rounded-lg border-2 border-border bg-background p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer",
-                            "peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5",
+                            "peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5"
                           )}
                         >
                           <Icons.moon className="mb-3 h-6 w-6" />
@@ -459,7 +459,7 @@ export default function SettingsPage() {
                           htmlFor="theme-system"
                           className={cn(
                             "flex flex-col items-center justify-between rounded-lg border-2 border-border bg-background p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer",
-                            "peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5",
+                            "peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5"
                           )}
                         >
                           <Icons.laptop className="mb-3 h-6 w-6" />

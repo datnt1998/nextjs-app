@@ -29,7 +29,7 @@ export const useUserStore = create<UserState>()(
         setUser: (user) => set({ user, role: user?.role || "viewer" }),
         clearUser: () => set({ user: null, role: "viewer" }),
       }),
-      { name: "user-storage" },
-    ),
-  ),
+      { name: "user-storage" }
+    )
+  )
 );

@@ -121,7 +121,7 @@ export function TanStackProvider({ children }: { children: React.ReactNode }) {
             // Individual mutations can override this by providing their own onError
           },
         },
-      }),
+      })
   );
 
   return (

@@ -16,7 +16,7 @@ import { DELIMITERS } from "./delimiters";
  */
 export function serializeColumnFilters<TData>(
   filters: ColumnFiltersState,
-  filterFields?: DataTableFilterField<TData>[],
+  filterFields?: DataTableFilterField<TData>[]
 ): string {
   if (!filters.length || !filterFields) return "";
 
@@ -35,7 +35,7 @@ export function serializeColumnFilters<TData>(
       // Checkbox: array of values
       if (value.length > 0) {
         serialized.push(
-          `${filter.id}${DELIMITERS.KEY_VALUE}${value.join(DELIMITERS.ARRAY)}`,
+          `${filter.id}${DELIMITERS.KEY_VALUE}${value.join(DELIMITERS.ARRAY)}`
         );
       }
     } else if (
@@ -45,7 +45,7 @@ export function serializeColumnFilters<TData>(
     ) {
       // Slider: range with min-max
       serialized.push(
-        `${filter.id}${DELIMITERS.KEY_VALUE}${value[0]}${DELIMITERS.RANGE}${value[1]}`,
+        `${filter.id}${DELIMITERS.KEY_VALUE}${value[0]}${DELIMITERS.RANGE}${value[1]}`
       );
     } else if (
       field.type === "timerange" &&
@@ -56,7 +56,7 @@ export function serializeColumnFilters<TData>(
       const [start, end] = value;
       if (start && end) {
         serialized.push(
-          `${filter.id}${DELIMITERS.KEY_VALUE}${start}${DELIMITERS.DATE_RANGE}${end}`,
+          `${filter.id}${DELIMITERS.KEY_VALUE}${start}${DELIMITERS.DATE_RANGE}${end}`
         );
       }
     } else if (field.type === "input" && typeof value === "string" && value) {
@@ -81,7 +81,7 @@ export function serializeColumnFilters<TData>(
  */
 export function deserializeFilters<T extends z.ZodType>(
   searchParams: SearchParams,
-  schema: T,
+  schema: T
 ): z.infer<T> {
   const filtersParam = searchParams.filters;
 
@@ -135,7 +135,7 @@ export function deserializeFilters<T extends z.ZodType>(
  * Converts column filters to a Record format for easier manipulation
  */
 export function columnFiltersToRecord(
-  filters: ColumnFiltersState,
+  filters: ColumnFiltersState
 ): Record<string, string | string[] | number[] | null> {
   const record: Record<string, string | string[] | number[] | null> = {};
 
@@ -150,7 +150,7 @@ export function columnFiltersToRecord(
  * Converts a Record to column filters format
  */
 export function recordToColumnFilters(
-  record: Record<string, string | string[] | number[] | null>,
+  record: Record<string, string | string[] | number[] | null>
 ): ColumnFiltersState {
   return Object.entries(record)
     .filter(([_, value]) => value != null)
@@ -162,7 +162,7 @@ export function recordToColumnFilters(
  */
 export function mergeFilters(
   existing: ColumnFiltersState,
-  newFilters: Record<string, string | string[] | number[] | null>,
+  newFilters: Record<string, string | string[] | number[] | null>
 ): ColumnFiltersState {
   const existingRecord = columnFiltersToRecord(existing);
   const merged = { ...existingRecord, ...newFilters };

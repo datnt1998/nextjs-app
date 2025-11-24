@@ -119,7 +119,7 @@ export interface UserProfile {
  */
 export function hasPermission(
   user: UserProfile | null | undefined,
-  permission: Permission,
+  permission: Permission
 ): boolean {
   if (!user) {
     return false;
@@ -152,7 +152,7 @@ export function hasPermission(
  */
 export function hasAnyPermission(
   user: UserProfile | null | undefined,
-  permissions: Permission[],
+  permissions: Permission[]
 ): boolean {
   if (!user) {
     return false;
@@ -175,7 +175,7 @@ export function hasAnyPermission(
  */
 export function hasAllPermissions(
   user: UserProfile | null | undefined,
-  permissions: Permission[],
+  permissions: Permission[]
 ): boolean {
   if (!user) {
     return false;
@@ -196,7 +196,7 @@ export function hasAllPermissions(
  * @returns Array of all permissions the user has
  */
 export function getUserPermissions(
-  user: UserProfile | null | undefined,
+  user: UserProfile | null | undefined
 ): Permission[] {
   if (!user) {
     return [];
@@ -207,8 +207,7 @@ export function getUserPermissions(
 
   // Combine with user-specific permissions
   const customPermissions = (user.permissions || []).filter(
-    (p): p is Permission =>
-      Object.values(PERMISSIONS).includes(p as Permission),
+    (p): p is Permission => Object.values(PERMISSIONS).includes(p as Permission)
   );
 
   // Return unique permissions
@@ -225,7 +224,7 @@ export function getUserPermissions(
 export function canPerformAction(
   user: UserProfile | null | undefined,
   permission: Permission,
-  resourceOwnerId?: string,
+  resourceOwnerId?: string
 ): boolean {
   if (!user) {
     return false;
@@ -258,7 +257,7 @@ export function canPerformAction(
  */
 export function createUserProfileFromJWT(
   user: User,
-  accessToken?: string,
+  accessToken?: string
 ): UserProfile {
   const jwtProfile = getUserProfileFromJWT(user, accessToken);
 

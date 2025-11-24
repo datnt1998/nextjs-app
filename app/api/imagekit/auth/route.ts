@@ -20,7 +20,7 @@ export async function GET() {
     if (!privateKey || !publicKey) {
       return NextResponse.json(
         { error: "ImageKit credentials not configured" },
-        { status: 500 },
+        { status: 500 }
       );
     }
 
@@ -44,7 +44,7 @@ export async function GET() {
     console.error("ImageKit auth error:", error);
     return NextResponse.json(
       { error: "Failed to generate authentication parameters" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

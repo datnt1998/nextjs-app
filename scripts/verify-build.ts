@@ -51,7 +51,7 @@ function checkBuildExists(): void {
 
   if (!fs.existsSync(BUILD_DIR)) {
     result.errors.push(
-      'Build directory does not exist. Run "npm run build" first.',
+      'Build directory does not exist. Run "npm run build" first.'
     );
     result.success = false;
     return;
@@ -146,13 +146,13 @@ function checkBundleOptimization(): void {
 
       if (sizeKB > 500) {
         result.warnings.push(
-          `Large chunk detected: ${chunk} (${sizeKB.toFixed(2)} KB)`,
+          `Large chunk detected: ${chunk} (${sizeKB.toFixed(2)} KB)`
         );
       }
     }
   } else {
     result.warnings.push(
-      "Chunks directory not found - code splitting may not be working",
+      "Chunks directory not found - code splitting may not be working"
     );
   }
 
@@ -188,16 +188,16 @@ function checkTranslationCodeSplitting(): void {
     (chunk) =>
       chunk.includes("messages") ||
       chunk.includes("i18n") ||
-      chunk.includes("intl"),
+      chunk.includes("intl")
   );
 
   if (translationChunks.length > 0) {
     console.log(
-      `   ✓ Translation files are code-split (${translationChunks.length} chunks)`,
+      `   ✓ Translation files are code-split (${translationChunks.length} chunks)`
     );
   } else {
     console.log(
-      "   ℹ Translation chunks not explicitly identified (may be bundled with pages)",
+      "   ℹ Translation chunks not explicitly identified (may be bundled with pages)"
     );
   }
 }

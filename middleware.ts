@@ -38,7 +38,7 @@ export async function middleware(request: NextRequest) {
     // If we have a locale cookie and it's valid, and the URL doesn't have a locale prefix,
     // we should redirect to the preferred locale
     const hasLocaleInPath = locales.some((loc) =>
-      pathname.startsWith(`/${loc}`),
+      pathname.startsWith(`/${loc}`)
     );
 
     if (

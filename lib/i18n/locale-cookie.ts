@@ -35,7 +35,7 @@ export function getLocaleCookie(): Locale | null {
 
   const cookies = document.cookie.split("; ");
   const localeCookie = cookies.find((cookie) =>
-    cookie.startsWith(`${LOCALE_COOKIE_CONFIG.name}=`),
+    cookie.startsWith(`${LOCALE_COOKIE_CONFIG.name}=`)
   );
 
   if (!localeCookie) {

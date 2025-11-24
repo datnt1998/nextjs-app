@@ -1,9 +1,10 @@
 "use client";
 
-import { type ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
+import { Icons } from "@/components/icons/registry";
 import {
   Collapsible,
   CollapsibleContent,
@@ -20,6 +21,12 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import type { NavItem } from "@/config/site";
+import { Link } from "@/i18n/routing";
+import { removeLocaleFromPathname } from "@/lib/navigation/utils";
+import type { Permission } from "@/lib/rbac/permissions";
+import { hasPermission } from "@/lib/rbac/permissions";
+import { useUserStore } from "@/stores/user.store";
 import { Badge } from "../ui/badge";
 import {
   DropdownMenu,
@@ -29,13 +36,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Link } from "@/i18n/routing";
-import type { NavItem } from "@/config/site";
-import { Icons } from "@/components/icons/registry";
-import type { Permission } from "@/lib/rbac/permissions";
-import { hasPermission } from "@/lib/rbac/permissions";
-import { useUserStore } from "@/stores/user.store";
-import { removeLocaleFromPathname } from "@/lib/navigation/utils";
 
 export interface NavGroupProps {
   title: string;

@@ -150,7 +150,7 @@ function validateKeyConsistency(): void {
     const baseFilePath = path.join(
       MESSAGES_DIR,
       baseLocale,
-      `${namespace}.json`,
+      `${namespace}.json`
     );
 
     if (!fileExists(baseFilePath)) {
@@ -221,7 +221,7 @@ function printResults(): void {
     console.log(`   - ${LOCALES.length} locales validated`);
     console.log(`   - ${NAMESPACES.length} namespaces per locale`);
     console.log(
-      `   - ${LOCALES.length * NAMESPACES.length} total files checked`,
+      `   - ${LOCALES.length * NAMESPACES.length} total files checked`
     );
   } else {
     if (errors.length > 0) {

@@ -26,11 +26,11 @@ export const Grid = React.forwardRef<HTMLDivElement, GridProps>(
             "gap-6": gap === "md",
             "gap-8": gap === "lg",
           },
-          className,
+          className
         )}
         {...props}
       />
     );
-  },
+  }
 );
 Grid.displayName = "Grid";

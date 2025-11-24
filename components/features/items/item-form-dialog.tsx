@@ -161,7 +161,7 @@ export function ItemFormDialog({
             useUniqueFileName: true,
           });
           imageUrl = uploadResult.url;
-        } catch (error) {
+        } catch (_error) {
           toast.error(t("uploadFailed"));
           setIsUploading(false);
           return;
@@ -179,7 +179,7 @@ export function ItemFormDialog({
       } else {
         createMutation.mutate(itemData);
       }
-    } catch (error) {
+    } catch (_error) {
       toast.error(t("saveFailed"));
     }
   };

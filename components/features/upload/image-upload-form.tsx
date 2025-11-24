@@ -31,7 +31,7 @@ export function ImageUploadForm({
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<UploadResponse | null>(
-    null,
+    null
   );
   const [imageLoading, setImageLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
