@@ -7,6 +7,7 @@ export { DataTableFilterInput } from "./data-table-filter-input";
 export { DataTableFilterSlider } from "./data-table-filter-slider";
 export { DataTableFilterTimerange } from "./data-table-filter-timerange";
 export { DataTablePagination } from "./data-table-pagination";
+export { DataTableSkeleton } from "./data-table-skeleton";
 export { DataTableToolbar } from "./data-table-toolbar";
 export { DataTableViewOptions } from "./data-table-view-options";
 

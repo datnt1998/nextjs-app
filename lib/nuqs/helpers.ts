@@ -7,7 +7,7 @@
  * Filters out undefined and null values
  */
 export function buildQueryString(
-  params: Record<string, string | number | boolean | undefined | null>,
+  params: Record<string, string | number | boolean | undefined | null>
 ): string {
   const searchParams = new URLSearchParams();
 
@@ -41,7 +41,7 @@ export function parseQueryString(queryString: string): Record<string, string> {
  */
 export function mergeParams(
   currentParams: Record<string, string>,
-  newParams: Record<string, string | undefined | null>,
+  newParams: Record<string, string | undefined | null>
 ): Record<string, string> {
   const merged = { ...currentParams };
 

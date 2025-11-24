@@ -64,7 +64,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                 ) : (
                   options
                     .filter((option) =>
-                      selectedValues.has(String(option.value)),
+                      selectedValues.has(String(option.value))
                     )
                     .map((option) => (
                       <Badge
@@ -100,7 +100,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                       }
                       const filterValues = Array.from(selectedValues);
                       column?.setFilterValue(
-                        filterValues.length ? filterValues : undefined,
+                        filterValues.length ? filterValues : undefined
                       );
                     }}
                   >
@@ -109,7 +109,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                         "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
                         isSelected
                           ? "bg-primary text-primary-foreground border-primary"
-                          : "opacity-50 [&_svg]:invisible border-input",
+                          : "opacity-50 [&_svg]:invisible border-input"
                       )}
                     >
                       <Check className="h-4 w-4 text-current" />

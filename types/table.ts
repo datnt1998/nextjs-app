@@ -1,3 +1,18 @@
+import type { Row } from "@tanstack/react-table";
+import z from "zod";
+
+export type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {};
+
+export type StringKeyOf<TData> = Extract<keyof TData, string>;
+
+export const filterSchema = z.object({
+  id: z.string(),
+  value: z.union([z.string(), z.array(z.string())]),
+  rowId: z.string(),
+});
+
 /**
  * Extended sorting state with type-safe column IDs
  */
@@ -5,6 +20,21 @@ export type ExtendedSortingState<TData> = {
   id: keyof TData extends string ? keyof TData : string;
   desc: boolean;
 }[];
+
+export interface DataTableActions<TData> {
+  id: string;
+  label: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  onClick: (row: Row<TData>) => void;
+  isPrimary?: boolean;
+  display?: boolean;
+}
+
+export type Filter<TData> = Prettify<
+  Omit<z.infer<typeof filterSchema>, "id"> & {
+    id: StringKeyOf<TData>;
+  }
+>;
 
 /**
  * Search params type for URL query parameters
@@ -90,7 +120,7 @@ export interface TimerangeFilterField<TData> extends BaseFilterField<TData> {
  * Discriminated union of all filter field types
  */
 export type DataTableFilterField<TData> =
-  | InputFilterField<TData>
+  | InputFilterField<TData & { search: string }>
   | CheckboxFilterField<TData>
   | SliderFilterField<TData>
   | TimerangeFilterField<TData>;

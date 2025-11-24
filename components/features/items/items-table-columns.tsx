@@ -30,6 +30,13 @@ export function getItemsTableColumns({
 }: ItemsTableColumnsProps): ColumnDef<Item>[] {
   return [
     {
+      accessorKey: "search",
+      header: () => null,
+      cell: () => null,
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
       id: "select",
       header: ({ table }) => (
         <Checkbox

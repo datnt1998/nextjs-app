@@ -1,6 +1,11 @@
 {
   "title": "Items",
   "subtitle": "Manage your items collection",
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "noData": "No data available"
+  },
   "actions": {
     "createItem": "Create Item",
     "tableView": "Table View",

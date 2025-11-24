@@ -164,12 +164,6 @@ export const siteConfig = {
           permissions: ["items:view"],
           items: [
             {
-              title: "Grid View",
-              translationKey: "items.gridView",
-              href: "/dashboard/items",
-              permissions: ["items:view"],
-            },
-            {
               title: "Table View",
               translationKey: "items.tableView",
               href: "/dashboard/items/table",

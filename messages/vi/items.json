@@ -1,6 +1,11 @@
 {
   "title": "Mục",
   "subtitle": "Quản lý bộ sưu tập mục của bạn",
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi",
+    "noData": "Không có dữ liệu"
+  },
   "actions": {
     "createItem": "Tạo mục",
     "tableView": "Xem bảng",

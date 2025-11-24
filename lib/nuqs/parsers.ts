@@ -1,34 +1,11 @@
-import type { ColumnFiltersState } from "@tanstack/react-table";
-import { createParser } from "nuqs";
-import { serializeColumnFilters } from "@/lib/data-table/utils";
-import type { DataTableFilterField, ExtendedSortingState } from "@/types/table";
-
-/**
- * Custom parser for number values in URL search params
- * Converts string to number, returns null if invalid
- */
-export const numberParser = createParser<number>({
-  parse: (v) => (v ? Number(v) : null),
-  serialize: (v) => (v != null ? String(v) : ""),
-});
-
-/**
- * Custom parser for string array values in URL search params
- * Splits comma-separated values into array
- */
-export const stringArrayParser = createParser<string[]>({
-  parse: (v) => (v ? v.split(",") : null),
-  serialize: (v) => (v && v.length > 0 ? v.join(",") : ""),
-});
-
-/**
- * Custom parser for sort order values in URL search params
- * Ensures value is either "asc" or "desc"
- */
-export const sortOrderParser = createParser<"asc" | "desc">({
-  parse: (v) => (v === "asc" || v === "desc" ? v : null),
-  serialize: (v) => v || "",
-});
+import type { Row } from "@tanstack/react-table";
+import { createParser } from "nuqs/server";
+import z from "zod";
+import {
+  type ExtendedSortingState,
+  type Filter,
+  filterSchema,
+} from "@/types/table";
 
 /**
  * Parser for TanStack Table sorting state
@@ -56,42 +33,36 @@ export function getSortingStateParser<TData>() {
 }
 
 /**
- * Parser for column filters state
- * Uses compact serialization: "status:active,pending price:10-100"
+ * Create a parser for data table filters.
+ * @param originalRow The original row data to create the parser for.
+ * @returns A parser for data table filters state.
  */
-export function getColumnFiltersParser<TData>(
-  filterFields?: DataTableFilterField<TData>[],
-) {
-  return createParser<Record<string, string | string[] | null>>({
+export const getFiltersStateParser = <T>(originalRow?: Row<T>["original"]) => {
+  const validKeys = originalRow ? new Set(Object.keys(originalRow)) : null;
+
+  return createParser<Filter<T>[]>({
     parse: (value) => {
-      if (!value) return {};
+      try {
+        const parsed = JSON.parse(value);
+        const result = z.array(filterSchema).safeParse(parsed);
 
-      const filters: Record<string, string | string[] | null> = {};
-      const pairs = value.split(" ");
+        if (!result.success) return null;
 
-      for (const pair of pairs) {
-        const [key, val] = pair.split(":");
-        if (!key || !val) continue;
-
-        // Check if it's an array value (comma-separated)
-        if (val.includes(",")) {
-          filters[key] = val.split(",");
-        } else {
-          filters[key] = val;
+        if (validKeys && result.data.some((item) => !validKeys.has(item.id))) {
+          return null;
         }
+
+        return result.data as Filter<T>[];
+      } catch {
+        return null;
       }
-
-      return filters;
     },
-    serialize: (value) => {
-      if (!value || Object.keys(value).length === 0) return "";
-
-      // Convert to ColumnFiltersState for serialization
-      const columnFilters: ColumnFiltersState = Object.entries(value)
-        .filter(([_, v]) => v != null)
-        .map(([id, v]) => ({ id, value: v }));
-
-      return serializeColumnFilters(columnFilters, filterFields);
-    },
+    serialize: (value) => JSON.stringify(value),
+    eq: (a, b) =>
+      a.length === b.length &&
+      a.every(
+        (filter, index) =>
+          filter.id === b[index]?.id && filter.value === b[index]?.value
+      ),
   });
-}
+};
