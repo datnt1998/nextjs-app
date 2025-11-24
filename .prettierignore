@@ -8,3 +8,9 @@ coverage
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+# TypeScript/JavaScript files are handled by Biome
+*.ts
+*.tsx
+*.js
+*.jsx
