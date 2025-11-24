@@ -7,9 +7,5 @@ export default function RootLayout({
 }>) {
   // This root layout is minimal - the actual layout with fonts, styles, etc. is in [locale]/layout.tsx
   // We need html and body tags here for Next.js to work properly with 404 pages
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body>{children}</body>
-    </html>
-  );
+  return <>{children}</>;
 }

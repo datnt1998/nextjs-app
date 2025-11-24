@@ -311,7 +311,7 @@ export default function UsersPage() {
               <div
                 className={cn(
                   "h-2 w-2 rounded-full",
-                  status === "active" ? "bg-green-500" : "bg-gray-400",
+                  status === "active" ? "bg-green-500" : "bg-gray-400"
                 )}
               />
               <span className="text-sm capitalize text-muted-foreground">
@@ -426,7 +426,7 @@ export default function UsersPage() {
         size: 80,
       },
     ],
-    [],
+    []
   );
 
   // Use the data table hook
@@ -477,7 +477,7 @@ export default function UsersPage() {
   };
 
   return (
-    <Container size="full" className="py-8">
+    <Container size="full">
       <Stack direction="vertical" gap="lg">
         {/* Header */}
         <Stack direction="horizontal" justify="between" align="start">
@@ -536,7 +536,7 @@ export default function UsersPage() {
                 <p className="text-3xl font-bold tracking-tight">
                   {
                     MOCK_USERS.filter(
-                      (u) => u.role === "admin" || u.role === "owner",
+                      (u) => u.role === "admin" || u.role === "owner"
                     ).length
                   }
                 </p>
@@ -650,7 +650,7 @@ export default function UsersPage() {
                             className={cn(
                               "font-semibold",
                               header.column.getCanSort() &&
-                                "cursor-pointer select-none",
+                                "cursor-pointer select-none"
                             )}
                             onClick={header.column.getToggleSortingHandler()}
                           >
@@ -658,7 +658,7 @@ export default function UsersPage() {
                               <div className="flex items-center gap-2">
                                 {flexRender(
                                   header.column.columnDef.header,
-                                  header.getContext(),
+                                  header.getContext()
                                 )}
                                 {header.column.getCanSort() && (
                                   <div className="flex flex-col text-muted-foreground">
@@ -702,7 +702,7 @@ export default function UsersPage() {
                             <TableCell key={cell.id}>
                               {flexRender(
                                 cell.column.columnDef.cell,
-                                cell.getContext(),
+                                cell.getContext()
                               )}
                             </TableCell>
                           ))}

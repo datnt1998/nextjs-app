@@ -31,8 +31,8 @@ export function DataTableColumnHeader<TData, TValue>({
         column.toggleSorting(undefined);
       }}
       className={cn(
-        "flex h-7 w-full items-center justify-between gap-2 px-0 py-0 hover:bg-transparent",
-        className,
+        "flex h-7 w-full items-center justify-between gap-2 px-0 py hover:bg-transparent text-xs font-medium text-body-foreground",
+        className
       )}
       {...props}
     >
@@ -40,18 +40,18 @@ export function DataTableColumnHeader<TData, TValue>({
       <span className="flex flex-col">
         <ChevronUp
           className={cn(
-            "-mb-0.5 h-2 w-2",
+            "-mb-0.5 h-1 w-1",
             column.getIsSorted() === "asc"
               ? "text-accent-foreground"
-              : "text-muted-foreground/40",
+              : "text-muted-foreground/40"
           )}
         />
         <ChevronDown
           className={cn(
-            "-mt-0.5 h-2 w-2",
+            "-mt-0.5 h-1 w-1",
             column.getIsSorted() === "desc"
               ? "text-accent-foreground"
-              : "text-muted-foreground/40",
+              : "text-muted-foreground/40"
           )}
         />
       </span>

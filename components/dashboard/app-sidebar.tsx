@@ -1,6 +1,8 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Icons } from "@/components/icons/registry";
 import {
   Sidebar,
   SidebarContent,
@@ -14,15 +16,13 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { siteConfig } from "@/config/site";
 import type { NavItem } from "@/config/site";
-import { Icons } from "@/components/icons/registry";
+import { siteConfig } from "@/config/site";
 import { Link } from "@/i18n/routing";
-import { usePathname } from "next/navigation";
+import { isPathnameActive } from "@/lib/navigation/utils";
 import type { Permission } from "@/lib/rbac/permissions";
 import { hasPermission } from "@/lib/rbac/permissions";
 import { useUserStore } from "@/stores/user.store";
-import { isPathnameActive } from "@/lib/navigation/utils";
 import { NavGroup } from "./nav-group";
 import { NavProjects } from "./nav-projects";
 import { NavUser } from "./nav-user";
@@ -62,7 +62,7 @@ export function AppSidebar() {
   const visibleSecondaryItems = siteConfig.secondaryNav.filter(canViewItem);
 
   return (
-    <Sidebar variant="floating" collapsible="icon">
+    <Sidebar collapsible="icon">
       {/* Header with Workspace/Project Switcher */}
       <SidebarHeader>
         <NavProjects projects={siteConfig.projects} />

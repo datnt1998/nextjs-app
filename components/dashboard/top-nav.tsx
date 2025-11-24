@@ -1,7 +1,9 @@
 "use client";
 
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
+import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Fragment } from "react";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,10 +12,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
-import { Fragment } from "react";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function TopNav() {
   const pathname = usePathname();
@@ -59,7 +59,7 @@ export function TopNav() {
   const breadcrumbs = generateBreadcrumbs();
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+    <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 bg-background">
       <div className="flex items-center gap-2">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4" />
